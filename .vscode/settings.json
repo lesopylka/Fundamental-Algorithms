@@ -2,6 +2,9 @@
     "git.ignoreLimitWarning": true,
     "files.associations": {
         "limits.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "ctype.h": "c",
+        "stdlib.h": "c",
+        "math.h": "c"
     }
 }
