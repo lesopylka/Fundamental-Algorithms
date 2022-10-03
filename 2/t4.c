@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <math.h>
 
-double function1(int n, ...) {
+double geometric_mean(int n, ...) {
   double result = 1;
   va_list factor;
   va_start(factor, n);
@@ -12,14 +13,14 @@ double function1(int n, ...) {
   return sqrt(result);
 }
 
-double power(double a, int n) {
+double exponentiation(double a, int n) {
   if (n == 0) return 1;
-  else if (n > 0) return power(a, n - 1) * a;
-  else if (n < 0) return power(a, n + 1) * (1.0 / a);
+  else if (n > 0) return exponentiation(a, n - 1) * a;
+  else return exponentiation(a, n + 1) * (1.0 / a);
 }
 
 int main(void) {
-  printf("%lf\n", function1(4, 1.6, 2.5, 3.4, 4.8));
-  printf("%.8lf\n", power(2, -2));
+  printf("%lf\n", geometric_mean(4, 1.6, 2.5, 3.4, 4.8));
+  printf("%.8lf\n", exponentiation(2, -2));
 
 }

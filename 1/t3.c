@@ -13,7 +13,7 @@ int is_flag(const char * arg) {
   int len = strlen(arg);
   return len > 1 && len < 4 &&
   (arg[0] == '-' || arg[0] == '/') &&
-  isalpha(arg[1]);
+    isalpha(arg[1]);
 }
 
 int symbol_is_letter(char c) {
