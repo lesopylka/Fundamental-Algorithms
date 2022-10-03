@@ -12,8 +12,8 @@
 int is_flag(const char * arg) {
   int len = strlen(arg);
   return len > 1 && len < 4 &&
-    (arg[0] == '-' || arg[0] == '/') &&
-    isalpha(arg[1]);
+  (arg[0] == '-' || arg[0] == '/') &&
+  isalpha(arg[1]);
 }
 
 int symbol_is_letter(char c) {
@@ -41,17 +41,21 @@ void file_logic(char * input_path, char * output_path, char flag, int kol_string
     return 0;
     break;
 
-  case 'i': //взять у дани
+  case 'i': 
     while ((c = fgetc(input_file)) != EOF) {
-      int count = 0;
-      while (c != '\n') {
-        if (c >= 'A' && c <= 'z') {
-          count++;
-        }
-        fprintf(output_file, "string = %d\n", count);
-        count = 0;
+      if (!kol_string) {
+        fprintf(output_file, "%d - ", b);
+        kol_string++;
+      }
+      if (symbol_is_bukva(c)) {
+        kol_string++;
+      } else if (c == '\n') {
+        fprintf(output_file, "%d\n", kol_string - 1);
+        kol_string = 0;
+        b++;
       }
     }
+    fprintf(output_file, "%d\n", kol_string - 1);
     return 0;
     break;
 
