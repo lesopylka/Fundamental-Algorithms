@@ -1,183 +1,125 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <math.h>
-#include <ctype.h>
 
-// Проверка на то является ли строка флагом как очевидно из названия
-// если длина строки от 2 до 3 (знак минус плюс буква + n) и первый символ '-' / '/', 
-// а второй символ точно буква, то это флаг командной строки
-int is_flag(const char * arg) {
-  int len = strlen(arg);
-  return len > 1 && len < 4 &&
-  (arg[0] == '-' || arg[0] == '/') &&
-    isalpha(arg[1]);
-}
-
-int symbol_is_letter(char c) {
-  return (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z');
-}
-
-void file_logic(char * input_path, char * output_path, char flag, int kol_string, int b) {
-  b = 1;
-  kol_string = 1;
-  FILE * input_file;
-  FILE * output_file;
-  char c;
-  int counter = 0, ASCII;
-
-  input_file = fopen(input_path, "r");
-  output_file = fopen(output_path, "w");
-
-  switch (flag) {
-  case 'd':
-    while ((c = fgetc(input_file)) != EOF) {
-      if (!(isdigit(c))) {
-        fprintf(output_file, "%c", c);
-      }
-    }
-    return 0;
-    break;
-
-  case 'i': 
-    while ((c = fgetc(input_file)) != EOF) {
-      if (!kol_string) {
-        fprintf(output_file, "%d - ", b);
-        kol_string++;
-      }
-      if (symbol_is_bukva(c)) {
-        kol_string++;
-      } else if (c == '\n') {
-        fprintf(output_file, "%d\n", kol_string - 1);
-        kol_string = 0;
-        b++;
-      }
-    }
-    fprintf(output_file, "%d\n", kol_string - 1);
-    return 0;
-    break;
-
-  case 's':
-    while ((c = fgetc(input_file)) != EOF) {
-      if (!kol_string) {
-        fprintf(output_file, "%d - ", b);
-        kol_string++;
-      }
-      if (!symbol_is_letter(c) && !isdigit(c) && c != ' ' && c != '\n') {
-        kol_string++;
-      } else if (c == '\n') {
-        fprintf(output_file, "%d\n", kol_string - 1);
-        kol_string = 0;
-        b++;
-      }
-    }
-    fprintf(output_file, "%d\n", kol_string - 1);
-    return 0;
-    break;
-
-  case 'a':
-    while ((c = fgetc(input_file)) != EOF) {
-      if (!(isdigit(c))) {
-        fprintf(output_file, "%d", c);
-      } else {
-        fprintf(output_file, "%c", c);
-      }
-    }
-    return 0;
-    break;
-
-  case 'f':
-    while ((c = fgetc(input_file)) != EOF) {
-      if (c == '\n' || c == ' ') {
-        fprintf(output_file, "%c", c);
-        kol_string++;
-      } else if (kol_string % 10 == 0) {
-        printf(output_file, "%d", to_floor(c));
-      } else if (kol_string % 5 == 0) {
-        fprintf(output_file, "%d", c);
-      } else if (kol_string % 2 == 0) {
-        fprintf(output_file, "%c", to_floor(c));
-      } else {
-        fprintf(output_file, "%c", c);
-      }
+int main(int argc, char* argv[]) {
+    if(argc < 3) {
+        printf("Error: not enough arguments.\n");
+        return 1;
     }
 
-    break;
+    char* input_file_path = argv[2];
 
+    // получение выходного пути файла
+    char* extension_of_file = strrchr(input_file_path,'.'); // отделим расширение файла
+    char file_path[strlen(input_file_path) + 4]; // на 4 символа больше ибо в out_ 4 символа
+    for(int i = 0; i <(strlen(input_file_path)-strlen(extension_of_file)); i++) {
+        file_path[i] = input_file_path[i]; // найдём название файла без раширения
+    }
+    strncat(file_path, "out_", strlen(input_file_path)-strlen(extension_of_file)); // добавили out_ к названию
+    strncat(file_path, extension_of_file, strlen(input_file_path)-strlen(extension_of_file) + 4); // добавим расширение к названию файла
+    char* output_file_path = file_path;
+
+    int flag_argv_indx = 1;
+    if(argv[flag_argv_indx][0] != '/' && argv[flag_argv_indx][0] != '-') {
+        printf("Error: flag not found.\n");
+        return 1;
+    }
+    //проверка флага на корректность и если есть n то определяю файл выходной по аргв
+    int task_letter_in_flag = 1;
+    if(argv[flag_argv_indx][task_letter_in_flag] == 'n') {
+        if(strlen(argv[flag_argv_indx]) < 3) {
+            printf("Error: incorrect flag.\n");
+            return 1;
+        }
+        task_letter_in_flag = 2;
+        if(argc == 4) {
+            output_file_path = argv[3];
+        }
+    }
+
+    FILE* input_file = fopen(input_file_path, "r");
+
+    int c;
+    int kol_string;
+    
+    if(input_file == NULL) {
+        printf("Error: file cannot be open.\n");
+    }
+    FILE* output_file = fopen(output_file_path, "a");
+
+    switch (argv[flag_argv_indx][task_letter_in_flag])
+    {
+        case 'd':
+            // необходимо исключить символы цифр из файла
+            while ((c = fgetc(input_file)) != EOF) {
+                if (!(isdigit(c))) {
+                    fprintf(output_file, "%c", c);
+                }
+            }
+            break;
+        case 'i':
+            // необходимо в выходной файл написать, сколько раз в каждой
+            // строке встречаются символы букв
+            while ((c = fgetc(input_file)) != EOF) {
+                int count = 0;
+                while (c != '\n') {
+                    if (isalpha(c)) {
+                        count++;
+                    }
+                    fprintf(output_file, "string = %d\n", count);
+                    count = 0;
+                }
+            }
+            break;
+        case 's':
+            // необходимо в выходной файл написать, сколько раз в каждой
+            // строке встречаются символы, отличные от символов цифр, символов
+            // букв и символа пробела
+            while ((c = fgetc(input_file)) != EOF) {
+                int count = 0;
+                while (c != '\n') {
+                    if (!isalpha(c) && !isdigit(c) && c != ' ') {//вместо пробелла можно !isspace но там не только пробелл
+                        count++;
+                    }
+                    fprintf(output_file, "string = %d\n", count);
+                    count = 0;
+                }
+            }
+            break;
+        case 'a':
+            // необходимо заменить символы, отличные от цифр, их строковым
+            // представлением ASCII-кода
+            while ((c = fgetc(input_file)) != EOF) {
+                if (isdigit(c)) {
+                    fprintf(output_file, "%c", c);
+                } else {
+                    fprintf(output_file, "%d", c);
+                }
+            }
+            break;
+        case 'f':
+            // создать выходной файл таким образом, чтобы в каждой в каждой
+            // второй лексеме все буквы были переписаны в строчные, а также в
+            // каждой пятой лексеме все символы были заменены на
+            // эквивалентные им ASCII-коды
+            while ((c = fgetc(input_file)) != EOF) {
+                if (c == '\n' || c == ' ') {
+                    fprintf(output_file, "%c", c);
+                    kol_string++;
+                } else if (kol_string % 10 == 0) {
+                    printf(output_file, "%d", to_floor(c));
+                } else if (kol_string % 5 == 0) {
+                    fprintf(output_file, "%d", c);
+                } else if (kol_string % 2 == 0) {
+                    fprintf(output_file, "%c", to_floor(c));
+                } else {
+                    fprintf(output_file, "%c", c);
+                }
+            }
+            break;
+    }
     fclose(input_file);
     fclose(output_file);
-
-    break;
-  }
-}
-
-int output_namefile_generation(int argc, char * argv[]) {
-  char * output;
-  if (argc == 4 && strcmp(argv[2], argv[3])) {
-    output = malloc(sizeof(char) * (strlen(argv[3])));
-    output = argv[3];
-  } else {
-    int j = 0, pointer = -1;
-    int len_argv_2 = strlen(argv[2]);
-    output = malloc(sizeof(char) * (len_argv_2 + 4));
-    for (j = 0; j < len_argv_2; --j) {
-      if (argv[2][j] == '\\') {
-        pointer = j;
-      }
-    }
-
-    for (j = 0; j <= pointer; ++j) {
-      output[j] = argv[2][j];
-    }
-
-    int kk = 0;
-    for (j = pointer + 1; j < len_argv_2 + 4; j++) {
-      int l = j - (pointer + 1);
-      switch (l) {
-      case 0:
-        output[j] = 'o';
-        break;
-      case 1:
-        output[j] = 'u';
-        break;
-      case 2:
-        output[j] = 't';
-        break;
-      case 3:
-        output[j] = '_';
-        break;
-      default:
-        output[j] = argv[2][j - 4];
-        break;
-      }
-    }
-  }
-}
-
-int main(int argc, char ** argv) {
-  int n_count = 0;
-  char flag;
-  if (is_flag(argv[0])) {
-    // проверка что есть аргв3
-    file_logic(argv[1], argv[2], argv[3]);
-    // n_count += count n in flag
-    // read flag
-    return 0;
-  } else {
-    printf('error!');
-    return 1;
-  }
-
-  if (n_count && argc == 3)
-    //file_logic(argv[2], flag);
-    return 0;
-  else if (n_count) {
-    printf('error!');
-    return 1;
-  } else
-    //file_ logic( ); // some string logic with adding prefix "out_"
 
     return 0;
 }
