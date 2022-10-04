@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
             while ((c = fgetc(input_file)) != EOF) {
                 int count = 0;
                 while (c != '\n') {
-                    if (!isalpha(c) && !isdigit(c) && c != ' ') {//вместо пробелла можно !isspace но там не только пробелл
+                    if (!isalpha(c) && !isdigit(c) && c != ' ') {//вместо пробела можно !isspace но там не только пробелл
                         count++;
                     }
                     fprintf(output_file, "string = %d\n", count);

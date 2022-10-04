@@ -2,6 +2,8 @@
 #include <stdarg.h>
 #include <math.h>
 
+//лекция 22 сентября
+
 double geometric_mean(int n, ...) {
   double result = 1;
   va_list factor;
@@ -16,7 +18,7 @@ double geometric_mean(int n, ...) {
 double exponentiation(double a, int n) {
   if (n == 0) return 1;
   else if (n > 0) return exponentiation(a, n - 1) * a;
-  else return exponentiation(a, n + 1) * (1.0 / a);
+  else return exponentiation(a, n + 1) * (1. / a);
 }
 
 int main(void) {
