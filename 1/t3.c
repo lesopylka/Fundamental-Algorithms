@@ -38,15 +38,12 @@ int main(int argc, char* argv[]) {
     }
 
     FILE* input_file = fopen(input_file_path, "r");
-
-    int c;
-    int kol_string;
-    
     if(input_file == NULL) {
         printf("Error: file cannot be open.\n");
     }
     FILE* output_file = fopen(output_file_path, "a");
-
+    char c;
+    int kol_string = 1;
     switch (argv[flag_argv_indx][task_letter_in_flag])
     {
         case 'd':
@@ -107,7 +104,7 @@ int main(int argc, char* argv[]) {
                     fprintf(output_file, "%c", c);
                     kol_string++;
                 } else if (kol_string % 10 == 0) {
-                    printf(output_file, "%d", to_floor(c));
+                    fprintf(output_file, "%d", to_floor(c));
                 } else if (kol_string % 5 == 0) {
                     fprintf(output_file, "%d", c);
                 } else if (kol_string % 2 == 0) {
