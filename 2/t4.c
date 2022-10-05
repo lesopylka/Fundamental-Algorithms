@@ -4,6 +4,8 @@
 
 //лекция 22 сентября
 
+//среднее геометрическое исправить
+
 double geometric_mean(int n, ...) {
   double result = 1;
   va_list factor;
