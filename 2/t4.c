@@ -4,15 +4,12 @@
 
 //лекция 22 сентября
 
-//среднее геометрическое неправильное
-
-double geometric_mean(int n, ...) {
+double geometric_mean(int n, double start, ...) {
   double result = 1;
   va_list factor;
-  va_start(factor, n);
-  for (int i = 0; i < n; i++) {
+  va_start(factor, start);
+  for (int i = 0; i < n; i++)
     result *= va_arg(factor, double);
-  }
   va_end(factor);
   return sqrt(result);
 }
