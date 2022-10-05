@@ -9,9 +9,9 @@ double geometric_mean(int n, double start, ...) {
   va_list factor;
   va_start(factor, start);
   for (int i = 0; i < n; i++)
-    result *= va_arg(factor, double);
+    result *= sqrt(va_arg(factor, double));
   va_end(factor);
-  return sqrt(result);
+  return result;
 }
 
 double exponentiation(double a, int n) {
