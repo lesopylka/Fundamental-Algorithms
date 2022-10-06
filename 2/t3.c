@@ -2,8 +2,6 @@
 #include <stdarg.h>
  
 void ilyaneebipls(char* str, char* fileName, ...) {
-    int d; 
-    double f;
     va_list factor;         // указатель на необязательный параметр
     va_start(factor, fileName);   // устанавливаем указатель
 
@@ -12,6 +10,13 @@ void ilyaneebipls(char* str, char* fileName, ...) {
         if(input_file == NULL) {
             printf("Error: file cannot be open.\n");
         }
+        char header = '\0';
+
+        while ((header = fgetc(input_file)) != EOF) {
+                if (!(isdigit(c))) {
+
+                }
+            }
     }
     va_end(factor);
 }
