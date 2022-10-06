@@ -27,12 +27,15 @@ void ilyaneebipls(char* str, char* fileName, ...) {
         }
         char header;
         unsigned int fileSize = 0;
-        char* 
+        fileSize = fileSymbolsCount(fileName);
+        char* arrayFile = (char*)realloc(sizeof(char) * fileSize);
+        int i = 0;
         while ((header = fgetc(input_file)) != EOF) {
-                if (!(isdigit(c))) {
-
+                if (header != '\n' && header != '\t') {
+                    arrayFile[i] = header;
+                    i++;
                 }
-            }
+        }
     }
     va_end(factor);
 }
