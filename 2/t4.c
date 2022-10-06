@@ -9,7 +9,7 @@ double geometric_mean(int n, double start, ...) {
   va_list factor;
   va_start(factor, start);
   for (int i = 0; i < n; i++)
-    result *= sqrt(va_arg(factor, double));
+    result *= pow(va_arg(factor, double), 1./n);
   va_end(factor);
   return result;
 }
