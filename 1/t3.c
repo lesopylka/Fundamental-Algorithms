@@ -44,8 +44,7 @@ int main(int argc, char* argv[]) {
     FILE* output_file = fopen(output_file_path, "a");
     char c;
     int kol_string = 1;
-    switch (argv[flag_argv_indx][task_letter_in_flag])
-    {
+    switch (argv[flag_argv_indx][task_letter_in_flag]) {
         case 'd':
             // необходимо исключить символы цифр из файла
             while ((c = fgetc(input_file)) != EOF) {
