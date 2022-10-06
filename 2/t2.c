@@ -5,7 +5,15 @@
 #include <limits.h>
 #include <ctype.h>
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    if (argc == 1) {
+        printf("Parameters no entered!\n");
+        return 0;
+    } else if(argc < 3) {
+        printf("Needs minimum 3 arguments! (namefile, string, flag)\n");
+        return 0;
+    }
 
     char* parametrs [5] = {"-l", "-r", "-u", "-n", "-c"};
     int good_flag = 0, flag;
@@ -39,4 +47,9 @@ int main() {
             break;
         }
     }
+        if(!good_flag) {
+        printf("Invalid flag entered! (Flag start in '-' and then one of the 'lrunc')\n");
+    }
+
+    return 0;
 }
