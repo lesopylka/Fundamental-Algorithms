@@ -25,7 +25,8 @@ void ilyaneebipls(char* str, char* fileName, ...) {
         if(input_file == NULL) {
             printf("Error: file cannot be open.\n");
         }
-        char header = ';
+        char header;
+        int fileSize = 0;
         while ((header = fgetc(input_file)) != EOF) {
                 if (!(isdigit(c))) {
 
