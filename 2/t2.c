@@ -1,27 +1,38 @@
 #include <stdio.h> 
 #include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <limits.h>
+#include <ctype.h>
+
 int main() {
 
     switch (expression)
     {
         case 'l': 
-            /* code подсчет длины строки */
+             printf("Length of string: %d\n", length(argv[1]));
             break;
 
         case 'r':
-            /* code переворот (reverse) строки*/
+            reverse(argv[1]);
+            printf("Reverse: %s\n", argv[1]);
             break;
 
         case 'u':
-            /* code  преобразовать каждый элемент, стоящий на нечетной позиции в верхний регистр*/
+           upper_register_through_2(argv[1]);
+            printf("Result: %s\n", argv[1]);
             break;
 
         case 'n':
-            /* code переписать строку так, чтобы в начале строки были символы цифр, затем символы букв, а в конце – прочие символы в порядке, определённом исходной строкой*/
+            printf("Replaced: %s\n",replace(argv[1]));
             break;
 
         case 'c':
-            /* code конкатенация со строкой, которая передается третьим аргументо*/
+            if (argc >= 4) {
+                printf("%s", concat(argv[1], argv[3]));
+            } else {
+                printf("Need one more argument!");
+            }
             break;
 
         default:
