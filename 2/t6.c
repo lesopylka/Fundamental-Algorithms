@@ -36,11 +36,17 @@ void ilyaneebipls(char* str, char* fileName, ...) {
                     i++;
                 }
         }
+        /*
+            сравниваем str с arrayfile, допустим в str 3 элемента. Сравниваем str[0] с arrayfile[0], 
+            str[1] с arrayfile[1],str[2] с arrayfile[2], увеличиваем счетчик int i=0 на 1 и сравниваем уже
+            str[0] с arrayfile[1], str[1] с arrayfile[2],str[2] с arrayfile[3] и так до конца. Если все три
+            сравнения были успешны, то мы нашли вхождение подстроки в строке.
+        */
     }
     va_end(factor);
 }
 
 int main() {   
-    ilyaneebipls();
+    ilyaneebipls("abobus");
     return 0;
 }
