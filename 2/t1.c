@@ -4,7 +4,7 @@
 #include <time.h>
 
 double *generate_matrix(int *size) {
-  *size = rand() % 100 + (-100);
+  *size = rand() % 50 + 10;
 
   double *matrix = (double*) malloc(sizeof(double) **size);
   for (int i = 0; i < *size; i++) {
