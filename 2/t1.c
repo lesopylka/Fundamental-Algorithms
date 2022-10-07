@@ -20,7 +20,7 @@ void output_matrix(double *matrix, int size) {
   }
 }
 
-double *result_matrix(double *matrix_1, int sizem1, double *matrix_2, int sizem2) {
+double *result_matrix(double *matrix_1, unsigned int sizem1, double *matrix_2, unsigned int sizem2) {
   double *result = NULL;
 
   result = (double*) malloc(sizeof(double*) *sizem1);
@@ -34,8 +34,8 @@ double *result_matrix(double *matrix_1, int sizem1, double *matrix_2, int sizem2
 
 int main() {
   srand(time(0));
-  int sizem1 = 0;
-  int sizem2 = 0;
+  unsigned int sizem1 = 0;
+  unsigned int sizem2 = 0;
   double *matrix_1 = generate_matrix(&sizem1);
   double *matrix_2 = generate_matrix(&sizem2);
 

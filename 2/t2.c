@@ -25,22 +25,37 @@ void reverse(char * str) {
 
 void upper_register_through_2(char * str) {
   int i = 0;
-  while (i < length(str)) {
+  unsigned length_ = length(str);
+  while (i < length_) {
     str[i] = toupper(str[i]);
     i += 2;
   }
 }
 
-char * replace(char * str) {
+void replace(char * str, char* result) {
   int n = length(str), i, j;
   int pointers[] = {
     0,
     0,
     0
   };
-  char * result = (char * ) malloc(sizeof(char) * (n + 1));
-  char * letters = (char * ) malloc(sizeof(char) * (n + 1));
-  char * others = (char * ) malloc(sizeof(char) * (n + 1));
+  result = (char*) malloc(sizeof(char) * (n + 1));
+      if( result == NULL ) {
+        printf( "Insufficient memory available\n" );
+        return;
+  }
+  char* letters = (char*) malloc(sizeof(char) * (n + 1));
+      if( letters == NULL ) {
+        printf( "Insufficient memory available\n" );
+        return;
+  }
+
+  char* others = (char*) malloc(sizeof(char) * (n + 1));
+      if( others == NULL ) {
+        printf( "Insufficient memory available\n" );
+        return;
+  }
+  
   for (i = 0; i < n; ++i) {
     if (isdigit(str[i])) {
       result[pointers[0]] = str[i];
@@ -64,23 +79,22 @@ char * replace(char * str) {
   result[pointers[0]] = '\0';
   free(letters);
   free(others);
-  return result;
 }
 
 char * concat(char * s1, char * s2) {
 
-  int len1 = length(s1);
-  int len2 = length(s2);
+  size_t len1 = strlen(s1);
+  size_t len2 = strlen(s2);
 
-  char * result = malloc(sizeof(int) * (len1 + len2 + 1));
+  char * result = malloc(sizeof(char) * (len1 + len2));
 
   if (!result) {
     fprintf(stderr, "malloc() failed: insufficient memory!\n");
     return NULL;
   }
 
-  memcpy(result, s1, len1);
-  memcpy(result + len1, s2, len2 + 1);
+  strcpy(result, s1);
+  strcpy(result + len1, s2);
 
   return result;
 }
@@ -120,7 +134,10 @@ int main(int argc, char * argv[]) {
         printf("Result: %s\n", argv[1]);
         break;
       case 'n':
-        printf("Replaced: %s\n", replace(argv[1]));
+        char* result = NULL; 
+        replace(argv[1], result);
+        printf("Replaced: %s\n", replace);
+        free(result);
         break;
       case 'c':
         if (argc >= 4) {
