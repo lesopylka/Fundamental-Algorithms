@@ -121,6 +121,7 @@ int main(int argc, char * argv[]) {
   for (flag = 0; flag < 5; ++flag) {
     if (!strcmp(parametrs[flag], argv[2])) {
       good_flag = 1;
+      char* result = NULL; 
       switch (parametrs[flag][1]) {
       case 'l':
         printf("Length of string: %d\n", length(argv[1]));
@@ -134,16 +135,19 @@ int main(int argc, char * argv[]) {
         printf("Result: %s\n", argv[1]);
         break;
       case 'n':
-        char* result = NULL; 
         replace(argv[1], result);
-        printf("Replaced: %s\n", replace);
+        printf("Replaced: %s\n", result);
         free(result);
+        result = NULL;
         break;
       case 'c':
         if (argc >= 4) {
-          printf("%s", concat(argv[1], argv[3]));
+          result = concat(argv[1], argv[3]);
+          printf("%s", result);
+          free(result);
         } else {
           printf("Need one more argument!");
+
         }
         break;
       }
