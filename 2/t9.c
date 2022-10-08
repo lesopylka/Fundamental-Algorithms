@@ -22,7 +22,10 @@ int length(const char *str){
     return 0;
 }
 
-int ToInteger(){
+int ToInteger(char c){
+    if (c >= 'A' && c <= 'Z') return c - 'A' + 10;
+    else if (c >= 'a' && c <= 'z') return c - 'a' + 10;
+    else if (c >= '0' && c <= '9') return c - '0';
     return 0;
 }
 
