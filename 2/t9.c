@@ -9,7 +9,10 @@ void reverse(char* str){
     return;
 }
 
-void swap(){
+void swap(char* s, int left, int right){
+    char tmp = s[left];
+    s[left] = s[right];
+    s[right] = tmp;
     return;
 }
 
