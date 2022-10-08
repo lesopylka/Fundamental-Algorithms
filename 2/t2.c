@@ -147,7 +147,6 @@ int main(int argc, char * argv[]) {
           free(result);
         } else {
           printf("Need one more argument!");
-
         }
         break;
       }
