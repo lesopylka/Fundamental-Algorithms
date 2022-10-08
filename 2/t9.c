@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
+#include <ctype.h>
+#include <string.h>
 
 void reverse(char* str){
     int n = length(str);
@@ -38,11 +41,27 @@ int ToChar(char c){
     return 0;
 }
 
-char SumInCC(char* str1, char* str2){
+char Stacking(char* str1, char* str2, int n){
     int len1 = length(str1);
     int len2 = length(str2);
     int len_result = max(len1, len2) + 2;
-    return 0;
+    char* result = (char*)malloc(sizeof(char) * len_result);
+    for (int i = 0; i < len_result - 1; ++i) result[i] = '0';
+    result[len_result - 1] = '\0';
+
+    int pointers [] = {len1 - 1, len2 - 1};
+
+    int s = 0;
+
+    for(int i = len_result - 2; i >= 0; --i) {
+        result[i] = ((pointers[0] >= 0) ? (to_integer(str1[pointers[0]])) : 0) + ((pointers[1] >= 0) ? (to_integer(str2[pointers[1]])) : 0) + s;
+        s = result[i] / n;
+        result[i] = to_char(result[i] % n);
+        --pointers[0];
+        --pointers[1];
+    }
+
+    return result;
 }
 
 int main(){

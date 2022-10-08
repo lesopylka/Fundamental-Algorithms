@@ -1,11 +1,13 @@
 #include <stdio.h>
+#include <stdbool.h>
+#include <stdarg.h>
 
-int СonvexTriangle(){
+bool СonvexTriangle(int count, ...){
 
 }
 
-int DegreePolynomialValue(){
-    
+double DegreePolynomialValue(double x, int index, ...){
+
 }
 
 int main(int argc, char *argv[]){
