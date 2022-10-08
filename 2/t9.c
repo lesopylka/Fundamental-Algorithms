@@ -26,11 +26,19 @@ int ToInteger(){
     return 0;
 }
 
-int ToChar(){
+int ToChar(char c){
+    if (c >= 10 && c <= 26) 
+    return c + 'A' - 10;
+    else if (c >= 0 && c <= 9) 
+    return c + '0';
+    else return -1;
     return 0;
 }
 
-char SumInCC(){
+char SumInCC(char* str1, char* str2){
+    int len1 = length(str1);
+    int len2 = length(str2);
+    int len_result = max(len1, len2) + 2;
     return 0;
 }
 
