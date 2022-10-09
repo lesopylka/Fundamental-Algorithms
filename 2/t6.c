@@ -57,7 +57,13 @@ void ilyaneebipls(char * str, char * fileName, ...) {
 }
 
 int main() {
-  ilyaneebipls("abobus", "1.txt", "2.txt", "3.txt");
+  char str[100];
+  char file1[100], file2[100], file3[100];
+  gets(str);
+  gets(file1);
+  gets(file2);
+  gets(file3);
+  ilyaneebipls(str, file1, file2, file3);
   return 0;
 }
 
