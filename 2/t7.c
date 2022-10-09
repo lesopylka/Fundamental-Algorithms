@@ -2,8 +2,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
-bool СonvexTriangle(int count, ...)
-{
+bool СonvexTriangle(int count, ...) {
     if (count < 6 || count % 2 != 0)
     return false;
     va_list iter;
@@ -55,8 +54,7 @@ double DegreePolynomialValue(double x, int index, ...) {
     return res;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     if (СonvexTriangle(10, 2, 1, 4, 1, 5, 3, 3, 5, 1, 3))
     printf("The polygon convex!\n");
     else
