@@ -47,6 +47,7 @@ void ilyaneebipls(char * str, char * fileName, ...) {
         }
       }
       if (flag) {
+        printf("%s\n", c);
         return 0;
       }
     }
@@ -59,3 +60,4 @@ int main() {
   ilyaneebipls("abobus", "1.txt", "2.txt", "3.txt");
   return 0;
 }
+
