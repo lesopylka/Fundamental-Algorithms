@@ -41,8 +41,7 @@ bool СonvexTriangle(int count, ...)
     return true;
 }
 
-double DegreePolynomialValue(double x, int index, ...)
-{
+double DegreePolynomialValue(double x, int index, ...) {
     va_list iter;
     va_start(iter, index);
 
