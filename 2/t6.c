@@ -36,13 +36,18 @@ void ilyaneebipls(char * str, char * fileName, ...) {
         i++;
       }
     }
-
+  int flag = 1;
   int n = sizeof(str);
   for(int i = 0; i < fileSize; i++) {
-  for(int j=0; j < n; j++) {
-  if (str[j] = arrayFile[i+j]) {
-
+    flag = 1;
+    for(int j=0; j < n; j++) {
+      if (str[j] != arrayFile[i+j]) {
+        flag = 0;
+        break;
       }
+    }
+    if (flag) {
+      return 0;
     }
   }
 /*
@@ -53,6 +58,7 @@ void ilyaneebipls(char * str, char * fileName, ...) {
     */
   }
   va_end(factor);
+  return 1;
 }
 
 int main() {
