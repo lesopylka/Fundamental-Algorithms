@@ -55,7 +55,7 @@ bool СonvexTriangle(int count, ...) {
       return res;
     }
 
-    int main(int argc, char * argv[]) {
+    int main(int argc, char* argv[]) {
       if (СonvexTriangle(10, 2, 1, 4, 1, 5, 3, 3, 5, 1, 3))
         printf("The polygon convex!\n");
       else
