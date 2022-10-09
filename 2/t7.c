@@ -5,7 +5,7 @@
 bool СonvexTriangle(int count, ...){
 {
     if (count < 6 || count % 2 != 0)
-        return "Something went wrong";
+        return false;
     va_list iter;
     va_start(iter, count);
 
