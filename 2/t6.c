@@ -16,7 +16,7 @@ unsigned int fileSymbolsCount(char * fileName) {
   return (count);
 }
 
-void ilyaneebipls(char * str, char * fileName, ...) {
+void Find(char * str, char * fileName, ...) {
   va_list factor; // указатель на необязательный параметр
   va_start(factor, fileName); // устанавливаем указатель
 
@@ -63,7 +63,7 @@ int main() {
   gets(file1);
   gets(file2);
   gets(file3);
-  ilyaneebipls(str, file1, file2, file3);
+  Find(str, file1, file2, file3);
   return 0;
 }
 
