@@ -36,13 +36,16 @@ void ilyaneebipls(char * str, char * fileName, ...) {
         i++;
       }
     }
-    /* 
-    n = sizeof(str);
-    for(i = 0; i < filesize; i++)
-        if (str[0] = arrayfile[i] &&  str[1] = arrayfile[i+1] &&  str[2] = arrayfile[i+2])
-            {
-                printf(есть пробитие);
-            }
+
+  int n = sizeof(str);
+  for(int i = 0; i < fileSize; i++) {
+  for(int j=0; j < n; j++) {
+  if (str[j] = arrayFile[i+j]) {
+
+      }
+    }
+  }
+/*
         сравниваем str с arrayfile, допустим в str 3 элемента. Сравниваем  str[0] с arrayfile[0], 
         str[1] с arrayfile[1],str[2] с arrayfile[2], увеличиваем счетчик int i=0 на 1 и сравниваем уже
         str[0] с arrayfile[1], str[1] с arrayfile[2],str[2] с arrayfile[3] и так до конца. Если все три
