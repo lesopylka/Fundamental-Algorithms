@@ -36,26 +36,20 @@ void ilyaneebipls(char * str, char * fileName, ...) {
         i++;
       }
     }
-  int flag = 1;
-  int n = sizeof(str);
-  for(int i = 0; i < fileSize; i++) {
-    flag = 1;
-    for(int j=0; j < n; j++) {
-      if (str[j] != arrayFile[i+j]) {
-        flag = 0;
-        break;
+    int flag = 1;
+    int n = sizeof(str);
+    for(int i = 0; i < fileSize; i++) {
+      flag = 1;
+      for(int j=0; j < n; j++) {
+        if (str[j] != arrayFile[i+j]) {
+          flag = 0;
+          break;
+        }
+      }
+      if (flag) {
+        return 0;
       }
     }
-    if (flag) {
-      return 0;
-    }
-  }
-/*
-        сравниваем str с arrayfile, допустим в str 3 элемента. Сравниваем  str[0] с arrayfile[0], 
-        str[1] с arrayfile[1],str[2] с arrayfile[2], увеличиваем счетчик int i=0 на 1 и сравниваем уже
-        str[0] с arrayfile[1], str[1] с arrayfile[2],str[2] с arrayfile[3] и так до конца. Если все три
-        сравнения были успешны, то мы нашли вхождение подстроки в строке.
-    */
   }
   va_end(factor);
   return 1;
