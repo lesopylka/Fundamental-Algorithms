@@ -48,7 +48,7 @@ void Find(char * str, char * fileName, ...) {
         }
       }
       if (flag) {
-        printf("ты пидор%s\n", c);
+        printf("%s\n", c);
         return;
       }
     }
