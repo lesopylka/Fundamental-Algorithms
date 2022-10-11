@@ -3,10 +3,10 @@
 #include <math.h>
 #include <time.h>
 
-double *generate_matrix(int *size) {
+double *generate_matrix(unsigned int *size) {
   *size = rand() % 50 + 10;
 
-  double *matrix = (double*) malloc(sizeof(double) **size);
+  double *matrix = (double*) malloc(sizeof(double) **size); //проверка на выделение памяти
   for (int i = 0; i < *size; i++) {
     matrix[i] = rand() % 500 - 100;
   }
@@ -26,7 +26,7 @@ double *result_matrix(double *matrix_1, unsigned int sizem1, double *matrix_2, u
   result = (double*) malloc(sizeof(double*) *sizem1);
 
   for (int i = 0; i < sizem1; i++) {
-    result[i] = matrix_1[i] + ((i >= sizem2) ? matrix_2[sizem2 - 1] : matrix_2[i]);
+    result[i] = matrix_1[i] + matrix_2[i >= sizem2 ? sizem2 - 1 : i];
   }
 
   return result;

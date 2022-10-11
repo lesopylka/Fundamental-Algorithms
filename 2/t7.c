@@ -11,7 +11,7 @@ bool СonvexTriangle(int count, ...) {
     bool sign = false;
 
     int n = count / 2;
-    int X[n], Y[n];
+    int X[n], Y[n]; //не все скушают
     int x = 0, y = 0;
 
     for (int i = 0; i < count; i++) {
@@ -55,11 +55,11 @@ double DegreePolynomialValue(double x, int index, ...) {
 }
 
 int main(int argc, char *argv[]) {
-    if (СonvexTriangle(10, 2, 1, 4, 1, 5, 3, 3, 5, 1, 3))
+    if (СonvexTriangle(8, 2, 2, 0, 2, 0, 0, 2, 0))
     printf("The polygon convex!\n");
     else
     printf("The polygon is not convex!\n");
 
-    printf("%f\n", DegreePolynomialValue(3.0, 2, 2.0, 5.0, 3.0));
+    printf("%f\n", DegreePolynomialValue(3.0, 2., 2.0, 5.0, 3.0));
     return 0;
 }

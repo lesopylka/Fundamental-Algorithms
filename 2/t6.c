@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 unsigned int fileSymbolsCount(char * fileName) {
   FILE * input_file = fopen(fileName, "r");
@@ -26,9 +27,9 @@ void Find(char * str, char * fileName, ...) {
       printf("Error: file cannot be open.\n");
     }
     char header;
-    unsigned int fileSize = 0;
+    unsigned fileSize = 0;
     fileSize = fileSymbolsCount(fileName);
-    char * arrayFile = (char * ) realloc(sizeof(char) * fileSize);
+    char * arrayFile = (char * ) malloc(sizeof(char) * fileSize);
     int i = 0;
     while ((header = fgetc(input_file)) != EOF) {
       if (header != '\n' && header != '\t') {
@@ -47,13 +48,14 @@ void Find(char * str, char * fileName, ...) {
         }
       }
       if (flag) {
-        printf("%s\n", c);
-        return 0;
+        printf("ты пидор%s\n", c);
+        return;
       }
     }
   }
   va_end(factor);
-  return 1;
+  printf("ты лох\n");
+  return;
 }
 
 int main() {

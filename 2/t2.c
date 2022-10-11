@@ -32,53 +32,55 @@ void upper_register_through_2(char * str) {
   }
 }
 
-void replace(char * str, char* result) {
+char* replace(char * str) {
   int n = length(str), i, j;
-  int pointers[] = {
-    0,
-    0,
-    0
-  };
-  result = (char*) malloc(sizeof(char) * (n + 1));
-      if( result == NULL ) {
-        printf( "Insufficient memory available\n" );
-        return;
+  
+  char* result = (char*) malloc(sizeof(char) * (n + 1));
+  if( result == NULL ) {
+    printf( "Insufficient memory available\n" );
+    return NULL;
   }
+
   char* letters = (char*) malloc(sizeof(char) * (n + 1));
-      if( letters == NULL ) {
-        printf( "Insufficient memory available\n" );
-        return;
+  if( letters == NULL ) {
+    printf( "Insufficient memory available\n" );
+    return NULL;
   }
 
   char* others = (char*) malloc(sizeof(char) * (n + 1));
-      if( others == NULL ) {
-        printf( "Insufficient memory available\n" );
-        return;
+  if( others == NULL ) {
+    printf( "Insufficient memory available\n" );
+    return NULL;
   }
+
+  int digitCount=0, letterCount=0, otherCount=0;
   
   for (i = 0; i < n; ++i) {
     if (isdigit(str[i])) {
-      result[pointers[0]] = str[i];
-      pointers[0]++;
+      result[digitCount] = str[i];
+      digitCount++;
     } else if (isalpha(str[i])) {
-      letters[pointers[1]] = str[i];
-      pointers[1]++;
+      letters[letterCount] = str[i];
+      letterCount++;
     } else {
-      others[pointers[2]] = str[i];
-      pointers[2]++;
+      others[otherCount] = str[i];
+      otherCount++;
     }
   }
-  for (j = 0; j < pointers[1]; ++j) {
-    result[pointers[0]] = letters[j];
-    pointers[0]++;
+
+  int count = digitCount;
+  for (j = 0; j < letterCount; ++j) {
+    result[count] = letters[j];
+    count++;
   }
-  for (j = 0; j < pointers[2]; ++j) {
-    result[pointers[0]] = others[j];
-    pointers[0]++;
+  for (j = 0; j < otherCount; ++j) {
+    result[count] = others[j];
+    count++;
   }
-  result[pointers[0]] = '\0';
+  
   free(letters);
   free(others);
+  return (result);
 }
 
 char * concat(char * s1, char * s2) {
@@ -135,7 +137,7 @@ int main(int argc, char * argv[]) {
         printf("Result: %s\n", argv[1]);
         break;
       case 'n':
-        replace(argv[1], result);
+        result = replace(argv[1]);
         printf("Replaced: %s\n", result);
         free(result);
         result = NULL;
@@ -143,19 +145,17 @@ int main(int argc, char * argv[]) {
       case 'c':
         if (argc >= 4) {
           result = concat(argv[1], argv[3]);
-          printf("%s", result);
+          printf("%s\n", result);
           free(result);
         } else {
-          printf("Need one more argument!");
+          printf("Need one more argument!\n");
         }
         break;
       }
-      break;
     }
   }
   if (!good_flag) {
     printf("Invalid flag entered! (Flag start in '-' and then one of the 'lrunc')\n");
   }
-
   return 0;
 }
