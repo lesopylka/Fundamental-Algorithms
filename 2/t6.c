@@ -27,6 +27,7 @@ void Find(char *str, char *fileName, ...) {
         FILE *input_file = fopen(c, "r");
         if (input_file == NULL) {
             printf("Error: file cannot be open.\n");
+            return 1;
         }
         char header;
         unsigned fileSize = 0;
