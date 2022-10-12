@@ -3,6 +3,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+void SearchSubstring(){
+  for (int i = 0; i < fileSize; i++) {
+    flag = 1;
+    for (int j = 0; j < n; j++) {
+        if (str[j] != arrayFile[i + j]) {
+            flag = 0;
+            break;
+        }
+    }
+    // если строка найдена - печатается номер файла
+    if (flag) {
+        printf("Entry in file: %s on position: %d\n", c, i);
+//                return;
+    }
+}
+}
+
 unsigned int fileSymbolsCount(char *fileName) {
     FILE *input_file = fopen(fileName, "r");
     if (input_file == NULL) {
@@ -44,23 +61,10 @@ void Find(char *str, char *fileName, ...) {
         }
 
 
-        int flag = 1;
+        bool flag = 1;
         int n = strlen(str);
         // поиск подстроки наивным способом
-        for (int i = 0; i < fileSize; i++) {
-            flag = 1;
-            for (int j = 0; j < n; j++) {
-                if (str[j] != arrayFile[i + j]) {
-                    flag = 0;
-                    break;
-                }
-            }
-            // если строка найдена - печатается номер файла
-            if (flag) {
-                printf("Entry in file: %s on position: %d\n", c, i);
-//                return;
-            }
-        }
+
         if (count == 3) {
             break;
         }
