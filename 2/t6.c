@@ -54,7 +54,7 @@ void Find(char * str, char * fileName, ...) {
     }
   }
   va_end(factor);
-  printf("ты лох\n");
+  printf("что то не так\n");
   return;
 }
 
