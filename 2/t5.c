@@ -55,7 +55,7 @@ int * unique_elems_array(int * array, int SIZE) {
     final_array[i] = sub_array[i];
   }
   for (int i = 0; i < k; ++i) {
-    printf("%d ", final_array[i]);
+    printf("%d\n", final_array[i]);
   }
   return final_array;
 }
@@ -71,7 +71,7 @@ int main() {
   printf("select an option\n1: change max and min\n 2: create an array of unique elements\n");
   int option;
   for (int i = 0; i < SIZE; ++i) {
-    printf("%d ", array[i]);
+    printf("%d\n", array[i]);
   }
   scanf("%d", & option);
   switch (option) {
