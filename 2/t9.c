@@ -12,31 +12,19 @@ int max(int a, int b) {
     }
 }
 
-void swap(char *s, int left, int right) {
-    char tmp = s[left];
-    s[left] = s[right];
-    s[right] = tmp;
-    return;
-}
-
 int length(const char *str) {
     int i = 0;
     while (str[++i]);
     return 0;
 }
 
-void reverse(char *str) {
-    int n = length(str);
-    for (int i = 0; i < n / 2; ++i)
-        swap(str, i, n - 1 - i);
-    return;
-}
-
-
 int ToInteger(char c) {
-    if (c >= 'A' && c <= 'Z') return c - 'A' + 10;
-    else if (c >= 'a' && c <= 'z') return c - 'a' + 10;
-    else if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'A' && c <= 'Z') 
+        return c - 'A' + 10;
+    else if (c >= 'a' && c <= 'z') 
+        return c - 'a' + 10;
+    else if (c >= '0' && c <= '9') 
+        return c - '0';
     return 0;
 }
 
@@ -75,11 +63,10 @@ char *Stacking(char *str1, char *str2, int n) {
 }
 
 int main() {
-    int n = 15;
-    char *str1 = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-    char *str2 = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001";
-    char *str3 = "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000FFFF";
-    char *res = Stacking(str2, str3, n);
+    int n = 10;
+    char *str1 = "2";
+    char *str2 = "5";
+    char *res = Stacking(str1, str2, n);
 
     printf("%s\n", res);
     free(res);

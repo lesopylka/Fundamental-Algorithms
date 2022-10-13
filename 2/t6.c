@@ -3,23 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void SearchSubstring(){
-  for (int i = 0; i < fileSize; i++) {
-    flag = 1;
-    for (int j = 0; j < n; j++) {
-        if (str[j] != arrayFile[i + j]) {
-            flag = 0;
-            break;
-        }
-    }
-    // если строка найдена - печатается номер файла
-    if (flag) {
-        printf("Entry in file: %s on position: %d\n", c, i);
-//                return;
-    }
-}
-}
-
 unsigned int fileSymbolsCount(char *fileName) {
     FILE *input_file = fopen(fileName, "r");
     if (input_file == NULL) {
@@ -35,6 +18,24 @@ unsigned int fileSymbolsCount(char *fileName) {
     return (count);
 }
 
+void SearchSubstring(int fileSize, char *str, char *arrayFile, char *c) {
+    int flag;
+    int n = strlen(str);
+    for (int i = 0; i < fileSize; i++) {
+        flag = 1;
+        for (int j = 0; j < n; j++) {
+            if (str[j] != arrayFile[i + j]) {
+                flag = 0;
+                break;
+            }
+        }
+        // если строка найдена - печатается номер файла
+        if (flag) {
+            printf("Entry in file: %s on position: %d\n", c, i);
+        }
+    }
+}
+
 void Find(char *str, char *fileName, ...) {
     va_list factor; // указатель на необязательный параметр
     va_start(factor, fileName); // устанавливаем указатель
@@ -44,7 +45,7 @@ void Find(char *str, char *fileName, ...) {
         FILE *input_file = fopen(c, "r");
         if (input_file == NULL) {
             printf("Error: file cannot be open.\n");
-            return 1;
+            return;
         }
         char header;
         unsigned fileSize = 0;
@@ -60,9 +61,7 @@ void Find(char *str, char *fileName, ...) {
             }
         }
 
-
-        bool flag = 1;
-        int n = strlen(str);
+        SearchSubstring(fileSize, str, arrayFile, c);
         // поиск подстроки наивным способом
 
         if (count == 3) {
