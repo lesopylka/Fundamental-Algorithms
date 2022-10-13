@@ -4,7 +4,7 @@
 
 void fill_array(int *array, int SIZE, int left_bound, int right_bound) {
     for (int i = 0; i < SIZE; ++i) {
-        array[i] = rand() % right_bound + left_bound;
+        array[i] = rand() % (right_bound - left_bound + 1) + left_bound;
     }
 }
 
