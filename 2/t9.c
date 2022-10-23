@@ -44,28 +44,28 @@ char *Stacking(char *str1, char *str2, int n) {
     char *result = (char *) malloc(sizeof(char) * len_result);
     for (int i = 0; i < len_result - 1; ++i) result[i] = '0';
     result[len_result - 1] = '\0';
-    int pointers[] = {
+    int p[] = {
             len1 - 1,
             len2 - 1
     };
     int s = 0;
     for (int i = len_result - 2; i >= 0; --i) {
 
-        result[i] = ((pointers[0] >= 0) ? (ToInteger(str1[pointers[0]])) : 0) +
-                    ((pointers[1] >= 0) ? (ToInteger(str2[pointers[1]])) : 0) + s;
+        result[i] = ((p[0] >= 0) ? (ToInteger(str1[p[0]])) : 0) +
+                    ((p[1] >= 0) ? (ToInteger(str2[p[1]])) : 0) + s;
         s = result[i] / n;
         result[i] = ToChar(result[i] % n);
-        --pointers[0];
-        --pointers[1];
+        --p[0];
+        --p[1];
     }
 
     return result;
 }
 
 int main() {
-    int n = 10;
-    char *str1 = "2";
-    char *str2 = "5";
+    int n = 2;
+    char *str1 = "0001";
+    char *str2 = "0000000010";
     char *res = Stacking(str1, str2, n);
 
     printf("%s\n", res);

@@ -17,7 +17,7 @@ void swap(int * a, int * b) {
   * b = c;
 }
 
-void exchange_min_max(int * array, int SIZE) { // готово
+void exchange_min_max(int * array, int SIZE) { 
   int * max = NULL;
   int * min = NULL;
   max = array;
@@ -57,6 +57,7 @@ int * unique_elems_array(int * array, int SIZE) {
   for (int i = 0; i < k; ++i) {
     printf("%d\n", final_array[i]);
   }
+  free(sub_array);
   return final_array;
 }
 
@@ -84,4 +85,6 @@ int main() {
   default:
     printf("Incorrect option\n");
   }
+  free(array);
+  return 0;
 }

@@ -31,7 +31,7 @@ void SearchSubstring(int fileSize, char * str, char * arrayFile, char * c) {
     }
     // если строка найдена - печатается номер файла
     if (flag) {
-      printf("Entry in file: %s on position: %d\n", c, i);
+      printf("Entry in file: %s on position: %d\n", c, i); 
     }
   }
 }
