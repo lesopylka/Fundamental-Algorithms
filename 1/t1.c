@@ -143,7 +143,6 @@ int main(int argc, char * argv[]) {
 
   char toggle = argv[2][0];
   char command = argv[2][1];
-  char * result;
 
   switch (command) {
     case 'h':
