@@ -2,19 +2,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-int to_cc(char c) {
-  if (c >= 'A' && c <= 'Z') return c - 'A' + 10;
-  else if (c >= 'a' && c <= 'z') return c - 'a' + 10;
-  else if (c >= '0' && c <= '9') return c - '0';
-  else return -1;
+int ToInteger(char c) {
+    if (c >= 'A' && c <= 'Z') 
+        return c - 'A' + 10;
+    else if (c >= 'a' && c <= 'z') 
+        return c - 'a' + 10;
+    else if (c >= '0' && c <= '9') 
+        return c - '0';
+    return 0;
 }
 
-char to_char_in_cc(int x) {
-  if (x >= 0 && x <= 9) return x + '0';
-  else return x + 'A' - 10;
+char ToChar(char c) {
+    if (c >= 10 && c <= 26)
+        return c + 'A' - 10;
+    else if (c >= 0 && c <= 9)
+        return c + '0';
+    else return -1;
+    return 0;
 }
 
-void func_prisvaiv(char * a, char * b) {
+void Assimilation(char * a, char * b) {
   int n = strlen(b);
   for (int i = 0; i < n; ++i) {
     a[i] = b[i];
@@ -23,28 +30,28 @@ void func_prisvaiv(char * a, char * b) {
 
 int main(void) {
   int n, f;
-  printf("Enter a number system in the range from 2 to 36:\n");
+  printf("enter a number system in the range from 2 to 36:\n");
   scanf("%d", & n);
   if (n < 2 || n > 36) {
-    printf("Wrong number system entered, learn to read!");
+    printf("wrong number system entered, learn to read!");
     return 0;
   }
   char c[50];
   char stop[4] = "Stop";
-  char max_str[50];
+  char MaxStr[50];
   int max_str_len = 0;
-  printf("\nEnter numbers no more than 50 characters long (Don`t forget, to stop typing, you must enter Stop with a capital letter!)\n");
+  printf("\nenter numbers no more than 50 characters long (Don`t forget, to stop typing, you must enter Stop with a capital letter!)\n");
   do {
     scanf("%s", & c);
-    if (strcmp(c, "Stop") != 0) {
+    if (strcmp(c, "stop") != 0) {
       int x = strlen(c);
       if (c[0] == '-') --x;
       if (x > max_str_len) {
-        func_prisvaiv( & max_str, & c);
+        Assimilation( & MaxStr, & c);
         max_str_len = x;
       } else if (x == max_str_len) {
-        if (strcmp(c, max_str) > 0) {
-          func_prisvaiv( & max_str, & c);
+        if (strcmp(c, MaxStr) > 0) {
+          Assimilation( & MaxStr, & c);
         }
       }
     } else {
@@ -54,38 +61,38 @@ int main(void) {
 
   long long p = 1, result = 0, minus = 0;
   for (int i = max_str_len - 1; i >= 0; --i) {
-    if (max_str[i] == '-' && i == 0) {
+    if (MaxStr[i] == '-' && i == 0) {
       minus = 1;
       continue;
     }
-    f = to_cc(max_str[i]);
+    f = ToInteger(MaxStr[i]);
     if (f == -1) {
-      printf("Invalid character encountered on line %s ", max_str);
+      printf("invalid character encountered on line %s ", MaxStr);
       return 0;
     };
     result += (p * f);
     p *= n;
   }
-  max_str[max_str_len] = '\0';
-  printf("\nMax str: %s  In decimal number system: %d\n", max_str, (minus) ? -result : result);
+  MaxStr[max_str_len] = '\0';
+  printf("\nmax str: %s  In decimal number system: %d\n", MaxStr, (minus) ? -result : result);
 
-  int len_cc = 0, j = 0;
-  char mass_cc[50];
+  int LenCC = 0, j = 0;
+  char MassCC[50];
 
   for (int cc = 9; cc <= 36; cc += 9) {
     p = result;
     while (p) {
-      mass_cc[len_cc] = to_char_in_cc(p % cc);
+      MassCC[LenCC] = ToChar(p % cc);
       p /= cc;
-      len_cc++;
+      LenCC++;
     }
-    printf("In counting system %d -> ", cc);
+    printf("in counting system %d -> ", cc);
     printf("%s", (minus) ? "-" : "");
-    for (int i = len_cc - 1; i >= 0; --i) {
-      printf("%c", mass_cc[i]);
+    for (int i = LenCC - 1; i >= 0; --i) {
+      printf("%c", MassCC[i]);
     }
     printf("\n");
-    len_cc = 0;
+    LenCC = 0;
   }
 
   return 0;

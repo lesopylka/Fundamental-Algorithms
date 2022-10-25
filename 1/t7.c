@@ -4,10 +4,11 @@
 #include <math.h>
 #include <time.h>
 
-void swap(int * a, int * b) {
-  int temp = * a;
+void Swap(int * a, int * b) {
+  int c;
+  c = * a;
   * a = * b;
-  * b = temp;
+  * b = c;
 }
 
 int main(void) {
@@ -32,13 +33,13 @@ int main(void) {
       }
     }
   }
-  swap( & matrix[nmin], & matrix[nmax]);
-  printf("      min = %d, max = %d\n", min, max);
+  Swap( & matrix[nmin], & matrix[nmax]);
+  printf(" min = %d, max = %d\n", min, max);
 
   for (i = 0; i < n; i++) {
     printf("%d ", matrix[i]);
   }
-  printf("     -- result tranfer");
+  printf(" — result tranfer");
 
   free(matrix);
 

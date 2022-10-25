@@ -1,14 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
 char * FileNameGeneration(const char * str) {
-  char * output;
+  char * Output;
   int j = 0, Pointer = -1;
   int LenArgv = strlen(str);
-  output = malloc(sizeof(char) * (LenArgv + 4));
-  if (output == NULL)
+  Output = malloc(sizeof(char) * (LenArgv + 4));
+  if (Output == NULL)
     return NULL;
   for (j = LenArgv - 1; j >= 0; --j) {
     if (str[j] == '\\') {
@@ -18,47 +17,50 @@ char * FileNameGeneration(const char * str) {
   }
 
   for (j = 0; j <= Pointer; j++) {
-    output[j] = str[j];
+    Output[j] = str[j];
   }
 
   for (j = Pointer + 1; j < LenArgv+ 4; j++) {
     int l = j - (Pointer + 1);
     if (l == 0) {
-      output[j] = 'o';
+      Output[j] = 'o';
     } else if (l == 1) {
-      output[j] = 'u';
+      Output[j] = 'u';
     } else if (l == 2) {
-      output[j] = 't';
+      Output[j] = 't';
     } else if (l == 3) {
-      output[j] = '_';
+      Output[j] = '_';
     } else {
-      output[j] = str[j - 4];
+      Output[j] = str[j - 4];
     }
   }
-  return output;
+  return Output;
 }
 
-int to_cc(char c) {
-  if (c >= 'A' && c <= 'Z') return c - 'A' + 10;
-  else if (c >= 'a' && c <= 'z') return c - 'a' + 10;
-  else if (c >= '0' && c <= '9') return c - '0';
-  else return -1;
+int ToInteger(char c) {
+    if (c >= 'A' && c <= 'Z') 
+        return c - 'A' + 10;
+    else if (c >= 'a' && c <= 'z') 
+        return c - 'a' + 10;
+    else if (c >= '0' && c <= '9') 
+        return c - '0';
+    return 0;
 }
 
 int main(int argc, char * argv[]) {
 
   if (argc < 2) {
-    printf("Please, input path to the file");
+    printf("please, input path to the file");
     return 0;
   } else if (argc > 2) {
-    printf("Сheck the correctness of the entered data");
+    printf("check the correctness of the entered data");
     return 0;
   }
 
   FILE * InputFile = fopen(argv[1], "r");
 
   if (InputFile == NULL) {
-    printf("Error opening input file\n");
+    printf("error opening input file\n");
     return 0;
   }
 
@@ -66,48 +68,48 @@ int main(int argc, char * argv[]) {
   int i = 0;
 
   // генерация названия файла.
-  char * output = FileNameGeneration(argv[1]);
+  char * Output = FileNameGeneration(argv[1]);
 
-  FILE * output_file = fopen(output, "w");
-  if (output_file == NULL) {
-    printf("Error opening output file\n");
+  FILE * OutputFile = fopen(Output, "w");
+  if (OutputFile == NULL) {
+    printf("error opening Output file\n");
     return 0;
   }
 
-  char array[50]; //сюда должно влезать число в какой-то системе счисления.
-  int flag = 0;
-  int max = 1;
+  char Array[50]; //сюда должно влезать число в какой-то системе счисления.
+  int Flag = 0;
+  int Max = 1;
   while ((c = fgetc(InputFile))) {
     if (c != ' ' && c != '\n' && c != EOF) {
-      array[i] = c;
-      if (to_cc(c) == -1) {
+      Array[i] = c;
+      if (ToInteger(c) == -1) {
         printf("file contains invalid characters...");
         return 0;
       }
-      if (to_cc(c) > max) {
-        max = to_cc(c);
+      if (ToInteger(c) > Max) {
+        Max = ToInteger(c);
       }
-      fprintf(output_file, "%c", c);
-      flag = 0;
+      fprintf(OutputFile, "%c", c);
+      Flag = 0;
       ++i;
-    } else if (!flag) {
-      max++;
-      fprintf(output_file, " - minimum number system: %d  =>  ", max);
+    } else if (!Flag) {
+      Max++;
+      fprintf(OutputFile, " - minimum number system: %d  =>  ", Max);
       long long p = 1, result = 0;
       for (int l = i - 1; l >= 0; l--) {
-        result += (p * to_cc(array[l]));
-        p *= (max);
+        result += (p * ToInteger(Array[l]));
+        p *= (Max);
       }
-      fprintf(output_file, "%lld\n", result);
-      flag = 1;
-      max = 1;
+      fprintf(OutputFile, "%lld\n", result);
+      Flag = 1;
+      Max = 1;
       i = 0;
       if (c == EOF) break;
     }
   }
 
   fclose(InputFile);
-  fclose(output_file);
-  free(output);
+  fclose(OutputFile);
+  free(Output);
   return 0;
 }

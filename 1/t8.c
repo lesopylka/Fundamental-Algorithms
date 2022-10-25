@@ -3,60 +3,59 @@
 #include <string.h>
 #include <math.h>
 
-int is_digit(char c) {
+int IsDigit(char c) {
   return (c >= '0' && c <= '9');
 }
 
 int main(int argc, char * argv[]) {
 
   if (argc < 3) {
-    printf("Please, input path to the file and flag one of the ( 'a)' , 'b)', 'c)', 'd)', 'e)' )\n");
+    printf("please, input path to the file and Flag one of the ( 'a)' , 'b)', 'c)', 'd)', 'e)' )\n");
     return 0;
   } else if (argc > 3) {
-    printf("Сheck the correctness of the entered data. Too much arguments.\n");
+    printf("too much arguments.\n");
     return 0;
   }
 
   FILE * input_file = fopen(argv[1], "r");
 
   if (input_file == NULL) {
-    printf("Error opening input file\n");
+    printf("error opening input file\n");
     return 0;
   }
 
   long long array[128];
-  int size_array = 0, flag = 1, minus = 0;
+  int SizeArray = 0, Flag = 1, Minus = 0;
   long long n = 0;
   char c;
   while ((c = fgetc(input_file))) {
-    if (is_digit(c)) {
+    if (IsDigit(c)) {
       n = n * 10 + (c - '0');
-      flag = 0;
-    } else if (flag == 0) {
-      if (minus) {
+      Flag = 0;
+    } else if (Flag == 0) {
+      if (Minus) {
         n = -n;
-        minus = 0;
+        Minus = 0;
       }
-      array[size_array] = n;
-      size_array++;
+      array[SizeArray] = n;
+      SizeArray++;
       n = 0;
-      flag = 1;
-    } else if (flag == 1) {
+      Flag = 1;
+    } else if (Flag == 1) {
       if (c == '-') {
-        minus = 1;
+        Minus = 1;
       }
     }
     if (c == EOF) break;
   }
-  printf("\nStart array from file: ");
-  for (int j = 0; j < size_array; j++) {
+  printf("\nstart array from file: ");
+  for (int j = 0; j < SizeArray; j++) {
     printf("%lld ", array[j]);
   }
-  printf("\n");
 
   fclose(input_file);
   int good_flag = 0;
-  char parametrs[5][3] = {
+  char Parameters[5][3] = {
     "a)",
     "b)",
     "c)",
@@ -65,95 +64,95 @@ int main(int argc, char * argv[]) {
   };
 
   long long array2[128];
-  int size_array2 = 0;
+  int SizeArray2 = 0;
   int i;
-  int current_element;
+  int CurrentElement;
   long long s = 0;
   for (i = 0; i < 5; i++) {
-    if (!strcmp(parametrs[i], argv[2])) {
+    if (!strcmp(Parameters[i], argv[2])) {
       good_flag = 1;
-      switch (parametrs[i][0]) {
+      switch (Parameters[i][0]) {
       case 'a':
-        printf("Numbers at odd indices: ");
-        for (int l = 1; l < size_array; l += 2) {
-          array2[size_array2] = array[l];
-          size_array2++;
+        printf("numbers at odd indices: ");
+        for (int l = 1; l < SizeArray; l += 2) {
+          array2[SizeArray2] = array[l];
+          SizeArray2++;
         }
 
         break;
       case 'b':
-        printf("Even numbers: ");
-        for (int l = 0; l < size_array; ++l) {
+        printf("even numbers: ");
+        for (int l = 0; l < SizeArray; ++l) {
           if (array[l] % 2 == 0) {
-            array2[size_array2] = array[l];
-            size_array2++;
+            array2[SizeArray2] = array[l];
+            SizeArray2++;
           }
         }
         break;
       case 'c':
-        printf("Enter the index of the current element: ");
-        scanf("%d", & current_element);
-        if (current_element > size_array - 1 || current_element < 0) {
-          printf("Invalid pointer!\n");
+        printf("enter the index of the current element: ");
+        scanf("%d", & CurrentElement);
+        if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
+          printf("invalid pointer!\n");
           return 0;
         }
-        long long minim = array[0], maxim = array[0];
-        for (int l = 0; l < size_array; ++l) {
+        long long Minim = array[0], maxim = array[0];
+        for (int l = 0; l < SizeArray; ++l) {
           if (array[l] > maxim) {
             maxim = array[l];
           }
-          if (array[l] < minim) {
-            minim = array[l];
+          if (array[l] < Minim) {
+            Minim = array[l];
           }
         }
-        printf("Farthest (in value) from it: ");
-        if (maxim - array[current_element] > array[current_element] - minim) {
+        printf("farthest (in value) from it: ");
+        if (maxim - array[CurrentElement] > array[CurrentElement] - Minim) {
           printf("%lld", maxim);
         } else {
-          printf("%lld", minim);
+          printf("%lld", Minim);
         }
 
         break;
       case 'd':
-        printf("Enter the index of the current element: ");
-        scanf("%d", & current_element);
+        printf("enter the index of the current element: ");
+        scanf("%d", & CurrentElement);
 
-        if (current_element > size_array - 1 || current_element < 0) {
-          printf("Invalid pointer!\n");
+        if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
+          printf("invalid pointer!\n");
           return 0;
         }
 
-        for (int l = 0; l < current_element; ++l)
+        for (int l = 0; l < CurrentElement; ++l)
           s += array[l];
 
-        printf("Sum: %lld", s);
+        printf("sum: %lld", s);
 
         break;
       case 'e':
-        printf("Enter the index of the current element: ");
-        scanf("%d", & current_element);
+        printf("enter the index of the current element: ");
+        scanf("%d", & CurrentElement);
 
-        if (current_element > size_array - 1 || current_element < 0) {
-          printf("Invalid pointer!\n");
+        if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
+          printf("invalid pointer!\n");
           return 0;
         }
 
-        for (int l = 0; l < size_array; ++l)
-          if (array[l] < array[current_element])
+        for (int l = 0; l < SizeArray; ++l)
+          if (array[l] < array[CurrentElement])
             s += array[l];
 
-        printf("Sum: %lld", s);
+        printf("sum: %lld", s);
 
         break;
       }
     }
   }
   if (!good_flag) {
-    printf("Invalid flag entered! flag one of the ( 'a)' , 'b)', 'c)', 'd)', 'e)' )\n");
+    printf("invalid flag entered\n");
     return 0;
   }
 
-  for (int l = 0; l < size_array2; ++l) {
+  for (int l = 0; l < SizeArray2; ++l) {
     printf("%lld ", array2[l]);
   }
   printf("\n");

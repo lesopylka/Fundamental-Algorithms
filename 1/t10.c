@@ -5,52 +5,52 @@
 
 #define ERROR 0.01
 
-void free_matrix(double ** matrix, int row) {
-  for (int i = 0; i < row; i++) {
-    free(matrix[i]);
+void FreeMatrix(double ** Matrix, int Row) {
+  for (int i = 0; i < Row; i++) {
+    free(Matrix[i]);
   }
-  free(matrix);
+  free(Matrix);
 }
 
-double ** generate_matrix(int * row, int * col) {
-  //*row = rand() % 10 + 1;
-  //*col = rand() % 10 + 1;
+double ** GenerateMatrix(int * Row, int * Col) {
+  //*Row = rand() % 10 + 1;
+  //*Col = rand() % 10 + 1;
 
-  double ** matrix = (double ** ) malloc(sizeof(double * ) * * row);
-  for (int i = 0; i < * row; i++) {
-    matrix[i] = (double * ) malloc(sizeof(double) * * col);
-    for (int j = 0; j < * col; j++) {
-      matrix[i][j] = rand() % 200 - 100;
+  double ** Matrix = (double ** ) malloc(sizeof(double * ) * * Row);
+  for (int i = 0; i < * Row; i++) {
+    Matrix[i] = (double * ) malloc(sizeof(double) * * Col);
+    for (int j = 0; j < * Col; j++) {
+      Matrix[i][j] = rand() % 200 - 100;
     }
   }
 
-  return matrix;
+  return Matrix;
 }
 
-void output_matrix(double ** matrix, int row, int col) {
-  for (int i = 0; i < row; i++) {
-    for (int j = 0; j < col; j++) {
-      printf("%10.0lf ", matrix[i][j]);
+void output_matrix(double ** Matrix, int Row, int Col) {
+  for (int i = 0; i < Row; i++) {
+    for (int j = 0; j < Col; j++) {
+      printf("%10.0lf ", Matrix[i][j]);
     }
     printf("\n");
   }
   printf("\n");
 }
 
-double ** multiply_matrix(double ** matrix_1, int row_1, int col_1, double ** matrix_2, int row_2, int col_2) {
+double ** MultiplyMatrix(double ** Matrix1, int Row1, int Col1, double ** Matrix2, int Row2, int Col2) {
   double ** result = NULL;
 
-  if (col_1 == row_2) {
-    result = (double ** ) malloc(sizeof(double * ) * row_1);
-    for (int i = 0; i < row_1; i++) {
-      result[i] = (double * ) malloc(sizeof(double) * col_2);
+  if (Col1 == Row2) {
+    result = (double ** ) malloc(sizeof(double * ) * Row1);
+    for (int i = 0; i < Row1; i++) {
+      result[i] = (double * ) malloc(sizeof(double) * Col2);
     }
 
-    for (int i = 0; i < row_1; i++) {
-      for (int j = 0; j < col_2; j++) {
+    for (int i = 0; i < Row1; i++) {
+      for (int j = 0; j < Col2; j++) {
         result[i][j] = 0;
-        for (int k = 0; k < col_1; k++) {
-          result[i][j] += matrix_1[i][k] * matrix_2[k][j];
+        for (int k = 0; k < Col1; k++) {
+          result[i][j] += Matrix1[i][k] * Matrix2[k][j];
         }
       }
     }
@@ -59,38 +59,38 @@ double ** multiply_matrix(double ** matrix_1, int row_1, int col_1, double ** ma
   return result;
 }
 
-void row_decrement(double * row_begin, double * row, double dec, int col) {
-  for (int i = 0; i < col; i++) {
-    row[i] -= dec * row_begin[i];
+void row_decrement(double * RowBegin, double * Row, double dec, int Col) {
+  for (int i = 0; i < Col; i++) {
+    Row[i] -= dec * RowBegin[i];
   }
 }
 
-double determinant(double ** matrix, int row, int col) {
-  if (row == col) {
-    double res = 1.0;
-    int size = row;
-    double ** copy_matrix = (double ** ) malloc(sizeof(double * ) * size);
+double determinant(double ** Matrix, int Row, int Col) {
+  if (Row == Col) {
+    double Res = 1.0;
+    int Size = Row;
+    double ** CopyMatrix = (double ** ) malloc(sizeof(double * ) * Size);
 
-    for (int i = 0; i < size; i++) {
-      copy_matrix[i] = (double * ) malloc(sizeof(double) * size);
-      for (int j = 0; j < size; j++) {
-        copy_matrix[i][j] = matrix[i][j];
+    for (int i = 0; i < Size; i++) {
+      CopyMatrix[i] = (double * ) malloc(sizeof(double) * Size);
+      for (int j = 0; j < Size; j++) {
+        CopyMatrix[i][j] = Matrix[i][j];
       }
     }
 
-    for (int row_begin = 0; row_begin < size; row_begin++) {
-      for (int row_dec = row_begin + 1; row_dec < size; row_dec++) {
-        row_decrement(copy_matrix[row_begin], copy_matrix[row_dec], copy_matrix[row_dec][row_begin] / copy_matrix[row_begin][row_begin], size);
+    for (int RowBegin = 0; RowBegin < Size; RowBegin++) {
+      for (int RowDec = RowBegin + 1; RowDec < Size; RowDec++) {
+        row_decrement(CopyMatrix[RowBegin], CopyMatrix[RowDec], CopyMatrix[RowDec][RowBegin] / CopyMatrix[RowBegin][RowBegin], Size);
       }
     }
 
-    for (int i = 0; i < row; i++) {
-      res *= copy_matrix[i][i];
+    for (int i = 0; i < Row; i++) {
+      Res *= CopyMatrix[i][i];
     }
 
-    free_matrix(copy_matrix, size);
+    FreeMatrix(CopyMatrix, Size);
 
-    return res;
+    return Res;
   }
 
   return ERROR;
@@ -98,51 +98,51 @@ double determinant(double ** matrix, int row, int col) {
 
 int main() {
   srand(time(0));
-  int row_1 = 3;
-  int col_1 = 3;
-  int row_2 = 3;
-  int col_2 = 3;
-  double ** matrix_1 = generate_matrix( & row_1, & col_1);
-  double ** matrix_2 = generate_matrix( & row_2, & col_2);
-  double ** multiply = multiply_matrix(matrix_1, row_1, col_1, matrix_2, row_2, col_2);
+  int Row1 = 3;
+  int Col1 = 3;
+  int Row2 = 3;
+  int Col2 = 3;
+  double ** Matrix1 = GenerateMatrix( & Row1, & Col1);
+  double ** Matrix2 = GenerateMatrix( & Row2, & Col2);
+  double ** multiply = MultiplyMatrix(Matrix1, Row1, Col1, Matrix2, Row2, Col2);
 
   printf("A:\n");
-  output_matrix(matrix_1, row_1, col_1);
+  output_matrix(Matrix1, Row1, Col1);
   printf("B:\n");
-  output_matrix(matrix_2, row_2, col_2);
+  output_matrix(Matrix2, Row2, Col2);
 
   if (multiply != NULL) {
     printf("A x B:\n");
-    output_matrix(multiply, row_1, col_2);
+    output_matrix(multiply, Row1, Col2);
   } else {
     fprintf(stderr, "%s\n\n", "A x B:\nMultiplication cannot be done");
   }
 
-  if (determinant(matrix_1, row_1, col_1) != ERROR) {
-    printf("det(A) = %lf\n", determinant(matrix_1, row_1, col_1));
+  if (determinant(Matrix1, Row1, Col1) != ERROR) {
+    printf("det(A) = %lf\n", determinant(Matrix1, Row1, Col1));
   } else {
-    fprintf(stderr, "%s\n\n", "det(A): Invalid count of row and col");
+    fprintf(stderr, "%s\n\n", "det(A): Invalid count of Row and Col");
   }
 
-  if (determinant(matrix_2, row_2, col_2) != ERROR) {
-    printf("det(B) = %lf\n", determinant(matrix_2, row_2, col_2));
+  if (determinant(Matrix2, Row2, Col2) != ERROR) {
+    printf("det(B) = %lf\n", determinant(Matrix2, Row2, Col2));
   } else {
-    fprintf(stderr, "%s\n\n", "det(B): Invalid count of row and col");
+    fprintf(stderr, "%s\n\n", "det(B): Invalid count of Row and Col");
   }
 
   if (multiply != NULL) {
-    if (determinant(multiply, row_1, col_2) != ERROR) {
-      printf("det(A x B) = %lf\n", determinant(multiply, row_1, col_2));
+    if (determinant(multiply, Row1, Col2) != ERROR) {
+      printf("det(A x B) = %lf\n", determinant(multiply, Row1, Col2));
     } else {
-      fprintf(stderr, "%s\n\n", "det(A x B): Invalid count of row and col");
+      fprintf(stderr, "%s\n\n", "det(A x B): Invalid count of Row and Col");
     }
-    free_matrix(multiply, row_1);
+    FreeMatrix(multiply, Row1);
   } else {
     fprintf(stderr, "%s\n\n", "det(A x B): Multiplication cannot be done");
   }
 
-  free_matrix(matrix_1, row_1);
-  free_matrix(matrix_2, row_2);
+  FreeMatrix(Matrix1, Row1);
+  FreeMatrix(Matrix2, Row2);
 
   return 0;
 }

@@ -6,6 +6,8 @@
         "ctype.h": "c",
         "stdlib.h": "c",
         "math.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "__tuple": "c",
+        "array": "c"
     }
 }
