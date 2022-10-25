@@ -7,27 +7,27 @@ int main(int argc, char * argv[]) {
   // генерация названия файла.
 
   char * output;
-  int j = 0, ukazatel_na_slash = -1;
+  int j = 0, pointer = -1;
   int len_argv = strlen(argv[0]);
   output = malloc(sizeof(char) * 7);
   for (j = 0; j < len_argv; j++) {
     if (argv[0][j] == '\\') {
-      ukazatel_na_slash = j;
+      pointer = j;
     }
   }
 
-  for (j = 0; j <= ukazatel_na_slash; j++) {
+  for (j = 0; j <= pointer; j++) {
     output[j] = argv[0][j];
   }
 
-  for (j = ukazatel_na_slash + 1; j < ukazatel_na_slash + 9; j++) {
-    int l = j - (ukazatel_na_slash + 1);
+  for (j = pointer + 1; j < pointer + 9; j++) {
+    int l = j - (pointer + 1);
     if (l == 0) {
-      output[j] = 'o';
+      output[j] = 'i';
     } else if (l == 1) {
-      output[j] = 'u';
+      output[j] = 'd';
     } else if (l == 2) {
-      output[j] = 't';
+      output[j] = 'k';
     } else if (l == 3) {
       output[j] = '.';
     } else if (l == 4) {
@@ -44,11 +44,11 @@ int main(int argc, char * argv[]) {
   FILE * output_file = fopen(output, "w");
 
   if (output_file == NULL) {
-    printf("File is not open");
+    printf("file is not open");
     return 0;
   }
 
-  char * parametrs[3] = {
+  char * toggles[3] = {
     "-fi",
     "-cin",
     "-arg"
@@ -57,21 +57,21 @@ int main(int argc, char * argv[]) {
   FILE * input_file;
   FILE * input_files_in_file;
   char c;
+  char mass[300];
 
   int i, good_flag = 0;
   for (i = 0; i < 5; i++) {
-    if (!strcmp(parametrs[i], argv[1])) {
+    if (!strcmp(toggles[i], argv[1])) {
       good_flag = 1;
-      switch (parametrs[i][1]) {
+      switch (toggles[i][1]) {
       case 'fi':
-        input_file = fopen(argv[2], "r"); 
+        input_file = fopen(argv[2], "r");
         if (input_file == NULL) {
-          printf("Error opening input file\n");
+          printf("error opening input file\n");
           return 0;
         }
 
         while (1) {
-          char mass[300];
           if (fscanf(input_file, "%s", & mass) == 1) {
             input_files_in_file = fopen(mass, "r");
             if (input_files_in_file != NULL) {
@@ -88,7 +88,6 @@ int main(int argc, char * argv[]) {
         break;
       case 'cin':
         while (1) {
-          char mass[300];
           if (scanf("%s", & mass) == 1) {
             input_files_in_file = fopen(mass, "r");
             if (input_files_in_file != NULL) {
