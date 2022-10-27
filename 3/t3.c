@@ -59,13 +59,6 @@ int logic() {
 
 }
 
-struct employee {
-    unsigned int id;
-    char name;
-    char surname;
-    float wage;
-};
-
 togglesA(){
 
 }
