@@ -4,6 +4,7 @@
 #include <string.h>
 #include <limits.h>
 #include <stdbool.h>
+#include "FibonacciHeap.h"
 
 enum VALIDATION_ENUM {
     noArguments,
