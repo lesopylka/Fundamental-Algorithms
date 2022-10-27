@@ -8,6 +8,7 @@
         "math.h": "c",
         "stdio.h": "c",
         "__tuple": "c",
-        "array": "c"
+        "array": "c",
+        "istream": "c"
     }
 }

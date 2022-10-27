@@ -49,20 +49,6 @@ enum VALIDATION_ENUM validationArg(int argc, char * argv[]) {
 
   return ok;
 }
-struct node {
-    struct node* parent;     // указатель на отца
-    struct node* child;      // указатель на одного из сыновей
-    struct node* left;       // указатель на левого брата
-    struct node* right;      // указатель на правого брата
-    int degree;       // количество дочерних узлов
-    bool mark;        // метка - был ли удален один из дочерних элементов
-    int key;          // числовое значение узла
-};
-
-struct fib_heap {
-    struct node* min;        // узел с минимальным корнем
-    int roots_amount; // количество узлов
-};
 
 void read() {
 
