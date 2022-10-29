@@ -13,7 +13,7 @@ void swap(char * s, int left, int right) {
   s[right] = tmp;
 }
 
-// возвращает длинну строки 
+// возвращает длину строки 
 int length(const char * str) {
   int i = -1;
   while (str[++i]);
@@ -91,24 +91,25 @@ char get(int number, int mask, int r, int k) {
 }
 
 // функция конвертации числа number в СИ 2^r
-void convert(int number, int r) {
+char* convert(int number, int r) {
     int mask = 0;
-    char res[] = "";
     for (int i = 0, tmp = 1; i < r; i = add(i, 1), tmp = multiply(tmp, 2)) {
         mask = add(mask, tmp);
     }
     
     int k = 1;
-    char result[32] = "";
+    char buffer[32] = "";
 
     while(multiply(k, r) <= 31) {
         char digit = get(number, mask, r, k);
-        strncat(result, &digit, 1);
+        strncat(buffer, &digit, 1);
         k = add(k, 1);
         mask <<= r;
     }
-    reverse(result);
-    printf("%s\n", result);
+    reverse(buffer);
+    char *result = buffer;
+
+    return result;
 }
 
 // Валидация аргументов командной строки
@@ -134,8 +135,9 @@ int main(int argc, char * argv[]) {
     int number = atoi(argv[1]);
     int r = atoi(argv[2]);
 
-    convert(number, r);
+    char* result = convert(number, r);
+
+    printf("%s\n", result);
     
     return 0;
 }
-
