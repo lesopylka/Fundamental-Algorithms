@@ -98,8 +98,9 @@ char* convert(int number, int r) {
     }
     
     int k = 1;
-    char buffer[32] = "";
-
+    int p = floor(log(r))+2;
+    char* buffer = (char*)malloc(sizeof(char) * p); 
+    if (buffer=NULL){return NULL;}
     while(multiply(k, r) <= 31) {
         char digit = get(number, mask, r, k);
         strncat(buffer, &digit, 1);
@@ -136,8 +137,9 @@ int main(int argc, char * argv[]) {
     int r = atoi(argv[2]);
 
     char* result = convert(number, r);
-
-    printf("%s\n", result);
+    if(result==NULL){printf("не получилось");}
+    else printf("%s\n", result);
     
+    free(result);
     return 0;
 }

@@ -43,6 +43,32 @@ void printValidationError(enum VALIDATION_ENUM error) {
     }
 }
 
+struct Employee readStr(char* str) {
+  char *w;
+  int state = 0;
+  w = strtok(str, " ");
+  char *id, *name, *surname, *wage;
+  while(w != NULL) {
+    if (state == 0) {
+      id = w;
+    }
+    if (state == 1) {
+      name = w;
+    }
+    if (state == 2) {
+      surname = w;
+    }
+    if (state == 3) {
+      wage = w;
+    }
+    state++;
+    w = strtok(NULL, " ");
+  }
+  struct Employee employee = { .name=name, .surname=surname, .wage=strtod(wage, NULL)};
+
+  return employee;
+}
+
 enum VALIDATION_ENUM validationArg(int argc, char * argv[]) {
   FILE *ifp = fopen(argv[1], "r");
   
@@ -64,22 +90,24 @@ enum VALIDATION_ENUM validationArg(int argc, char * argv[]) {
   return ok;
 }
 
-void read(char *fileName) { 
+int read(char *fileName) { 
   FILE * fp = fopen(fileName, "r");// чтение всего файла
   char tmpString[TMP_STRING_LENGTH];
 
   if (fp == NULL) {
-    printValidationError(inputFileError);
-    return;
+    return 1;
   }
 
   while(1) {
-    if(fgets(tmpString, TMP_STRING_LENGTH, fp) == NULL) {
-      break;
+      if(fgets(tmpString, TMP_STRING_LENGTH, fp) == NULL) {
+        break;
+      }
+      struct Employee test = readStr(tmpString);
+      printf("%s\n%s\n%f\n", test.name, test.surname, test.wage);
     }
-    puts(tmpString);
-  }
   fclose(fp);
+
+  return 0;
   //чтение строки -> чтение всех символов в строке -> чтение символа -> int c = fgetc(fp)
 }
 
@@ -96,7 +124,6 @@ int main(int argc, char * argv[]) {
 
     read(inputFilename);
 }
-
 
 // 1. ввод аргументов +
 // 2. валидация аргументов +

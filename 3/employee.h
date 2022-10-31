@@ -1,5 +1,5 @@
 struct Employee {
-    char name;
-    char surname;
+    char* name;
+    char* surname;
     float wage;
 };
