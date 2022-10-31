@@ -8,6 +8,12 @@
 
 const int TMP_STRING_LENGTH = 150;
 
+const char INPUT_FILE_DELIMETER = ' ';
+struct RawInput {
+  struct Employee employee;
+  int id;
+};
+
 enum VALIDATION_ENUM {
     ok = 0,
     noArguments = 1,
@@ -43,14 +49,16 @@ void printValidationError(enum VALIDATION_ENUM error) {
     }
 }
 
-struct Employee readStr(char* str) {
+ struct RawInput readStr(char* str) {
   char *w;
   int state = 0;
-  w = strtok(str, " ");
-  char *id, *name, *surname, *wage;
+  w = strtok(str, &INPUT_FILE_DELIMETER);
+  char *name, *surname;
+  int id;
+  double wage;
   while(w != NULL) {
     if (state == 0) {
-      id = w;
+      id = atoi(w);
     }
     if (state == 1) {
       name = w;
@@ -59,14 +67,15 @@ struct Employee readStr(char* str) {
       surname = w;
     }
     if (state == 3) {
-      wage = w;
+      wage = strtod(w, NULL);
     }
     state++;
-    w = strtok(NULL, " ");
+    w = strtok(NULL, &INPUT_FILE_DELIMETER);
   }
-  struct Employee employee = { .name=name, .surname=surname, .wage=strtod(wage, NULL)};
+  struct Employee employee = { .name=name, .surname=surname, .wage=wage};
 
-  return employee;
+  struct RawInput rawInput = { .id=id, employee=employee};
+  return rawInput;
 }
 
 enum VALIDATION_ENUM validationArg(int argc, char * argv[]) {
@@ -90,20 +99,22 @@ enum VALIDATION_ENUM validationArg(int argc, char * argv[]) {
   return ok;
 }
 
-int read(char *fileName) { 
+int read(char *fileName, FIB_HEAP *heap) { 
   FILE * fp = fopen(fileName, "r");// чтение всего файла
-  char tmpString[TMP_STRING_LENGTH];
 
   if (fp == NULL) {
     return 1;
   }
 
+  char tmpString[TMP_STRING_LENGTH];
+
   while(1) {
       if(fgets(tmpString, TMP_STRING_LENGTH, fp) == NULL) {
         break;
       }
-      struct Employee test = readStr(tmpString);
-      printf("%s\n%s\n%f\n", test.name, test.surname, test.wage);
+      struct RawInput tmp = readStr(tmpString);
+      NODE *node = malloc(sizeof(NODE));
+      insertion(heap, node, tmp.id, tmp.employee);
     }
   fclose(fp);
 
@@ -122,7 +133,11 @@ int main(int argc, char * argv[]) {
       return 1;
     }
 
-    read(inputFilename);
+    FIB_HEAP *heap = make_fib_heap();
+ 
+    if (read(inputFilename, heap)) {
+      printValidationError(inputFileError);
+    }
 }
 
 // 1. ввод аргументов +
@@ -130,6 +145,6 @@ int main(int argc, char * argv[]) {
 // 3. отображение ошибки (если есть) +
 // 4. чтение файла +
 // 5. валидация строк (проверка на соотвествие структуре)
-// 6. заполнить фибоначчиеву пирамиду данными с пукта 5
+// 6. заполнить фибоначчиеву пирамиду данными с пукта 5 +
 // 7. сортировка пирамиды в зависимости от поданного флага
 // 8. вывод отсортированной даты в файл 
