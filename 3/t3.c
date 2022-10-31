@@ -74,7 +74,7 @@ void printValidationError(enum VALIDATION_ENUM error) {
   }
   struct Employee employee = { .name=name, .surname=surname, .wage=wage};
 
-  struct RawInput rawInput = { .id=id, employee=employee};
+  struct RawInput rawInput = { .id=id, .employee=employee};
   return rawInput;
 }
 
