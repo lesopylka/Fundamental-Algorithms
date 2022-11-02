@@ -472,7 +472,7 @@ short saveToFiles(char * origFilename, Student ** list, int len) {
 
 int main(int argc, char * argv[]) {
   if (argc != 2)
-    return 69;
+    return 2;
 
   FILE * data;
   Student ** list;
@@ -486,7 +486,7 @@ int main(int argc, char * argv[]) {
   int statusCode = readStudents(data, & list, & len);
   if (statusCode != 0) {
     fclose(data);
-    return 69;
+    return 2;
   }
   sortStudents(list, len, compareByName);
   printStudents(list, len);
@@ -498,7 +498,7 @@ int main(int argc, char * argv[]) {
   if (statusCode != 0) {
     killStudents(list, len);
     fclose(data);
-    return 69;
+    return 2;
   }
   printStudents(groupList, groupLen);
 
@@ -507,7 +507,7 @@ int main(int argc, char * argv[]) {
     free(groupList);
     killStudents(list, len);
     fclose(data);
-    return 69;
+    return 2;
   }
 
   free(groupList);

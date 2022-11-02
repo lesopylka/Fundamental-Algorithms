@@ -158,8 +158,8 @@ void printPersons(List * list) {
     // printf('\n');
     //printf("%-*", 30);
     // printf("\n%s\n%s\n%s\n%s\n%d\n%f\n",
-      // person -> lastname, person -> name, person -> patronymic,
-      // person -> birthDate, person -> sex, person -> salary);
+    // person -> lastname, person -> name, person -> patronymic,
+    // person -> birthDate, person -> sex, person -> salary);
     // printf("%-*", 30);
     // printf('\n');
     printf("\n------------------------------\n%s\n%s\n%s\n%s\n%d\n%f\n------------------------------\n",
@@ -560,7 +560,7 @@ int searchPerson(List * list, char * lastname, char * name, char * patronymic,
 
 int main(int argc, char * argv[]) {
   if (argc != 2)
-    return 69;
+    return 2;
 
   FILE * data;
   List * list;
@@ -574,7 +574,7 @@ int main(int argc, char * argv[]) {
   case 0:
     break;
   default:
-    return 69;
+    return 2;
   }
   printPersons(list);
   printf("\nINDEX: %d\n", searchPerson(list, "Irbitsky", NULL, NULL, NULL, NULL, NULL));
@@ -582,14 +582,14 @@ int main(int argc, char * argv[]) {
   case 0:
     break;
   default:
-    return 69;
+    return 2;
   }
   printPersons(list);
   switch (saveToFile("out.txt", list)) {
   case 0:
     break;
   default:
-    return 69;
+    return 2;
   }
 
   listDestroy(list);

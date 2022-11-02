@@ -175,7 +175,7 @@ void printList(List * mes) {
 
 int main(int argc, char * argv[]) {
   if (argc != 2)
-    return 69;
+    return 2;
 
   FILE * data;
   char * filename;
