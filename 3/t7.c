@@ -155,6 +155,13 @@ void printPersons(List * list) {
   do {
     listNextNode(list, & node);
     Person * person = node -> data;
+    // printf('\n');
+    //printf("%-*", 30);
+    // printf("\n%s\n%s\n%s\n%s\n%d\n%f\n",
+      // person -> lastname, person -> name, person -> patronymic,
+      // person -> birthDate, person -> sex, person -> salary);
+    // printf("%-*", 30);
+    // printf('\n');
     printf("\n------------------------------\n%s\n%s\n%s\n%s\n%d\n%f\n------------------------------\n",
       person -> lastname, person -> name, person -> patronymic,
       person -> birthDate, person -> sex, person -> salary);

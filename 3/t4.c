@@ -78,13 +78,13 @@ short genFilename(char ** result, char * extension) {
 short getMessage(char * res, int resCapacity) {
   char c;
   int count = 0;
-  while ((c = getchar()) != '\n') {
+  while ((c = getchar()) != '\n') { 
     if (count == resCapacity - 1) {
       return 1;
     }
     if (!(
         ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') ||
-        ('0' <= c && c <= '9') || (c == ' ') || (c == '.') || (c == ',') ||
+        ('0' <= c && c <= '9') || (c == ' ') || (c == '.') || (c == ',') || //alpha
         (c == '"') || (c == '?') || (c == ':') || (c == ';') || (c == '-') ||
         (c == '!') || (c == '(') || (c == ')') || (c == '=') || (c == '*')
       )) {
