@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 
 typedef struct {
@@ -82,14 +83,15 @@ short getMessage(char * res, int resCapacity) {
     if (count == resCapacity - 1) {
       return 1;
     }
+
     if (!(
-        ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') ||
-        ('0' <= c && c <= '9') || (c == ' ') || (c == '.') || (c == ',') || //alpha
-        (c == '"') || (c == '?') || (c == ':') || (c == ';') || (c == '-') ||
-        (c == '!') || (c == '(') || (c == ')') || (c == '=') || (c == '*')
-      )) {
-      return 2;
+        isalumn(c) || (c == ' ') || (c == '.') || (c == ',') || (c == '"') || 
+        (c == '?') || (c == ':') || (c == ';') || (c == '-') || (c == '!') || 
+        (c == '(') || (c == ')') || (c == '=') || (c == '*')
+    )) {
+        return 2;
     }
+
     res[count] = c;
     count++;
   }
