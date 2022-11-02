@@ -5,7 +5,6 @@
 #include <math.h>
 #include <errno.h>
 
-
 typedef struct {
   unsigned int id;
   char * lastname;
