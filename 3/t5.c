@@ -262,53 +262,27 @@ int studentsAverageMark(Student ** list, int len) {
   return ((int) round(sumMarks / (double)(5 * len)));
 }
 
-void swap(Student ** a, Student ** b) {
-  Student * x = * a;
-  * a = * b;
-  * b = x;
+void sortStudents(Student ** list, int len, int( * compareTo)(Student ** , Student ** )) {
+  qsort(list, len, sizeof(Student * ), (int( * )(const void * ,
+    const void * )) compareTo);
 }
 
-int partition(Student ** array, int low, int high, int( * compareTo)(Student * , Student * )) {
-  Student * pivot = array[high];
-  int i = (low - 1);
-  for (int j = low; j < high; j++) {
-    if (compareTo(array[j], pivot) != 1) {
-      i++;
-      swap( & array[i], & array[j]);
-    }
-  }
-  swap( & array[i + 1], & array[high]);
-  return (i + 1);
+int compareByName(Student ** s1, Student ** s2) {
+  return strcmp(( * s1) -> name, ( * s2) -> name);
 }
 
-void quickSort(Student ** array, int low, int high, int( * compareTo)(Student * , Student * )) {
-  if (low < high) {
-    int pi = partition(array, low, high, compareTo);
-    quickSort(array, low, pi - 1, compareTo);
-    quickSort(array, pi + 1, high, compareTo);
-  }
+int compareByLastname(Student ** s1, Student ** s2) {
+  return strcmp(( * s1) -> lastname, ( * s2) -> lastname);
 }
 
-void sortStudents(Student ** list, int len, int( * compareTo)(Student * , Student * )) {
-  quickSort(list, 0, len - 1, compareTo);
+int compareByGroup(Student ** s1, Student ** s2) {
+  return strcmp(( * s1) -> group, ( * s2) -> group);
 }
 
-int compareByName(Student * s1, Student * s2) {
-  return strcmp(s1 -> name, s2 -> name);
-}
-
-int compareByLastname(Student * s1, Student * s2) {
-  return strcmp(s1 -> lastname, s2 -> lastname);
-}
-
-int compareByGroup(Student * s1, Student * s2) {
-  return strcmp(s1 -> group, s2 -> group);
-}
-
-int compareById(Student * s1, Student * s2) {
-  if (s1 -> id > s2 -> id)
+int compareById(Student ** s1, Student ** s2) {
+  if (( * s1) -> id > ( * s2) -> id)
     return 1;
-  if (s1 -> id < s2 -> id)
+  if (( * s1) -> id < ( * s2) -> id)
     return -1;
   return 0;
 }
@@ -471,7 +445,7 @@ short saveToFiles(char * origFilename, Student ** list, int len) {
 
 int main(int argc, char * argv[]) {
   if (argc != 2)
-    return 2;
+    return 69;
 
   FILE * data;
   Student ** list;
@@ -485,7 +459,7 @@ int main(int argc, char * argv[]) {
   int statusCode = readStudents(data, & list, & len);
   if (statusCode != 0) {
     fclose(data);
-    return 2;
+    return 69;
   }
   sortStudents(list, len, compareByName);
   printStudents(list, len);
@@ -497,7 +471,7 @@ int main(int argc, char * argv[]) {
   if (statusCode != 0) {
     killStudents(list, len);
     fclose(data);
-    return 2;
+    return 69;
   }
   printStudents(groupList, groupLen);
 
@@ -506,7 +480,7 @@ int main(int argc, char * argv[]) {
     free(groupList);
     killStudents(list, len);
     fclose(data);
-    return 2;
+    return 69;
   }
 
   free(groupList);
