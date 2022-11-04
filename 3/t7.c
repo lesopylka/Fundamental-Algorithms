@@ -362,7 +362,7 @@ short readPerson(FILE * file, Person ** result) {
   }
   statusCode = readString(file, & salaryString, "\t \n", isNumOrDot);
   if (statusCode != 0) {
-    if (statusCode == EOF) { 
+    if (statusCode == EOF) {
       isLastPerson = 1;
     } else {
       freeAll(5, lastname, name, patronymic, date, sexString);

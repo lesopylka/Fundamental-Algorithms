@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-
 typedef struct {
   unsigned int id;
   unsigned int size;
@@ -79,17 +78,17 @@ short genFilename(char ** result, char * extension) {
 short getMessage(char * res, int resCapacity) {
   char c;
   int count = 0;
-  while ((c = getchar()) != '\n') { 
+  while ((c = getchar()) != '\n') {
     if (count == resCapacity - 1) {
       return 1;
     }
 
     if (!(
-        isalnum(c) || (c == ' ') || (c == '.') || (c == ',') || (c == '"') || 
-        (c == '?') || (c == ':') || (c == ';') || (c == '-') || (c == '!') || 
+        isalnum(c) || (c == ' ') || (c == '.') || (c == ',') || (c == '"') ||
+        (c == '?') || (c == ':') || (c == ';') || (c == '-') || (c == '!') ||
         (c == '(') || (c == ')') || (c == '=') || (c == '*')
-    )) {
-        return 2;
+      )) {
+      return 2;
     }
 
     res[count] = c;
