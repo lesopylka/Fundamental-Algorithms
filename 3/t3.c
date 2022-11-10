@@ -122,11 +122,30 @@ int read(char *fileName, FIB_HEAP *heap) {
   //чтение строки -> чтение всех символов в строке -> чтение символа -> int c = fgetc(fp)
 }
 
+int fileCheck(char* fileName) {
+  FILE* input_file = fopen(fileName, "r");
+  if (input_file == NULL) {   
+    printf("Error: file cannot be open.\n"); 
+  }
+
+  
+  char header;
+  unsigned int count = 0;
+
+  while ((header = fgetc(input_file)) != EOF) {
+    while(header != '/n') { 
+      if(!isDigit(header))
+        printf("Error: incorrect id.\n");//допилить норм обработку
+      header = fgetc(input_file);
+    } 
+  }
+}
+
 int main(int argc, char * argv[]) {
     enum VALIDATION_ENUM validationResult = validationArg(argc, argv);
 
-    char* inputFilename = argv[1];
-    char* outputFilename = argv[2];
+    char* inputFileName = argv[1];
+    char* outputFileName = argv[2]; 
 
     if (validationResult != ok) {
       printValidationError(validationResult);
@@ -135,7 +154,7 @@ int main(int argc, char * argv[]) {
 
     FIB_HEAP *heap = make_fib_heap();
  
-    if (read(inputFilename, heap)) {
+    if (read(inputFileName, heap)) {
       printValidationError(inputFileError);
     }
 }
