@@ -5,6 +5,7 @@
 #include <limits.h>
 #include <stdbool.h>
 #include "FibonacciHeap.h"
+#include "Heapsort.h"
 
 const int TMP_STRING_LENGTH = 150;
 
@@ -148,7 +149,7 @@ int fileCheck(char * fileName) {
         for (int i = 0; i < sizeof(tmpString); i++) {
           if (!isdigit(tmpString[i])) {
             //затычка ошибки
-            printf("Ошибка, тут какая-то хуйня, а не целое положительное числоn\n");
+            printf("Invalid input: enter a positive integer\n");
           }
         }
         count++;
@@ -158,7 +159,7 @@ int fileCheck(char * fileName) {
         for (int i = 0; i < sizeof(tmpString); i++) {
           if (!isalpha(tmpString[i])) {
             //затычка ошибки
-            printf("Ошибка, тут какая-то хуйня, а не имя\n");
+            printf("Invalid input: lead name\n");
           }
           count++;
         }
@@ -167,32 +168,32 @@ int fileCheck(char * fileName) {
           for (int i = 0; i < sizeof(tmpString); i++) {
             if (!isalpha(tmpString[i])) {
               //затычка ошибки
-              printf("Ошибка, тут какая-то хуйня, а не фамилия\n");
+              printf("Invalid input: surname\n");
             }
             count++;
           }
           if (count == 3) {
             int dotcount = 0;
             if (tmpString[0] == '46') {
-              printf("ошибка, хуле строка с точки начинается а а а");
+              printf("Invalid input: dot at the beginning of the line\n");
             }
             // проверка tmpstring на то, неотрицательное вещественное ли это число
             for (int i = 1; i < sizeof(tmpString); i++) {
               if (tmpString[i] == '46') {
                 dotcount++;
                 if (dotcount > 1)
-                  printf("Ошибка, какого хуя в вещественном числе вторая точка взялась?");
+                  printf("Invalid input: two points in a real number\n");
               }
               if (!isalpha(tmpString[i]) && tmpString[0] != '46') {
                 //затычка ошибки ну да
-                printf("Ошибка, тут какая-то хуйня, а не зарплата (прям как в риал лайф)\n");
+                printf("Invalid input: enter salary\n");
               }
             }
           }
         }
-
       }
-
+    }
+}
       int main(int argc, char * argv[]) {
         enum VALIDATION_ENUM validationResult = validationArg(argc, argv);
 
@@ -215,7 +216,7 @@ int fileCheck(char * fileName) {
       // 2. валидация аргументов +
       // 3. отображение ошибки (если есть) +
       // 4. чтение файла +
-      // 5. валидация строк (проверка на соотвествие структуре) +-  пока спасибо
+      // 5. валидация строк (проверка на соотвествие структуре) +-  
       // 6. заполнить фибоначчиеву пирамиду данными с пукта 5 +
       // 7. сортировка пирамиды в зависимости от поданного флага
       // 8. вывод отсортированной даты в файл 
