@@ -4,8 +4,13 @@ int numBits(int k){
     return 2 << (k - 1);
 }
 
-int factorial(){
-
+long long factorial(int n){
+    if (n > 22)
+        return 2;
+    else if (n == 0)
+        return 1;
+    else
+        return (long long) n * factorial(n - 1);
 }
 
 int getMem(){
