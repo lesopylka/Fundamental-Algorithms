@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-int numBits(){
-
+int numBits(int k){
+    return 2 << (k - 1);
 }
 
 int factorial(){
