@@ -20,12 +20,40 @@ int getMem(int l, int k){
     return (int) (a / (b * c));
 }
 
-int checkBits(){
-   
+int checkBits(int l, int num, int straight) {
+    int counter = 0;
+    if (!straight) {
+        while (num != 0) {
+            counter += (num & 1);
+            num >>= 1;
+        }
+    } else {
+        while (num != 0) {
+            if (!(num & 1)) {
+                if (counter == l)
+                    break;
+                counter = 0;
+            } else
+                counter++;
+            num >>= 1;
+        }
+    }
+    return counter == l;
 }
 
-int bitsIn(){
-
+int bitsIn(int l, int k, int **list, int *len) {
+    int lim = numBits(k);
+    int size = getMem(l, k);
+    *list = (int *) calloc(size, sizeof(int));
+    if (*list == NULL) {
+        return 1;
+    }
+    for (int i = 0; i < lim; i++) {
+        if (checkBits(l, i, 0)) {
+            (*list)[(*len)++] = i;
+        }
+    }
+    return size ? 0 : -1;
 }
 
 int bitsForward(){
