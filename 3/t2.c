@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 void print(int * list, int ln) {
   for (int i = 0; i < ln; i++) {
