@@ -80,7 +80,12 @@ int bitsForward(int l, int k, int ** list, int * len) {
   return size ? 0 : -1;
 }
 
-int main(int l, int k, int * list, int len, int * straight, int statusCode) {
+int main() {
+  int l, k;
+  int statusCode = 0;
+  int len = 0;
+  int * list = NULL;
+  int * straight = NULL;
   printf("Enter l: ");
   if (!scanf("%d", & l)) {
     return 7;
