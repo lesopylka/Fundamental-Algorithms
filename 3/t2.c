@@ -1,5 +1,12 @@
 #include <stdio.h>
 
+void print(int *list, int ln){
+    for (int i = 0; i < ln; i++) {
+        printf("%d ", list[i]);
+    }
+    printf("\n");
+}
+
 int numBits(int k){
     return 2 << (k - 1);
 }
@@ -56,15 +63,20 @@ int bitsIn(int l, int k, int **list, int *len) {
     return size ? 0 : -1;
 }
 
-int bitsForward(){
-
-}
-
-void print(int *list, int ln){
-    for (int i = 0; i < ln; i++) {
-        printf("%d ", list[i]);
+int bitsForward(int l, int k, int **list, int *len) {
+    int lim = numBits(k);
+    int pred = numBits(l) - 1;
+    int size = lim - pred;
+    *list = (int *) malloc(size * sizeof(int));
+    if (*list == NULL) {
+        return 1;
     }
-    printf("\n");
+    for (int i = pred; i < lim; i++) {
+        if (checkBits(l, i, 1)) {
+            (*list)[(*len)++] = i;
+        }
+    }
+    return size ? 0 : -1;
 }
 
 int main(){
