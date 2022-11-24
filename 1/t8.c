@@ -83,7 +83,7 @@ int main(int argc, char * argv[]) {
       case 'b':
         printf("even numbers: ");
         for (int l = 0; l < SizeArray; ++l) {
-          if (array[l] % 2 == 0) {
+          if (array[l] & 1 == 0) {
             array2[SizeArray2] = array[l];
             SizeArray2++;
           }
@@ -150,7 +150,7 @@ int main(int argc, char * argv[]) {
   if (!good_flag) {
     printf("invalid flag entered\n");
     return 0;
-  }
+  } else return 1;
 
   for (int l = 0; l < SizeArray2; ++l) {
     printf("%lld ", array2[l]);
@@ -162,6 +162,5 @@ int main(int argc, char * argv[]) {
 
 
 
-// аналогично 1.5 и 1.6, с exit code в main при неуспешном завершении приложения
-// 86 строка: быстрее выполнить &1, чем %2
-// в остальном вроде норм
+// аналогично 1.5 и 1.6, с exit code в main при неуспешном завершении приложения +-
+// 86 строка: быстрее выполнить &1, чем %2 +

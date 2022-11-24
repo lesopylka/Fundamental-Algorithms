@@ -14,18 +14,19 @@ char* input_validation(int argc, char * argv[], unsigned * number) {
   if (strlen(argv[2]) != 2) {
     return "Invalid Input: unexpected toggles";
   }
-  if ((argv[1][0] == '0') && (strlen(argv[1]) != 1)) {
+  if ((argv[1][0] == '0') && (argv[1][1] == 0)) {
     return "Invalid Input: unexpected number";
   }
   char * symbol = argv[1];
+  char difference = *symbol - '0';
   while ( * symbol) {
-    if ((( * symbol - '0') < 0) || (( * symbol - '0') > 9)) {
+    if ((( difference) < 0) || (( difference) > 9)) {
       return "Invalid Input: unexpected number";
     }
     if (( * number > UINT_MAX / 10)) {
       return "Invalid Number: overflow";
     }
-    if ((( * number * 10) / 2 + ( * symbol - '0') / 2) > UINT_MAX / 2) {
+    if ((( * number * 10) / 2 + ( difference) / 2) > UINT_MAX / 2) {
       return "Invalid Number: overflow";
     }
     * number = * number * 10 + ( * symbol++ - '0');
@@ -181,8 +182,8 @@ int main(int argc, char * argv[]) {
 
 
 // 7 строка: зачем возвращать строку? чтобы потом strcmp дёргать который имеет линейную сложность? возвращай статускод (enum для этого свой определи) и его хендли в вызывающем коде
-// 17 строка: проще чекнуть что argv[1][1] == 0, без вызова strlen
-// 22 строка и далее: 100500 раз вычисляется выражение *symbol - '0'. Вычисли один раз на каждой итерации, сохрани в переменную и используй её
+// + 17 строка: проще чекнуть что argv[1][1] == 0, без вызова strlen
+// + 22 строка и далее: 100500 раз вычисляется выражение *symbol - '0'. Вычисли один раз на каждой итерации, сохрани в переменную и используй её
 // 42 и 52 строки: тип возвращаемого значения функции unsigned long long, так зачем вычислять в int?
 // 55 строка: функция digits_kol: от транслита отказываемся + можно параметризовать основание системы счисления
 // 73 строка: зачем перебирать все числа? возьми n, сохрани в аккумулятор и прибавляй на каждой итерации к аккумулятору n

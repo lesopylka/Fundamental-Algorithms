@@ -9,7 +9,7 @@ int main(int argc, char * argv[]) {
   char * Output;
   int j = 0, Pointer = -1;
   int LenАrgv = strlen(argv[0]);
-  Output = malloc(sizeof(char) * 7);
+  Output = malloc(sizeof(char) * 69);
   for (j = 0; j < LenАrgv ; j++) {
     if (argv[0][j] == '\\') {
       Pointer = j;
@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
   if (OutputFile == NULL) {
     printf("file is not open");
     return 0;
-  }
+  } else return 1;
 
   char * Toggles[3] = {
     "-fi",
@@ -130,5 +130,5 @@ int main(int argc, char * argv[]) {
 // 12 строка: проверки на корректность выделения памяти нет, пофиксить с возможностью обработки ситуации в вызывающем коде
 // 12 строка: 7 символов точно всегда хватит? не уверен
 // 23-42 строки: выглядит очень убого (ктрлц ктрлв), перепиши чтобы выглядело не так ущербно
-// 48 строка: приложение завершилось не успешно, вероятно надо вернуть из main что-нибудь не равное 0
+// +- 48 строка: приложение завершилось не успешно, вероятно надо вернуть из main что-нибудь не равное 0
 // 75, 91 строка: mas это уже char*, зачем брать его адрес в fscanf, не понятно

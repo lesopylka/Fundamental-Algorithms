@@ -158,3 +158,27 @@ int main(int argc, char * argv[]) {
   freeAll(4, s1, s2, s3, s4);
   return 0;
 }
+
+
+from math import sqrt
+import random as rnd
+
+def s(point1, point2):
+    return sqrt((point1[0] - point2[0])**2 + (point1[1] - point2[1])**2)
+
+n = int(input("Введите количество строк: "))
+mass = [(rnd.randint(1,99), rnd.randint(1,99)) for i in range(n)]
+
+[print(*obj) for obj in mass]
+
+max = 0
+max_index = [0, 0]
+
+for i in range(n):
+    for j in range(i + 1, n):
+        l = s(mass[i], mass[j])
+        if max < l:
+            max = l
+            max_index = [i, j]
+
+print(f"{int(max)}: p1: {mass[max_index[0]]}, p2: {mass[max_index[1]]}")
