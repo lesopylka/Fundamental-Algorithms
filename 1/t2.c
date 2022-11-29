@@ -5,10 +5,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-bool is_flag(const char * arg) {
-  return strlen(arg) == 2 &&
-    (arg[0] == '-' || arg[0] == '/') &&
-    isalpha(arg[1]);
+const double EPS = 1.0E-7;
+
+bool is_flag(const char * arg_flag) {
+  return strlen(arg_flag) == 2 &&
+    (arg_flag[0] == '-' || arg_flag[0] == '/') &&
+    (arg_flag[1] == 'q' || arg_flag[1] == 'm' || arg_flag[1] == 't');
 }
 
 bool is_number(const char * arg) {
@@ -28,7 +30,6 @@ bool is_number(const char * arg) {
 
   return false;
 }
-
 
 int isnum(char c) {
     return (c > 47 && c < 58)? 1 : 0;
@@ -74,26 +75,49 @@ int myatoi(char * s) {
   return (ret * sign);
 }
 
-int number_parameters_count(char c) {
+int IntToString(int x, char str[], int d){ // возвращает индекс символа конца строки
+  int i = 0;
+  while (x) {
+      str[i++] = (x % 10) + '0';
+      x = x / 10;
+  }
+  while (i < d)
+      str[i++] = '0';
+  reverse(str, i);
+  str[i] = '\0';
+  return i;
+}
+
+int myftoa(double n, char* res, int after_point){ // возвращает индекс символа конца строки
+  int i_part = (int)n;
+  double f_part = n - (double)i_part;
+  int i = intToStr(i_part, res, 0);
+  if (after_point != 0) {
+      res[i] = '.';
+      f_part = f_part * pow(10, after_point);
+      intToStr((int)f_part, res + i + 1, after_point);
+  }
+  return i;
+}
+
+int number_of_parameters(char c) {
   if (c == 'q' || c == 't')
     return 3;
-
   if (c == 'm')
     return 2;
-
   return 0;
 }
 
 int toggles_q(double a, double b, double c) {
   double d;
   printf("For the: (%.3lf) * x^2 + (%.3lf) * x + (%.3lf) = 0\n", a, b, c);
-  if (a == 0) {
+  if (fabs(a - 0) <= EPS) {
     printf("The number 'a' is not a parameter of the quadratic equation, because it should not be equal to 0\n\n");
   } else {
     d = dicriminant(a, b, c);
-    if (d < 0) {
+    if (d < 0 - EPS) {
       printf("No roots.\n");
-    } else if (d == 0) {
+    } else if (fabs(d - 0) <= EPS) {
       printf("x = %lf\n", (-b + sqrt(d)) / (2 * a));
     } else {
       printf("x1 = %lf\n", (-b + sqrt(d)) / (2 * a));
@@ -108,127 +132,89 @@ bool toggles_m(int i, int k) {
   if (!i || !k) {
     return false;
   }
-
   return i % k == 0;
 }
 
 bool toggles_t(float a, float b, float c) {
   if (a > 0 && b > 0 && c > 0)
-    return a * a + b * b == c * c ||
-      a * a + c * c == b * b ||
-      b * b + c * c == a * a;
-  else
+    return fabs((a * a + b * b) - (c * c)) <= EPS ||
+           fabs((a * a + c * c) - (b * b)) <= EPS ||
+           fabs((b * b + c * c) - (a * a)) <= EPS;
+  else 
     printf("Something went wrong\n");
     return 0;
 }
 
-int main(int argc, char ** argv) {
-  char flag;
-  int flag_params[10];
-  int param_count;
-  int arg_index = 1;
-  while (arg_index < argc) {
-    if (is_flag(argv[arg_index])) {
-      flag = argv[arg_index][1];
-      ++arg_index;
-    } else {
-      printf("Inappropriate flag position\n");
-      return 1;
-    }
-    if (argc - arg_index < number_parameters_count(flag)) {
-      printf("Inappropriate parameters count\n");
-      return 1;
-    }
-    param_count = number_parameters_count(flag);
-    for (int i = 0; i < number_parameters_count(flag); ++i) {
-      if (!is_number(argv[arg_index + i])) {
-        printf("Inappropriate parameters count\n");
-        return 1;
-      } else {
-        flag_params[i] = myatoi(argv[arg_index + i]);
+char* main(int argc, char ** argv) {
+  // типы возвр значений
+  // true, false под false ещё ошибка может быть
+  // x, x1 x2
+  // наш протокол
+  // флаги:
+  //    -e это ошибка, текст ошибки
+  //    -a это ответ флоат, количество ответов, ответ/ы
+  //    -b ответ тру или фалсе
+  if(!is_flag(argv[1])){
+    char* message = "-e Inappropriate flag position\n";
+    return message;
+  }
+  if(!argc - 1 == number_of_parameters(argv[1][1])){
+    char* message = "-e Inappropriate parameters count\n";
+    return message;
+  }
+
+  switch (argv[1][1]) {
+    case 'q':
+      double x1 = 0, x2 = 0;
+      int answ = toggles_q(atof(argv[2]), atof(argv[3]), atof(argv[4]));
+      if (answ == 0) {
+        char* message = "-e With the entered coefficients does not exist\n";
+        return message;
+      } else if (answ == 1) {
+        char message[100];
+        strcpy(message, "-a 1 ");
+        char* ans;
+        myftoa(x1, ans, 2);
+        strcat(message, ans);
+        return message;
+      } else if (answ == 2) {
+        char message[100];
+        strcpy(message, "-a 2 ");
+        char* ans1;
+        myftoa(x1, ans1, 2);
+        char* ans2;
+        myftoa(x2, ans2, 2);
+        strcat(message, ans1);
+        strcat(message, ans2);
+        return message;
+        printf("%f  %f\n", x1, x2);
       }
-    }
-    arg_index += number_parameters_count(flag);
-  }
-  if (argv[1][1] == 'q') {
-    double x1 = 0, x2 = 0;
-    int answ = toggles_q(atof(argv[2]), atof(argv[3]), atof(argv[4]));
-    if (answ == 0) {
-      printf("With the entered coefficients does not exist\n");
-    } else if (answ == 1) {
-      printf("%f\n", x1);
-    } else if (answ == 2) {
-      printf("%f  %f\n", x1, x2);
-    }
-  } else if (argv[1][1] == 'm') {
-    if (toggles_m(myatoi(argv[2]), myatoi(argv[3])))
-      printf("Yes\n");
-    else
-      printf("No\n");
-  } else if (argv[1][1] == 't') {
-    if (toggles_t(atof(argv[2]), atof(argv[3]), atof(argv[4])))
-      printf("Yes\n");
-    else if (atof(argv[2]) > 0 && atof(argv[3]) > 0 && atof(argv[4]) > 0) {
-      printf("No\n");
-    }
-  }
+      break;
+    case 'm':
+      if (toggles_m(myatoi(argv[2]), myatoi(argv[3]))){
+        char* message = "-b true\n";
+        return message;
+          }
+      else {
+
+        char* message = "-b false\n";
+        return message;
+      break;
+      }
+    case 't':
+      if (toggles_t(atof(argv[2]), atof(argv[3]), atof(argv[4]))){
+        char* message = "-b true\n";
+        return message;
+      } 
+      else if (atof(argv[2]) > 0 && atof(argv[3]) > 0 && atof(argv[4]) > 0) {
+        char* message = "-b false\n";
+        return message;
+      }
+      break;
 }
 
-
-/* во второй задаче
-
-toggles_q
-
-зачем создавался массив arr ? 
-
-просто чтобы было видимо (=
-
-if (d == epsilon) в строке 78
-
-извените за капс, но
-
-ЧИСЛА С ПЛАВАЮЩЕЙ ТОЧКОЙ НЕЛЬЗЯ СРАВНИВАТЬ НА ПРЕДМЕТ ПОЛНОГО РАВЕНСТВА, ТОЛЬКО ЧЕРЕЗ ЭПСИЛОН
-
-надо бы это запомнить (=
-
-if (d == epsilon) в строке 78
-
-ой
-
-в 81
-
-и на 84 строке надо
-
-else if (d < -epsilon)
-
-Тебе надо смотреть всё что меньше левого баунда эпсилон-окрестности
-
-эпсилоном вообще лучше функцию параметризовать
-
-+ проверить на неотрицательность
-
-тут же во второй задаче в main
-
-какой-то приколдесный цикл для парсинга аргументов командной строки
-
-а потом по хардкору на 136 строке лазим в argv[1]
-
-а точно ли он существует (=
-
-ну если смотреть конечную версию
-
-96 строка
-
-непральна
-
-почему printf вместо возврата значения
-
-и тд
-
-всё о чём уже говорили
-
-toggles_t аналогично
-
-эпсилон 
-
-*/
+// принтф плохо
+// сравнение вещественных чисел переделывай
+// везде где тупо ==
+// надо сделать сравнение модуля разности чисел со значением эпсилон, которое было бы круто как параметр функции приделать
+// через == сравнивать нельзя
