@@ -23,7 +23,7 @@ struct TrieNode {
     BstNode *link;
 };
 
-//
+//gi
 
 int trieDestroy(TrieNode *root) {
     for (int x = 0; x < root->len; x++) {
@@ -31,3 +31,4 @@ int trieDestroy(TrieNode *root) {
     }
     freeAll(2, root->kids, root);
 }
+

@@ -21,6 +21,8 @@
         "ratio": "c",
         "tuple": "c",
         "utility": "c",
-        "fibonacciheap.h": "c"
+        "fibonacciheap.h": "c",
+        "complex": "c",
+        "cmath": "c"
     }
 }
