@@ -14,8 +14,7 @@ double answer(double( * func)(double), double begin, double end, int accuracy) {
   return result;
 }
 
-double
-function (double x) {
+double function (double x) {
   return x - sin(x) - 1;
 }
 
