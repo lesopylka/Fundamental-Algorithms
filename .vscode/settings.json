@@ -23,6 +23,15 @@
         "utility": "c",
         "fibonacciheap.h": "c",
         "complex": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "__bit_reference": "c",
+        "__split_buffer": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "iterator": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "hashtable": "c"
     }
 }

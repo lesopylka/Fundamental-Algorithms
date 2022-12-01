@@ -36,10 +36,10 @@ void Assimilation(char * a, char * b) {
 
 int main(void) {
   int n, f;
-  printf("enter a number system in the range from 2 to 36:\n");
+  printf("\nenter a number system in the range from 2 to 36:\n");
   scanf("%d", & n);
   if (n < 2 || n > 36) {
-    printf("wrong number system entered, learn to read!");
+    printf("\nwrong number system entered, learn to read!\n");
     return 0;
   }
   char c[50];
@@ -73,14 +73,14 @@ int main(void) {
     }
     f = ToInteger(MaxStr[i]);
     if (f == -1) {
-      printf("invalid character encountered on line %s ", MaxStr);
+      printf("invalid character encountered on line %s \n", MaxStr);
       return 0;
     };
     result += (p * f);
     p *= n;
   }
   MaxStr[max_str_len] = '\0';
-  printf("\nmax str: %s  In decimal number system: %d\n", MaxStr, (minus) ? -result : result);
+  printf("\nmax: %s  in decimal number system: %d\n", MaxStr, (minus) ? -result : result);
 
   int LenCC = 0, j = 0;
   char MassCC[50];
