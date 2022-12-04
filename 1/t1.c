@@ -71,22 +71,7 @@ void printValidationError(enum VALIDATION_ENUM error) {
     return symbolBeforeTogglesNotFound;
   }
 
-  return "";
-}
-
-
-unsigned long long binpow(unsigned long long number, unsigned long long n) {
-  unsigned long long res = 1;
-  while (n) {
-    if (n & 1) {
-      res *= number;
-    }
-    number *= number;
-
-    n >>= 1;
-  }
-
-  return res;
+  return ok;
 }
 
 unsigned numberDigitsCount(unsigned number, unsigned numberSystemBase) {
@@ -104,7 +89,7 @@ unsigned numberDigitsCount(unsigned number, unsigned numberSystemBase) {
 void toggles_h(unsigned n) {
 
   for (unsigned acc = n; acc < 100; acc += n) {
-    printf("%d", acc);
+    printf("%d ", acc);
   }
 
   printf("\n");
@@ -168,10 +153,10 @@ unsigned toggles_a(unsigned number) {
 int main(int argc, char * argv[]) {
   unsigned number = 0;
 
-  char * validation_result = input_validation(argc, argv, & number);
+  enum VALIDATION_ENUM validation_result = validationArg(argc, argv, & number);
 
-  if (strcmp(validation_result, "")) {
-    printf("%s\n", validation_result);
+  if (validation_result != ok) {
+    printValidationError(validation_result);
     return 1;
   }
 
