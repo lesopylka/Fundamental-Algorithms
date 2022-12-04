@@ -53,14 +53,14 @@ unsigned long long binpow(unsigned long long number, unsigned long long n) {
   return res;
 }
 
-unsigned digits_kol(unsigned number) {
+unsigned numberDigitsCount(unsigned number, unsigned numberSystemBase) {
   if (number == 0) {
     return 1;
   }
   unsigned length = 0;
   while (number != 0) {
     length++;
-    number /= 10;
+    number /= numberSystemBase;
   }
   return length;
 }
@@ -81,10 +81,13 @@ void toggles_h(unsigned n) {
 }
 
 unsigned toggles_f(unsigned number) {
-  if (number <= 1) {
-    return 1;
+  unsigned long long result = 1;
+
+  for (unsigned i = 1; i <= number; ++i) {
+    result *= i;
   }
-  return number * toggles_f(number - 1);
+
+  return result;
 }
 
 int toggles_p(unsigned number) {
@@ -120,8 +123,8 @@ int toggles_e(unsigned number) {
   // неэффективно? O(9 * N * logN) -> O(N * logN)
   for (unsigned long long i = 2; i <= 10; i++) {
     printf("%llu: ", i);
-    for (unsigned long long k = 1; k <= number; k++) {
-      printf("%lld ", binpow(i, k));
+    for (unsigned long long k = 1, result = k * i; k <= number; k++, result *= i) {
+      printf("%lld ", result);
     }
     printf("\n");
   }
@@ -157,7 +160,7 @@ int main(int argc, char * argv[]) {
       printf("%d is composite\n", number);    
       break;
     case 's':
-      toggles_s(number, digits_kol(number));
+      toggles_s(number, numberDigitsCount(number, 10));
 
       break;
     case 'e':
@@ -179,15 +182,5 @@ int main(int argc, char * argv[]) {
   return 0;
 }
 
-
-
-// 7 строка: зачем возвращать строку? чтобы потом strcmp дёргать который имеет линейную сложность? возвращай статускод (enum для этого свой определи) и его хендли в вызывающем коде
-// + 17 строка: проще чекнуть что argv[1][1] == 0, без вызова strlen
-// + 22 строка и далее: 100500 раз вычисляется выражение *symbol - '0'. Вычисли один раз на каждой итерации, сохрани в переменную и используй её
-// +- 42 и 52 строки: тип возвращаемого значения функции unsigned long long, так зачем вычислять в int? 
-// 55 строка: функция digits_kol: от транслита отказываемся + можно параметризовать основание системы счисления
-// 73 строка: зачем перебирать все числа? возьми n, сохрани в аккумулятор и прибавляй на каждой итерации к аккумулятору n
-// 82 строка: зачем рекурсивно считать, если можно итеративно
-// алгоритм определения простоты не понятен
-// 119 строка: у Тебя O(n^2 * log(n)), сделай за O(n^2) 
-// как насчёт во вложенном цикле умножать аккумулятор на возводимое в степень число и сразу печатать?
+// 7 строка: зачем возвращать строку? чтобы потом strcmp дёргать который имеет линейную сложность? возвращай статускод (enum для этого свой определи) и его хендли в вызывающем коде посмотреть в 3 лаба 3 таск 
+// 74 строка: зачем перебирать все числа? возьми n, сохрани в аккумулятор и прибавляй на каждой итерации к аккумулятору n

@@ -1,134 +1,231 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
-#include <math.h>
+#include <stdbool.h>
 
-int main(int argc, char * argv[]) {
-  // генерация названия файла.
+#define COUNT_FILES 30
+#define SIZE_NAME 30
 
-  char * Output;
-  int j = 0, Pointer = -1;
-  int LenАrgv = strlen(argv[0]);
-  Output = malloc(sizeof(char) * 69);
-  for (j = 0; j < LenАrgv ; j++) {
-    if (argv[0][j] == '\\') {
-      Pointer = j;
+enum VALIDATION_ENUM {
+  ok = 0,
+    invalidCountOfOptions = 1,
+    invalidFileExtension = 2,
+    filDidntOpen = 3,
+    someOfTheArgumentFilesDidtOpen = 4,
+    someArgumentFileHasTheWrongExtension = 5,
+    invalidOptions = 6,
+    someFileDidntOpen = 7
+};
+
+void printValidationError(enum VALIDATION_ENUM error) {
+  switch (error) {
+  case invalidCountOfOptions:
+    printf("Invalid count of options\n");
+    break;
+  case invalidFileExtension:
+    printf("Invalid file extension\n");
+    break;
+  case filDidntOpen:
+    printf("File didn't open\n");
+    break;
+  case someOfTheArgumentFilesDidtOpen:
+    printf("Some of the argument files did't open\n");
+    break;
+  case someArgumentFileHasTheWrongExtension:
+    printf("Some argument file has the wrong extension\n");
+    break;
+  case invalidOptions:
+    printf("Invalid options\n");
+    break;
+  case someFileDidntOpen:
+    printf("Some file didn't open\n");
+  }
+}
+
+int check_args(int argc, char
+  const * argv[]) {
+  FILE * file = NULL;
+
+  if (argc <= 1) {
+    return 1;
+  }
+
+  if (strcmp(argv[1], "-fi") == 0) {
+    if (argc != 3) {
+      return 1;
     }
-  }
 
-  for (j = 0; j <= Pointer; j++) {
-    Output[j] = argv[0][j];
-  }
-
-  for (j = Pointer + 1; j < Pointer + 9; j++) {
-    int l = j - (Pointer + 1);
-    if (l == 0) {
-      Output[j] = 'i';
-    } else if (l == 1) {
-      Output[j] = 'd';
-    } else if (l == 2) {
-      Output[j] = 'k';
-    } else if (l == 3) {
-      Output[j] = '.';
-    } else if (l == 4) {
-      Output[j] = 't';
-    } else if (l == 5) {
-      Output[j] = 'x';
-    } else if (l == 6) {
-      Output[j] = 't';
-    } else if (l == 7) {
-      Output[j] = '\0';
+    if (strcmp(argv[2] + strlen(argv[2]) - 4, ".txt") == 0) {
+      return 2;
     }
-  }
 
-  FILE * OutputFile = fopen(Output, "w");
+    if ((file = fopen(argv[2], "r")) != NULL) {
+      return 3;
+    }
 
-  if (OutputFile == NULL) {
-    printf("file is not open");
+    fclose(file);
     return 0;
-  } else return 1;
+  }
 
-  char * Toggles[3] = {
-    "-fi",
-    "-cin",
-    "-arg"
-  };
+  if (strcmp(argv[1], "-cin") == 0) {
+    return argc != 2;
+  }
 
-  FILE * InputFile;
-  FILE * InputFilesInFile;
-  char c;
-  char mass[300];
+  if (strcmp(argv[1], "-arg") == 0) {
+    if (argc <= 2) {
+      return 1;
+    }
 
-  int i, good_flag = 0;
-  for (i = 0; i < 5; i++) {
-    if (!strcmp(Toggles[i], argv[1])) {
-      good_flag = 1;
-      switch (Toggles[i][1]) {
-      case 'fi':
-        InputFile = fopen(argv[2], "r");
-        if (InputFile == NULL) {
-          printf("error opening input file\n");
-          return 0;
-        }
+    for (int i = 2; i < argc; i++) {
 
-        while (1) {
-          if (fscanf(InputFile, "%s", & mass) == 1) {
-            InputFilesInFile = fopen(mass, "r");
-            if (InputFilesInFile != NULL) {
-              while ((c = fgetc(InputFilesInFile)) != EOF) {
-                fprintf(OutputFile, "%c", c);
-              }
-              fclose(InputFilesInFile);
-            }
-          } else {
-            break;
-          }
+      if (strcmp(argv[i] + strlen(argv[i]) - 4, ".txt") != 0) {
+        return 5;
+      }
+
+      if ((file = fopen(argv[i], "r")) != NULL) {
+        fclose(file);
+      }
+      return 4;
+    }
+
+    return 0;
+  }
+  return 6;
+}
+void get_names_from_file(const char * filename, char( * filenames)[SIZE_NAME], int * size) {
+  FILE * file = NULL;
+  * size = 0;
+
+  if ((file = fopen(filename, "r")) != NULL) {
+    while (!feof(file)) {
+      if (fscanf(file, "%s", filenames[ * size]) != EOF) {
+        ( * size) ++;
+      }
+    }
+    fclose(file);
+  }
+}
+
+void get_names_from_stdin(char( * filenames)[SIZE_NAME], int * size) {
+  char name[SIZE_NAME];
+  int is_good_line = 0;
+  * size = 0;
+
+  while (!feof(stdin)) {
+    if (fscanf(stdin, "%s", filenames[ * size]) != EOF) {
+      ( * size) ++;
+    }
+  }
+}
+
+void get_names_from_args(int argc,
+  const char * argv[], char( * filenames)[SIZE_NAME], int * size) {
+  * size = argc - 2;
+  for (int i = 2; i < argc; i++) {
+    for (int j = 0; j <= strlen(argv[i]); j++) {
+      if (j == strlen(argv[i])) {
+        filenames[i - 2][j] = '\0';
+      } else {
+        filenames[i - 2][j] = argv[i][j];
+      }
+
+      // filenames[i - 2][j] = j == strlen(argv[i]) ? '\0' : argv[i][j];
+    }
+  }
+}
+
+bool is_all_file_closed(bool * closed, int size) {
+  for (int i = 0; i < size; i++) {
+    if (!closed[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+bool write_files(char( * files)[SIZE_NAME], int count_files) {
+  FILE * opened_files[count_files];
+  FILE * result_file = fopen("out_file.txt", "w");
+  bool closed[count_files];
+  char symb = 0;
+
+  for (int i = 0; i < count_files; i++) {
+    closed[i] = false;
+    opened_files[i] = NULL;
+  }
+
+  while (!is_all_file_closed(closed, count_files)) {
+    for (int i = 0; i < count_files; i++) {
+      if (opened_files[i] == NULL) {
+        if ((opened_files[i] = fopen(files[i], "r")) != NULL) {
+          ;
+        } else {
+          return false;
         }
-        fclose(InputFile);
-        break;
-      case 'cin':
-        while (1) {
-          if (scanf("%s", & mass) == 1) {
-            InputFilesInFile = fopen(mass, "r");
-            if (InputFilesInFile != NULL) {
-              while ((c = fgetc(InputFilesInFile)) != EOF) {
-                fprintf(OutputFile, "%c", c);
-              }
-              fclose(InputFilesInFile);
-            }
-          } else {
-            break;
-          }
-        }
-        break;
-      case 'arg':
-        for (int file = 2; file < argc; ++file) {
-          InputFilesInFile = fopen(argv[file], "r");
-          if (InputFilesInFile != NULL) {
-            while ((c = fgetc(InputFilesInFile)) != EOF) {
-              fprintf(OutputFile, "%c", c);
-            }
-            fclose(InputFilesInFile);
-          }
-        }
-        break;
+      }
+      symb = fgetc(opened_files[i]);
+      if (symb != EOF) {
+        fputc(symb, result_file);
+      } else {
+        closed[i] = true;
+        fclose(opened_files[i]);
       }
     }
   }
-  if (!good_flag) {
-    printf("invalid flag entered!\n");
-    return 0;
-  }
 
-  fclose(OutputFile);
-  free(Output);
+  fclose(result_file);
 
-  return 0;
+  return true;
 }
 
+int main(int argc, char
+    const * argv[]) {
+    int check = check_args(argc, argv);
+    char filenames[COUNT_FILES][SIZE_NAME];
+    int size = 0;
+    enum VALIDATION_ENUM validationResult = validationArg(argc, argv);
 
-// 12 строка: проверки на корректность выделения памяти нет, пофиксить с возможностью обработки ситуации в вызывающем коде
-// 12 строка: 7 символов точно всегда хватит? не уверен
-// 23-42 строки: выглядит очень убого (ктрлц ктрлв), перепиши чтобы выглядело не так ущербно
-// +- 48 строка: приложение завершилось не успешно, вероятно надо вернуть из main что-нибудь не равное 0
-// 75, 91 строка: mas это уже char*, зачем брать его адрес в fscanf, не понятно
+    if (check == 0) {
+      if (strcmp(argv[1], "-fi") == 0) {
+        get_names_from_file(argv[2], filenames, & size);
+      }
+      if (strcmp(argv[1], "-cin") == 0) {
+        get_names_from_stdin(filenames, & size);
+      }
+      if (strcmp(argv[1], "-arg") == 0) {
+        get_names_from_args(argc, argv, filenames, & size);
+      }
+
+      if (validationResult != ok) {
+        printValidationError(validationResult);
+        return 1;
+      }
+
+      //   if (!write_files(filenames, size)) {
+      //     fprintf(stderr, "%s\n", "Some file didn't open");
+      //   }
+      // } else {
+      //   if (check == 1) {
+      //     fprintf(stderr, "%s\n", "Invalid count of options");
+      //   }
+      //   if (check == 2) {
+      //     fprintf(stderr, "%s\n", "Invalid file extension");
+      //   }
+      //   if (check == 3) {
+      //     fprintf(stderr, "%s\n", "File didn't open");
+      //   }
+      //   if (check == 4) {
+      //     fprintf(stderr, "%s\n", "Some of the argument files did't open");
+      //   }
+      //   if (check == 5) {
+      //     fprintf(stderr, "%s\n", "Some argument file has the wrong extension");
+      //   }
+      //   if (check == 6) {
+      //     fprintf(stderr, "%s\n", "Invalid options");
+      //   }
+      // }
+
+      return 0;
+    }

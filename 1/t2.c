@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
 
 const double EPS = 1.0E-7;
 
@@ -68,7 +69,7 @@ int myatoi(char * s) {
     ret *= 10;
     ret += s[i] - '0';
     if (ret <= 0 || ret > __INT_MAX__) {
-      return (sign > 0) ? 2147483647 : -2147483648;
+      return (sign > 0) ? INT_MAX : INT_MIN;
     }
     ++i;
   }
@@ -108,24 +109,33 @@ int number_of_parameters(char c) {
   return 0;
 }
 
-int toggles_q(double a, double b, double c) {
+int* toggles_q(double a, double b, double c) {
   double d;
+  int* roots = NULL;
   printf("For the: (%.3lf) * x^2 + (%.3lf) * x + (%.3lf) = 0\n", a, b, c);
-  if (fabs(a - 0) <= EPS) {
+  if (a <= EPS) {
     printf("The number 'a' is not a parameter of the quadratic equation, because it should not be equal to 0\n\n");
   } else {
     d = dicriminant(a, b, c);
-    if (d < 0 - EPS) {
+    if (d < -EPS) {
       printf("No roots.\n");
     } else if (fabs(d - 0) <= EPS) {
-      printf("x = %lf\n", (-b + sqrt(d)) / (2 * a));
+      roots = (int*)malloc(sizeof(int));
+      int x1 = (-b + sqrt(d)) / (2 * a);
+      *roots = x1;
+      printf("x = %lf\n", x1);
     } else {
+      roots = (int*)malloc(sizeof(int) * 2);
+      int x1 = (-b + sqrt(d)) / (2 * a);
+      int x2 = (-b - sqrt(d)) / (2 * a);
+      *roots = x1;
+      *(roots + 1) = x2;
       printf("x1 = %lf\n", (-b + sqrt(d)) / (2 * a));
       printf("x2 = %lf\n", (-b - sqrt(d)) / (2 * a));
     }
     printf("\n");
   }
-  return 0;
+  return roots;
 }
 
 bool toggles_m(int i, int k) {
@@ -136,7 +146,7 @@ bool toggles_m(int i, int k) {
 }
 
 bool toggles_t(float a, float b, float c) {
-  if (a > 0 && b > 0 && c > 0)
+  if (a > EPS && b > EPS && c > EPS)
     return fabs((a * a + b * b) - (c * c)) <= EPS ||
            fabs((a * a + c * c) - (b * b)) <= EPS ||
            fabs((b * b + c * c) - (a * a)) <= EPS;
@@ -154,13 +164,11 @@ char* main(int argc, char ** argv) {
   //    -e это ошибка, текст ошибки
   //    -a это ответ флоат, количество ответов, ответ/ы
   //    -b ответ тру или фалсе
-  if(!is_flag(argv[1])){
-    char* message = "-e Inappropriate flag position\n";
-    return message;
+  if(!is_flag(argv[1])){  
+    return "-e Inappropriate flag position\n";
   }
   if(!argc - 1 == number_of_parameters(argv[1][1])){
-    char* message = "-e Inappropriate parameters count\n";
-    return message;
+    return "-e Inappropriate parameters count\n";
   }
 
   switch (argv[1][1]) {
@@ -192,23 +200,18 @@ char* main(int argc, char ** argv) {
       break;
     case 'm':
       if (toggles_m(myatoi(argv[2]), myatoi(argv[3]))){
-        char* message = "-b true\n";
-        return message;
+        return "-b true\n";
           }
       else {
-
-        char* message = "-b false\n";
-        return message;
+        return "-b false\n";
       break;
       }
     case 't':
       if (toggles_t(atof(argv[2]), atof(argv[3]), atof(argv[4]))){
-        char* message = "-b true\n";
-        return message;
+        return "-b true\n";
       } 
       else if (atof(argv[2]) > 0 && atof(argv[3]) > 0 && atof(argv[4]) > 0) {
-        char* message = "-b false\n";
-        return message;
+        return "-b false\n";
       }
       break;
 }
@@ -218,3 +221,16 @@ char* main(int argc, char ** argv) {
 // везде где тупо ==
 // надо сделать сравнение модуля разности чисел со значением эпсилон, которое было бы круто как параметр функции приделать
 // через == сравнивать нельзя
+// t2.c
+
+// return (sign > 0) ? 2147483647 : -2147483648;
+
+// есть удивительная либа limits.h
+
+// лучше пользоваться ей - Твой код не переносим между разными архитектурами
+
+// квадратные уравнения - где возврат результата не увидел
+
+// а то всё обмазано printf'ами, плохо
+
+// toggles_t - epsilon classic

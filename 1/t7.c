@@ -3,15 +3,16 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
+#include <limits.h>
 
 void Swap(int * a, int * b) {
-    a +=b;
-    b = a - b;
-    a = a - b;
+    *a += *b;
+    *b = *a - *b;
+    *a = *a - *b;
     //   int c;
     //   c = * a;
     //   * a = * b;
-    //   * b = c;
+    //   * b = c; 
 }
 
 int main(void) {
@@ -34,19 +35,15 @@ int main(void) {
             min_indx = i;
         }
     }
-    Swap( & matrix[nmin], & matrix[nmax]);
-    printf(" min = %d, max = %d\n", min, max);
+    Swap( & matrix[min], & matrix[max]);
+    printf(" \nmin = %d, max = %d\n", min, max);
 
     for (i = 0; i < n; i++) {
         printf("%d ", matrix[i]);
     }
-    printf(" — result tranfer");
+    printf(" — result tranfer\n");
 
     free(matrix);
 
     return 0;
 }
-
-
-// 16 строка: проверки на корректность выделения памяти нет, пофиксить с возможностью обработки ситуации в вызывающем коде+
-// 36 строка: вместо &a[i] лучше написать a + i, -2 операции на использование сразу

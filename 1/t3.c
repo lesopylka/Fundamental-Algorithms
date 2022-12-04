@@ -11,10 +11,8 @@ int main(int argc, char* argv[]) {
 
     // получение выходного пути файла
     char* extension_of_file = strrchr(input_file_path,'.'); // отделим расширение файла
-    char file_path[strlen(input_file_path) + 4]; // на 4 символа больше ибо в out_ 4 символа
-    for(int i = 0; i <(strlen(input_file_path)-strlen(extension_of_file)); i++) {
-        file_path[i] = input_file_path[i]; // найдём название файла без раширения
-    }
+    char * file_path = (char *) malloc ( strlen(input_file_path) * sizeof(char)); //char file_path[strlen(input_file_path) + 4]; 
+    strcpy(file_path, input_file_path);
     strncat(file_path, "out_", strlen(input_file_path)-strlen(extension_of_file)); // добавили out_ к названию
     strncat(file_path, extension_of_file, strlen(input_file_path)-strlen(extension_of_file) + 4); // добавим расширение к названию файла
     char* output_file_path = file_path;
@@ -39,9 +37,12 @@ int main(int argc, char* argv[]) {
 
     FILE* input_file = fopen(input_file_path, "r");
     if(input_file == NULL) {
-        printf("Error: file cannot be open.\n");
+        printf("Error: input file cannot be open.\n");
     }
     FILE* output_file = fopen(output_file_path, "a");
+    if(output_file == NULL) {
+        printf("Error: output file cannot be open.\n");
+    }
     char c;
     int kol_string = 1;
     switch (argv[flag_argv_indx][task_letter_in_flag]) {
@@ -49,7 +50,7 @@ int main(int argc, char* argv[]) {
             // необходимо исключить символы цифр из файла
             while ((c = fgetc(input_file)) != EOF) {
                 if (!(isdigit(c))) {
-                    fprintf(output_file, "%c", c);
+                    fputc(c, output_file);
                 }
             }
             break;
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]) {
             while ((c = fgetc(input_file)) != EOF) {
                 int count = 0;
                 while (c != '\n') {
-                    if (!isalpha(c) && !isdigit(c) && c != ' ') {//вместо пробела можно !isspace но там не только пробелл
+                    if (!isalnum(c)) {//вместо пробела можно !isspace но там не только пробелл
                         count++;
                     }
                     fprintf(output_file, "string = %d\n", count);
@@ -86,11 +87,7 @@ int main(int argc, char* argv[]) {
             // необходимо заменить символы, отличные от цифр, их строковым
             // представлением ASCII-кода
             while ((c = fgetc(input_file)) != EOF) {
-                if (isdigit(c)) {
-                    fprintf(output_file, "%c", c);
-                } else {
-                    fprintf(output_file, "%d", c);
-                }
+                fputc(c, output_file);
             }
             break;
         case 'f':
@@ -100,23 +97,23 @@ int main(int argc, char* argv[]) {
             // эквивалентные им ASCII-коды
             while ((c = fgetc(input_file)) != EOF) {
                 if (c == '\n' || c == ' ') {
-                    fprintf(output_file, "%c", c);
+                    fputc(c, output_file);
                     kol_string++;
                 } else if (kol_string % 10 == 0) {
-                    fprintf(output_file, "%d", to_floor(c));
+                    fputc(to_floor(c), output_file);
                 } else if (kol_string % 5 == 0) {
-                    fprintf(output_file, "%d", c);
+                    fputc(c, output_file);
                 } else if (kol_string % 2 == 0) {
-                    fprintf(output_file, "%c", to_floor(c));
+                    fputc(to_floor(c), output_file);
                 } else {
-                    fprintf(output_file, "%c", c);
+                    fputc(c, output_file);
                 }
             }
             break;
     }
     fclose(input_file);
     fclose(output_file);
-
+    free(file_path);
     return 0;
 }
 
@@ -167,20 +164,5 @@ if (isdigit(c)) {
 удивительным образом превращается в
 
 fprintf(output_file, isdigit(c) ? "%c" : "%d", c);
-
-t2.c
-
-return (sign > 0) ? 2147483647 : -2147483648;
-
-есть удивительная либа limits.h
-
-лучше пользоваться ей - Твой код не переносим между разными архитектурами
-
-квадратные уравнения - где возврат результата не увидел
-
-а то всё обмазано printf'ами, плохо
-
-toggles_t - epsilon classic
-
  */ 
 
