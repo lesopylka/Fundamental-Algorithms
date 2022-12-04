@@ -1,43 +1,79 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <limits.h>
 
-char* input_validation(int argc, char * argv[], unsigned * number) {
+enum VALIDATION_ENUM {
+  ok = 0,
+    noArguments = 1,
+    wrongNumberOfArguments = 2,
+    unexpectedToggles = 3,
+    unexpectedNumber = 4,
+    overflow = 5,
+    symbolBeforeTogglesNotFound = 6,
+};
+
+void printValidationError(enum VALIDATION_ENUM error) {
+  switch (error) {
+  case noArguments:
+    printf("Invalid Input: no arguments\n");
+    break;
+  case wrongNumberOfArguments:
+    printf("Invalid Input: wrong number of arguments\n");
+    break;
+  case unexpectedToggles:
+    printf("Invalid Input: unexpected toggles\n");
+    break;
+  case unexpectedNumber:
+    printf("Invalid Input: unexpected number\n");
+    break;
+  case overflow:
+    printf("Invalid Number: overflow\n");
+    break;
+  case symbolBeforeTogglesNotFound:
+    printf("Invalid Input: symbol '-' or '/' before toggles not found\n");
+    break;
+  default:
+    printf("Unexpected error\n");
+  }
+}
+
+  enum VALIDATION_ENUM validationArg(int argc, char * argv[], unsigned * number) {
   if (argc == 1) {
-    return "Invalid Input: no arguments";
+    return noArguments;
   }
   if (argc != 3) {
-    return "Invalid Input: wrong number of arguments";
+    return wrongNumberOfArguments;
   }
   if (strlen(argv[2]) != 2) {
-    return "Invalid Input: unexpected toggles";
+    return unexpectedToggles;
   }
   if ((argv[1][0] == '0') && (argv[1][1] == 0)) {
-    return "Invalid Input: unexpected number";
+    return unexpectedNumber;
   }
   char * symbol = argv[1];
-  char difference = *symbol - '0';
+  char difference = * symbol - '0';
   while ( * symbol) {
-    if ((( difference) < 0) || (( difference) > 9)) {
-      return "Invalid Input: unexpected number";
+    if (((difference) < 0) || ((difference) > 9)) {
+      return unexpectedNumber;
     }
     if (( * number > UINT_MAX / 10)) {
-      return "Invalid Number: overflow";
+      return overflow;
     }
-    if ((( * number * 10) / 2 + ( difference) / 2) > UINT_MAX / 2) {
-      return "Invalid Number: overflow";
+    if ((( * number * 10) / 2 + (difference) / 2) > UINT_MAX / 2) {
+      return overflow;
     }
     * number = * number * 10 + ( * symbol++ - '0');
   }
 
   if (!(argv[2][0] == '-' || argv[2][0] == '/')) {
-    return "Invalid Input: symbol '-' or '/' before toggles not found";
+    return symbolBeforeTogglesNotFound;
   }
 
   return "";
 }
+
 
 unsigned long long binpow(unsigned long long number, unsigned long long n) {
   unsigned long long res = 1;
@@ -66,17 +102,11 @@ unsigned numberDigitsCount(unsigned number, unsigned numberSystemBase) {
 }
 
 void toggles_h(unsigned n) {
-  int maxValue = 100;
-  if (n < maxValue) {
-    maxValue = n;
+
+  for (unsigned acc = n; acc < 100; acc += n) {
+    printf("%d", acc);
   }
 
-  for(unsigned number = 2; number < maxValue; ++number) {
-    if (n % number != 0) {
-       continue;
-    }
-    printf("%u ", number);
-  }
   printf("\n");
 }
 
@@ -110,7 +140,7 @@ void toggles_s(unsigned number, unsigned digits_kol) {
 
     printf("%u ", digit);
 
-    number = number % tmp; 
+    number = number % tmp;
     tmp = tmp / 10;
   }
   printf("\n");
@@ -137,8 +167,8 @@ unsigned toggles_a(unsigned number) {
 
 int main(int argc, char * argv[]) {
   unsigned number = 0;
-  
-  char* validation_result = input_validation(argc, argv, & number);
+
+  char * validation_result = input_validation(argc, argv, & number);
 
   if (strcmp(validation_result, "")) {
     printf("%s\n", validation_result);
@@ -149,38 +179,37 @@ int main(int argc, char * argv[]) {
   char command = argv[2][1];
 
   switch (command) {
-    case 'h':
-      toggles_h(number);
-      break;
-    case 'p':
-      if (toggles_p(number)) {
-        printf("%d is prime\n", number);
-        return 0;
-      }
-      printf("%d is composite\n", number);    
-      break;
-    case 's':
-      toggles_s(number, numberDigitsCount(number, 10));
+  case 'h':
+    toggles_h(number);
+    break;
+  case 'p':
+    if (toggles_p(number)) {
+      printf("%d is prime\n", number);
+      return 0;
+    }
+    printf("%d is composite\n", number);
+    break;
+  case 's':
+    toggles_s(number, numberDigitsCount(number, 10));
 
-      break;
-    case 'e':
-      if (toggles_e(number)) {
-        printf("Input Error: the number is bigger than 10 (toggles e)\n");
-      }
-      break;
-    case 'a':
-      printf("sum of numbers from 1 to %u is %u\n", number, toggles_a(number));
-      break;
-    case 'f':
-      printf("Factorial of %u: %u\n", number, toggles_f(number));
-      break;
-    default:
-      printf("Invalid toggles: unexpected toggles '%c'\n", command);
-      break;
+    break;
+  case 'e':
+    if (toggles_e(number)) {
+      printf("Input Error: the number is bigger than 10 (toggles e)\n");
+    }
+    break;
+  case 'a':
+    printf("sum of numbers from 1 to %u is %u\n", number, toggles_a(number));
+    break;
+  case 'f':
+    printf("Factorial of %u: %u\n", number, toggles_f(number));
+    break;
+  default:
+    printf("Invalid toggles: unexpected toggles '%c'\n", command);
+    break;
   }
 
   return 0;
 }
 
 // 7 строка: зачем возвращать строку? чтобы потом strcmp дёргать который имеет линейную сложность? возвращай статускод (enum для этого свой определи) и его хендли в вызывающем коде посмотреть в 3 лаба 3 таск 
-// 74 строка: зачем перебирать все числа? возьми n, сохрани в аккумулятор и прибавляй на каждой итерации к аккумулятору n
