@@ -1,236 +1,168 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <math.h>
-#include <limits.h>
 
-const double EPS = 1.0E-7;
-
-bool is_flag(const char * arg_flag) {
-  return strlen(arg_flag) == 2 &&
-    (arg_flag[0] == '-' || arg_flag[0] == '/') &&
-    (arg_flag[1] == 'q' || arg_flag[1] == 'm' || arg_flag[1] == 't');
-}
-
-bool is_number(const char * arg) {
-  int len = strlen(arg);
-  if (len == 1 && arg[0] == '-') {
-    return false;
-  }
-
-  for (int i = 1; i < len; ++i) {
-    if (!isdigit(arg[i])) {
-      return false;
+int main(int argc, char* argv[]) {
+    if(argc < 3) {
+        printf("Error: not enough arguments.\n");
+        return 1;
     }
-  }
 
-  if (isdigit(arg[0]) || arg[0] == '-')
-    return true;
+    char* input_file_path = argv[2];
 
-  return false;
-}
+    // получение выходного пути файла
+    char* extension_of_file = strrchr(input_file_path,'.'); // отделим расширение файла
+    char * file_path = (char *) malloc ( strlen(input_file_path) * sizeof(char)); //char file_path[strlen(input_file_path) + 4]; 
+    strcpy(file_path, input_file_path);
+    strncat(file_path, "out_", strlen(input_file_path)-strlen(extension_of_file)); // добавили out_ к названию
+    strncat(file_path, extension_of_file, strlen(input_file_path)-strlen(extension_of_file) + 4); // добавим расширение к названию файла
+    char* output_file_path = file_path;
 
-int isnum(char c) {
-    return (c > 47 && c < 58)? 1 : 0;
-}
-
-int issign(char c) {
-    return (c == '+' || c == '-')? 1 : 0;
-}
-
-double dicriminant(double a, double b, double c) {
-    return (b * b - 4 * a * c);
-}
-
-int myatoi(char * s) {
-  int sign = 1;
-  int i = 0;
-  long int ret = 0;
-
-  while (s[i] == ' ') {
-    ++i;
-  }
-
-  if (issign(s[i])) {
-    if (s[i] == '-') {
-      sign = -1;
+    int flag_argv_indx = 1;
+    if(argv[flag_argv_indx][0] != '/' && argv[flag_argv_indx][0] != '-') {
+        printf("Error: flag not found.\n");
+        return 1;
     }
-    if (issign(s[i + 1])) {
-      return 0;
+    //проверка флага на корректность и если есть n то определяю файл выходной по аргв
+    int task_letter_in_flag = 1;
+    if(argv[flag_argv_indx][task_letter_in_flag] == 'n') {
+        if(strlen(argv[flag_argv_indx]) < 3) {
+            printf("Error: incorrect flag.\n");
+            return 1;
+        }
+        task_letter_in_flag = 2;
+        if(argc == 4) {
+            output_file_path = argv[3];
+        }
     }
-    ++i;
-  }
-  while (s[i] == '0') {
-    ++i;
-  }
-  while (isnum(s[i])) {
-    ret *= 10;
-    ret += s[i] - '0';
-    if (ret <= 0 || ret > __INT_MAX__) {
-      return (sign > 0) ? INT_MAX : INT_MIN;
+
+    FILE* input_file = fopen(input_file_path, "r");
+    if(input_file == NULL) {
+        printf("Error: input file cannot be open.\n");
     }
-    ++i;
-  }
-  return (ret * sign);
-}
-
-int IntToString(int x, char str[], int d){ // возвращает индекс символа конца строки
-  int i = 0;
-  while (x) {
-      str[i++] = (x % 10) + '0';
-      x = x / 10;
-  }
-  while (i < d)
-      str[i++] = '0';
-  reverse(str, i);
-  str[i] = '\0';
-  return i;
-}
-
-int myftoa(double n, char* res, int after_point){ // возвращает индекс символа конца строки
-  int i_part = (int)n;
-  double f_part = n - (double)i_part;
-  int i = intToStr(i_part, res, 0);
-  if (after_point != 0) {
-      res[i] = '.';
-      f_part = f_part * pow(10, after_point);
-      intToStr((int)f_part, res + i + 1, after_point);
-  }
-  return i;
-}
-
-int number_of_parameters(char c) {
-  if (c == 'q' || c == 't')
-    return 3;
-  if (c == 'm')
-    return 2;
-  return 0;
-}
-
-int* toggles_q(double a, double b, double c) {
-  double d;
-  int* roots = NULL;
-  printf("For the: (%.3lf) * x^2 + (%.3lf) * x + (%.3lf) = 0\n", a, b, c);
-  if (a <= EPS) {
-    printf("The number 'a' is not a parameter of the quadratic equation, because it should not be equal to 0\n\n");
-  } else {
-    d = dicriminant(a, b, c);
-    if (d < -EPS) {
-      printf("No roots.\n");
-    } else if (fabs(d - 0) <= EPS) {
-      roots = (int*)malloc(sizeof(int));
-      int x1 = (-b + sqrt(d)) / (2 * a);
-      *roots = x1;
-      printf("x = %lf\n", x1);
-    } else {
-      roots = (int*)malloc(sizeof(int) * 2);
-      int x1 = (-b + sqrt(d)) / (2 * a);
-      int x2 = (-b - sqrt(d)) / (2 * a);
-      *roots = x1;
-      *(roots + 1) = x2;
-      printf("x1 = %lf\n", (-b + sqrt(d)) / (2 * a));
-      printf("x2 = %lf\n", (-b - sqrt(d)) / (2 * a));
+    FILE* output_file = fopen(output_file_path, "a");
+    if(output_file == NULL) {
+        printf("Error: output file cannot be open.\n");
     }
-    printf("\n");
-  }
-  return roots;
-}
-
-bool toggles_m(int i, int k) {
-  if (!i || !k) {
-    return false;
-  }
-  return i % k == 0;
-}
-
-bool toggles_t(float a, float b, float c) {
-  if (a > EPS && b > EPS && c > EPS)
-    return fabs((a * a + b * b) - (c * c)) <= EPS ||
-           fabs((a * a + c * c) - (b * b)) <= EPS ||
-           fabs((b * b + c * c) - (a * a)) <= EPS;
-  else 
-    printf("Something went wrong\n");
+    char c;
+    int kol_string = 1;
+    switch (argv[flag_argv_indx][task_letter_in_flag]) {
+        case 'd':
+            // необходимо исключить символы цифр из файла
+            while ((c = fgetc(input_file)) != EOF) {
+                if (!(isdigit(c))) {
+                    fputc(c, output_file);
+                }
+            }
+            break;
+        case 'i':
+            // необходимо в выходной файл написать, сколько раз в каждой
+            // строке встречаются символы букв
+            while ((c = fgetc(input_file)) != EOF) {
+                int count = 0;
+                while (c != '\n') {
+                    if (isalpha(c)) {
+                        count++;
+                    }
+                    fprintf(output_file, "string = %d\n", count);
+                    count = 0;
+                }
+            }
+            break;
+        case 's':
+            // необходимо в выходной файл написать, сколько раз в каждой
+            // строке встречаются символы, отличные от символов цифр, символов
+            // букв и символа пробела
+            while ((c = fgetc(input_file)) != EOF) {
+                int count = 0;
+                while (c != '\n') {
+                    if (!isalnum(c)) {//вместо пробела можно !isspace но там не только пробелл
+                        count++;
+                    }
+                    fprintf(output_file, "string = %d\n", count);
+                    count = 0;
+                }
+            }
+            break;
+        case 'a':
+            // необходимо заменить символы, отличные от цифр, их строковым
+            // представлением ASCII-кода
+            while ((c = fgetc(input_file)) != EOF) {
+                fputc(c, output_file);
+            }
+            break;
+        case 'f':
+            // создать выходной файл таким образом, чтобы в каждой в каждой
+            // второй лексеме все буквы были переписаны в строчные, а также в
+            // каждой пятой лексеме все символы были заменены на
+            // эквивалентные им ASCII-коды
+            while ((c = fgetc(input_file)) != EOF) {
+                if (c == '\n' || c == ' ') {
+                    fputc(c, output_file);
+                    kol_string++;
+                } else if (kol_string % 10 == 0) {
+                    fputc(to_floor(c), output_file);
+                } else if (kol_string % 5 == 0) {
+                    fputc(c, output_file);
+                } else if (kol_string % 2 == 0) {
+                    fputc(to_floor(c), output_file);
+                } else {
+                    fputc(c, output_file);
+                }
+            }
+            break;
+    }
+    fclose(input_file);
+    fclose(output_file);
+    free(file_path);
     return 0;
 }
 
-char* main(int argc, char ** argv) {
-  // типы возвр значений
-  // true, false под false ещё ошибка может быть
-  // x, x1 x2
-  // наш протокол
-  // флаги:
-  //    -e это ошибка, текст ошибки
-  //    -a это ответ флоат, количество ответов, ответ/ы
-  //    -b ответ тру или фалсе
-  if(!is_flag(argv[1])){  
-    return "-e Inappropriate flag position\n";
-  }
-  if(!argc - 1 == number_of_parameters(argv[1][1])){
-    return "-e Inappropriate parameters count\n";
-  }
+/* 
+строка 13
+char* extension_of_file = strrchr(input_file_path,'.'); // отделим расширение файла
 
-  switch (argv[1][1]) {
-    case 'q':
-      double x1 = 0, x2 = 0;
-      int answ = toggles_q(atof(argv[2]), atof(argv[3]), atof(argv[4]));
-      if (answ == 0) {
-        char* message = "-e With the entered coefficients does not exist\n";
-        return message;
-      } else if (answ == 1) {
-        char message[100];
-        strcpy(message, "-a 1 ");
-        char* ans;
-        myftoa(x1, ans, 2);
-        strcat(message, ans);
-        return message;
-      } else if (answ == 2) {
-        char message[100];
-        strcpy(message, "-a 2 ");
-        char* ans1;
-        myftoa(x1, ans1, 2);
-        char* ans2;
-        myftoa(x2, ans2, 2);
-        strcat(message, ans1);
-        strcat(message, ans2);
-        return message;
-        printf("%f  %f\n", x1, x2);
-      }
-      break;
-    case 'm':
-      if (toggles_m(myatoi(argv[2]), myatoi(argv[3]))){
-        return "-b true\n";
-          }
-      else {
-        return "-b false\n";
-      break;
-      }
-    case 't':
-      if (toggles_t(atof(argv[2]), atof(argv[3]), atof(argv[4]))){
-        return "-b true\n";
-      } 
-      else if (atof(argv[2]) > 0 && atof(argv[3]) > 0 && atof(argv[4]) > 0) {
-        return "-b false\n";
-      }
-      break;
-}
+где гарантия того что у файла вообще есть расширение?
 
-// принтф плохо
-// сравнение вещественных чисел переделывай
-// везде где тупо ==
-// надо сделать сравнение модуля разности чисел со значением эпсилон, которое было бы круто как параметр функции приделать
-// через == сравнивать нельзя
-// t2.c
+его может не быть
 
-// return (sign > 0) ? 2147483647 : -2147483648;
+char file_path[strlen(input_file_path) + 4]; // на 4 символа больше ибо в out_ 4 символа
 
-// есть удивительная либа limits.h
+в чистом си так делать нельзя
 
-// лучше пользоваться ей - Твой код не переносим между разными архитектурами
+инициализатор числа элементов в массиве всегда должен быть константой
 
-// квадратные уравнения - где возврат результата не увидел
+приделывай malloc
 
-// а то всё обмазано printf'ами, плохо
+и free соответственно
 
-// toggles_t - epsilon classic
+FILE* output_file = fopen(output_file_path, "a");
+
+как насчёт проверить, открылся ли файл?
+
+for(int i = 0; i <(strlen(input_file_path)-strlen(extension_of_file)); i++) {
+        file_path[i] = input_file_path[i]; // найдём название файла без раширения
+    }
+
+strcpy? не, не слышал
+
+fprintf(output_file, "%c", c);
+
+если есть выбор между fputc и fprintf, лучше использовать fputc
+
+ибо не нужно тратить время на разбор форматной строки
+
+if (!isalpha(c) && !isdigit(c) && c != ' ')
+
+для букв/цифр одновременно, есть isalnum
+
+if (isdigit(c)) {
+                    fprintf(output_file, "%c", c);
+                } else {
+                    fprintf(output_file, "%d", c);
+                }
+
+удивительным образом превращается в
+
+fprintf(output_file, isdigit(c) ? "%c" : "%d", c);
+ */ 
+

@@ -1,41 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
-char * FileNameGeneration(const char * str) {
-  char * Output;
-  int j = 0, Pointer = -1;
-  int LenArgv = strlen(str);
-  Output = malloc(sizeof(char) * (LenArgv + 4));
-  if (Output == NULL)
-    return NULL;
-  for (j = LenArgv - 1; j >= 0; --j) {
-    if (str[j] == '\\') {
-      Pointer = j;
-      break;
-    } else return 1; //хз
-  } 
-
-  for (j = 0; j <= Pointer; j++) {
-    Output[j] = str[j];
-  }
-
-  for (j = Pointer + 1; j < LenArgv+ 4; j++) {
-    int l = j - (Pointer + 1);
-    if (l == 0) {
-      Output[j] = 'o';
-    } else if (l == 1) {
-      Output[j] = 'u';
-    } else if (l == 2) {
-      Output[j] = 't';
-    } else if (l == 3) {
-      Output[j] = '_';
-    } else {
-      Output[j] = str[j - 4];
-    }
-  }
-  return Output;
-}
+const int ARRAY_SIZE = 50;
+const int MEMORY_MULTIPLIER = 2;
 
 int ToInteger(char c) {
     if (c >= 'A' && c <= 'Z') 
@@ -67,40 +36,47 @@ int main(int argc, char * argv[]) {
   char c;
   int i = 0;
 
-  // генерация названия файла.
-  char * Output = FileNameGeneration(argv[1]);
+  FILE * OutputFile = fopen("out_file.txt", "w");
 
-  FILE * OutputFile = fopen(Output, "w");
   if (OutputFile == NULL) {
     printf("error opening Output file\n");
     return 0;
   }
 
-  char Array[50]; //сюда должно влезать число в какой-то системе счисления.
+  int size = ARRAY_SIZE;
+  int currentSize = 0;
+  char* Array = (char *)malloc(sizeof(char) * size);
+
   int Flag = 0;
   int Max = 1;
   while ((c = fgetc(InputFile))) {
     if (c != ' ' && c != '\n' && c != EOF) {
-      Array[i] = c;
+      if (currentSize == size) {
+        size *= MEMORY_MULTIPLIER;
+        Array = (char *) realloc(Array, sizeof(char) * size);
+      }
+
       if (ToInteger(c) == -1) {
         printf("file contains invalid characters...");
+        free(Array);
         return 0;
       }
+      *(Array + currentSize) = c;
       if (ToInteger(c) > Max) {
         Max = ToInteger(c);
       }
       fprintf(OutputFile, "%c", c);
       Flag = 0;
-      ++i;
+      currentSize++;
+      i++;
     } else if (!Flag) {
       Max++;
-      fprintf(OutputFile, " - minimum number system: %d  =>  ", Max);
+      fprintf(OutputFile, " - minimum number system: %d\n", Max);
       long long p = 1, result = 0;
       for (int l = i - 1; l >= 0; l--) {
         result += (p * ToInteger(Array[l]));
         p *= (Max);
       }
-      fprintf(OutputFile, "%lld\n", result);
       Flag = 1;
       Max = 1;
       i = 0;
@@ -110,7 +86,7 @@ int main(int argc, char * argv[]) {
 
   fclose(InputFile);
   fclose(OutputFile);
-  free(Output);
+  free(Array);
   return 0;
 }
 

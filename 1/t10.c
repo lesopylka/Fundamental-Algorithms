@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <float.h>
+#include <limits.h>
 
-#define ERROR 0.01
+#define ERROR DBL_MAX
 
 void FreeMatrix(double ** Matrix, int Row) {
   for (int i = 0; i < Row; i++) {
@@ -17,8 +19,14 @@ double ** GenerateMatrix(int * Row, int * Col) {
   //*Col = rand() % 10 + 1;
 
   double ** Matrix = (double ** ) malloc(sizeof(double * ) * * Row);
+  if (Matrix == NULL) {
+    return NULL;
+  }
   for (int i = 0; i < * Row; i++) {
     Matrix[i] = (double * ) malloc(sizeof(double) * * Col);
+    if (Matrix[i] == NULL) {
+      return NULL;
+    }
     for (int j = 0; j < * Col; j++) {
       Matrix[i][j] = rand() % 200 - 100;
     }
@@ -38,12 +46,21 @@ void output_matrix(double ** Matrix, int Row, int Col) {
 }
 
 double ** MultiplyMatrix(double ** Matrix1, int Row1, int Col1, double ** Matrix2, int Row2, int Col2) {
+  if (Col1 != Row2) {
+    return NULL;
+  }
   double ** result = NULL;
 
   if (Col1 == Row2) {
     result = (double ** ) malloc(sizeof(double * ) * Row1);
+    if (result == NULL) {
+      return NULL;
+    }
     for (int i = 0; i < Row1; i++) {
       result[i] = (double * ) malloc(sizeof(double) * Col2);
+      if (result[i] == NULL) {
+        return NULL;
+      }
     }
 
     for (int i = 0; i < Row1; i++) {
@@ -70,9 +87,15 @@ double determinant(double ** Matrix, int Row, int Col) {
     double Res = 1.0;
     int Size = Row;
     double ** CopyMatrix = (double ** ) malloc(sizeof(double * ) * Size);
+    if (CopyMatrix == NULL) {
+      return ERROR;
+    }
 
     for (int i = 0; i < Size; i++) {
       CopyMatrix[i] = (double * ) malloc(sizeof(double) * Size);
+      if (CopyMatrix == NULL) {
+        return ERROR;
+      }
       for (int j = 0; j < Size; j++) {
         CopyMatrix[i][j] = Matrix[i][j];
       }
@@ -103,8 +126,17 @@ int main() {
   int Row2 = 3;
   int Col2 = 3;
   double ** Matrix1 = GenerateMatrix( & Row1, & Col1);
+  if (Matrix1 == NULL) {
+    return 1;
+  }
   double ** Matrix2 = GenerateMatrix( & Row2, & Col2);
+  if (Matrix2 == NULL) {
+    return 1;
+  }
   double ** multiply = MultiplyMatrix(Matrix1, Row1, Col1, Matrix2, Row2, Col2);
+  if (multiply == NULL) {
+    return 1;
+  }
 
   printf("A:\n");
   output_matrix(Matrix1, Row1, Col1);
@@ -148,8 +180,8 @@ int main() {
 }
 
 
-// 19, 21, 44, 46, 72, 75 строка: проверки на корректность выделения памяти нет, пофиксить с возможностью обработки ситуации в вызывающем коде
-// в функции умножения стоит проверить, можно ли вообще умножить такие две матрицы
-// в main непонятно зачем сначала сравнивать возвращаемое значение функции, считающей определитель, с ERROR, а потом заново вычислять определитель
-// а если определитель матрицы будет равен ERROR вдруг? обрабатывай такие ситуации через статус-коды
-// сравнивать вещественные числа нужно исключительно с заданной точностью вследствие формата их хранения
+// 19, 21, 44, 46, 72, 75 строка: проверки на корректность выделения памяти нет, пофиксить с возможностью обработки ситуации в вызывающем коде +
+// в функции умножения стоит проверить, можно ли вообще умножить такие две матрицы +
+// в main непонятно зачем сначала сравнивать возвращаемое значение функции, считающей определитель, с ERROR, а потом заново вычислять определитель +
+// а если определитель матрицы будет равен ERROR вдруг? обрабатывай такие ситуации через статус-коды +
+// сравнивать вещественные числа нужно исключительно с заданной точностью вследствие формата их хранения + 
