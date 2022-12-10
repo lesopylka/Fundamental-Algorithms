@@ -53,7 +53,7 @@ int main(int argc, char * argv[]) {
     if (c != ' ' && c != '\n' && c != EOF) {
       if (currentSize == size) {
         size *= MEMORY_MULTIPLIER;
-        Array = (char *) realloc(Array, sizeof(char) * size);
+        Array = (char *) realloc(Array, sizeof(char) * size); //листочек с tmp
       }
 
       if (ToInteger(c) == -1) {

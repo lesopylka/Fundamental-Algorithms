@@ -41,6 +41,7 @@ char *Stacking(char *str1, char *str2, int n) {
     int len2 = strlen(str2);
     int len_result = max(len1, len2) + 2;
     char *result = (char *) malloc(sizeof(char) * len_result);
+    if (*result = NULL) {return 1;}
     for (int i = 0; i < len_result - 1; ++i) result[i] = '0';
     result[len_result - 1] = '\0';
     int p[] = {

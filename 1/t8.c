@@ -77,6 +77,7 @@ int main(int argc, char * argv[]) {
           for (int l = 1; l < SizeArray; l += 2) {
             array2[SizeArray2] = array[l];
             SizeArray2++;
+            printf("%lld", array[l]);
           }
 
           break;
@@ -88,6 +89,7 @@ int main(int argc, char * argv[]) {
             if (tmp == 0) {
               array2[SizeArray2] = array[l];
               SizeArray2++;
+              printf("%lld", array[l]);
             }
           }
           break;

@@ -32,6 +32,7 @@
         "string": "c",
         "unordered_map": "c",
         "vector": "c",
-        "hashtable": "c"
+        "hashtable": "c",
+        "__locale": "c"
     }
 }

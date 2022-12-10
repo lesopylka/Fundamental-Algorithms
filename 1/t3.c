@@ -10,14 +10,24 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    char* input_file_path = argv[2];
-
+    char *input_file_path = argv[2];
+    int slashIndex = 0;
+    for (int x = strlen(input_file_path) - 1; x >= 0; x--) {
+        if (input_file_path[x] == '/' || input_file_path[x] == '\\') {
+            slashIndex = x;
+            break;
+        }
+    }
     // получение выходного пути файла
-    char* extension_of_file = strrchr(input_file_path,'.'); // отделим расширение файла
-    char * file_path = (char *) malloc ( strlen(input_file_path) * sizeof(char)); //char file_path[strlen(input_file_path) + 4]; 
-    strcpy(file_path, input_file_path);
-    strncat(file_path, "out_", strlen(input_file_path)-strlen(extension_of_file)); // добавили out_ к названию
-    strncat(file_path, extension_of_file, strlen(input_file_path)-strlen(extension_of_file) + 4); // добавим расширение к названию файла
+    char * file_path = (char *) malloc ( (strlen(input_file_path) + 5) * sizeof(char)); //char file_path[strlen(input_file_path) + 4]; 
+    if (file_path == NULL) {return 2;} 
+    if (slashIndex) {
+        strncat(file_path, input_file_path, slashIndex + 1);
+    }
+    strcat(file_path, "out_");
+    strcat(file_path, input_file_path + slashIndex + (slashIndex == 0 ? 0 : 1));
+    // strncat(file_path, "out_", strlen(input_file_path)-strlen(extension_of_file)); // добавили out_ к названию
+    // strncat(file_path, extension_of_file, strlen(input_file_path)-strlen(extension_of_file) + 4); // добавим расширение к названию файла
     char* output_file_path = file_path;
 
     int flag_argv_indx = 1;
@@ -41,10 +51,14 @@ int main(int argc, char* argv[]) {
     FILE* input_file = fopen(input_file_path, "r");
     if(input_file == NULL) {
         printf("Error: input file cannot be open.\n");
+        return -2;
+    
     }
-    FILE* output_file = fopen(output_file_path, "a");
+    FILE* output_file = fopen(output_file_path, "a"); 
     if(output_file == NULL) {
         printf("Error: output file cannot be open.\n");
+        fclose(input_file);
+        return -1;
     }
     char c;
     int kol_string = 1;
@@ -106,7 +120,7 @@ int main(int argc, char* argv[]) {
                     fputc(floor(c), output_file);
                 } else if (kol_string % 5 == 0) {
                     fputc(c, output_file);
-                } else if (kol_string % 2 == 0) {
+                } else if (kol_string & 1 == 0) {
                     fputc(floor(c), output_file);
                 } else {
                     fputc(c, output_file);

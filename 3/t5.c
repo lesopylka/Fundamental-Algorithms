@@ -37,8 +37,7 @@ short readString(FILE * file, char ** result, char * separators, short( * isCorr
   short isEOF = 0;
   int resCapacity = 1;
   char * res = (char * ) malloc(sizeof(char) * resCapacity);
-  if (res == NULL)
-    return 1;
+  if (res == NULL) {return 1;}
   char c;
   int count = 0;
   while (1) {
@@ -165,10 +164,7 @@ short readStudent(FILE * file, Student ** result) {
     return 4;
   }
   marks = (int * ) malloc(sizeof(int) * 5);
-  if (marks == NULL) {
-    freeAll(4, lastname, name, group, marksString);
-    return 5;
-  }
+  if (marks == NULL) { return 5;}
   for (int x = 0; x < 5; x++) {
     marks[x] = (marksString[x] - '0');
     if (marks[x] < 2 || marks[x] > 5) {
@@ -178,10 +174,7 @@ short readStudent(FILE * file, Student ** result) {
   }
   free(marksString);
   Student * student = (Student * ) malloc(sizeof(Student));
-  if (student == NULL) {
-    freeAll(3, lastname, name, group);
-    return 6;
-  }
+  if (student == NULL) { return 6; }
   student -> id = id;
   student -> lastname = lastname;
   student -> name = name;
@@ -208,8 +201,7 @@ short readStudents(FILE * file, Student ** * result, int * len) {
   Student * student;
 
   Student ** res = (Student ** ) malloc(sizeof(Student * ) * resCapacity);
-  if (res == NULL)
-    return 10;
+  if (res == NULL) { return 10; }
 
   while (statusCode != -1) { // -1 = EOF
     if (count == resCapacity) {
@@ -329,8 +321,7 @@ short findStudents(Student ** list, int len, Student ** * result, int * resLen,
   Student * student;
 
   Student ** res = (Student ** ) malloc(sizeof(Student * ) * resCapacity);
-  if (res == NULL)
-    return 1;
+  if (res == NULL) {return 1;}
 
   for (int x = 0; x < len; x++) {
     student = list[x];
@@ -397,8 +388,7 @@ short saveToFiles(char * origFilename, Student ** list, int len) {
   FILE * file1, * file2, * file3, * file4;
   int lenFilename = strlen(origFilename) + 3;
   char * filename = (char * ) malloc(sizeof(char) * lenFilename);
-  if (filename == NULL)
-    return 2;
+  if (filename == NULL) {return 2;}
   strcpy(filename, origFilename);
   filename[lenFilename - 1] = '\0';
   filename[lenFilename - 2] = '1';

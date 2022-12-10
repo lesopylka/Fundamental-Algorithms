@@ -81,9 +81,7 @@ int bitsForward(int l, int k, int ** list, int * len) {
   int pred = numBits(l) - 1;
   int size = lim - pred;
   * list = (int * ) malloc(size * sizeof(int));
-  if ( * list == NULL) {
-    return 1;
-  }
+  if ( * list == NULL) { return 1; }
   for (int i = pred; i < lim; i++) {
     if (checkBits(l, i, 1)) {
       ( * list)[( * len) ++] = i;

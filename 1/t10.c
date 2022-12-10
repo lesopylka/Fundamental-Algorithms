@@ -7,11 +7,12 @@
 
 #define ERROR DBL_MAX
 
-void FreeMatrix(double ** Matrix, int Row) {
+void FreeMatrix(double *** Matrix, int Row) { 
   for (int i = 0; i < Row; i++) {
-    free(Matrix[i]);
+    free((*Matrix)[i]);
   }
-  free(Matrix);
+  free(*Matrix);
+  *Matrix = NULL;
 }
 
 double ** GenerateMatrix(int * Row, int * Col) {
@@ -25,8 +26,16 @@ double ** GenerateMatrix(int * Row, int * Col) {
   for (int i = 0; i < * Row; i++) {
     Matrix[i] = (double * ) malloc(sizeof(double) * * Col);
     if (Matrix[i] == NULL) {
+      FreeMatrix(&Matrix,i);
       return NULL;
     }
+
+      //   if (matrix[i] == NULL) {
+      // for (int j = 0; j <= i; j++)
+      //   free(matrix[j]);
+      // free(matrix);
+      // return NULL; 
+
     for (int j = 0; j < * Col; j++) {
       Matrix[i][j] = rand() % 200 - 100;
     }

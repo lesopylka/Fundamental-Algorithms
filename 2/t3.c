@@ -1,6 +1,6 @@
 // Напишите функции, вычисляющее значения чисел
-// 𝑒, π, ln 𝑙𝑛 2 , 2, γ с точностью 𝑙 знаков после запятой. 
-// Для каждой константы реализовать три способа вычисления: например,
+// 𝑒, π, ln 𝑙𝑛 2 , 2, γ с точностью 𝑙 знаков после запятой. 
+// Для каждой константы реализовать три способа вычисления: например,
 // как сумму ряда, как решение специального уравнения, как значение предела.
 
 #include <stdio.h>
@@ -214,11 +214,9 @@ double eulerEquation(double eps) {
 }
 
 void pascalTableGenerate(unsigned long long ** * table, int * generated, int toGenerate) {
-  unsigned long long ** tmpTable = NULL, * tmpString = NULL;
-  if (!( * generated)) {
-    if (!(( ** table) = (unsigned long long * ) malloc(sizeof(unsigned long long)))) {
-      return;
-    }
+  unsigned long long ** tmpTable = NULL, * tmpString = NULL; **
+  table = (unsigned long long * ) malloc(sizeof(unsigned long long));
+  if (!( * generated)) { if ( ** table = NULL) { return 1; }
     ( * table)[0][0] = 1;
     ( * generated) ++;
   }
@@ -231,11 +229,10 @@ void pascalTableGenerate(unsigned long long ** * table, int * generated, int toG
 
   int str, col, stringItemsCount;
   for (str = ( * generated); str < toGenerate + 1; str++) {
-    // gen array (string) with enough memory for items
     stringItemsCount = str + 1;
-    if (!(( * table)[str] = (unsigned long long * ) malloc(sizeof(unsigned long long) * stringItemsCount))) {
-      return;
-    }
+    ( * table)[str] = (unsigned long long * ) malloc(sizeof(unsigned long long) * stringItemsCount);
+    // gen array (string) with enough memory for items
+    if (( * table)[str] = NULL) { return 1; }
 
     for (col = 0; col <= str; col++) {
       if (col == 0 || col == str) {
