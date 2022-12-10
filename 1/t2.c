@@ -123,7 +123,7 @@ int* toggles_q(double a, double b, double c) {
       roots = (int*)malloc(sizeof(int));
       int x1 = (-b + sqrt(d)) / (2 * a);
       *roots = x1;
-      printf("x = %lf\n", x1);
+      printf("x = %d\n", x1);
     } else {
       roots = (int*)malloc(sizeof(int) * 2);
       int x1 = (-b + sqrt(d)) / (2 * a);
@@ -155,7 +155,7 @@ bool toggles_t(float a, float b, float c) {
     return 0;
 }
 
-char* main(int argc, char ** argv) {
+int main(int argc, char ** argv) {
   // типы возвр значений
   // true, false под false ещё ошибка может быть
   // x, x1 x2
@@ -164,27 +164,31 @@ char* main(int argc, char ** argv) {
   //    -e это ошибка, текст ошибки
   //    -a это ответ флоат, количество ответов, ответ/ы
   //    -b ответ тру или фалсе
-  if(!is_flag(argv[1])){  
-    return "-e Inappropriate flag position\n";
+  if(!is_flag(argv[1])){
+    printf("-e Inappropriate flag position\n");
+    return 1;
   }
   if(!argc - 1 == number_of_parameters(argv[1][1])){
-    return "-e Inappropriate parameters count\n";
+    printf("-e Inappropriate parameters count\n");
+    return 1;
   }
 
   switch (argv[1][1]) {
     case 'q':
-      double x1 = 0, x2 = 0;
+      double x1 = 0;
+      double x2 = 0;
       int answ = toggles_q(atof(argv[2]), atof(argv[3]), atof(argv[4]));
       if (answ == 0) {
-        char* message = "-e With the entered coefficients does not exist\n";
-        return message;
+        printf("-e With the entered coefficients does not exist\n");
+        return 0;
       } else if (answ == 1) {
         char message[100];
         strcpy(message, "-a 1 ");
         char* ans;
         myftoa(x1, ans, 2);
         strcat(message, ans);
-        return message;
+        printf("%s\n", message);
+        return 0;
       } else if (answ == 2) {
         char message[100];
         strcpy(message, "-a 2 ");
@@ -194,43 +198,31 @@ char* main(int argc, char ** argv) {
         myftoa(x2, ans2, 2);
         strcat(message, ans1);
         strcat(message, ans2);
-        return message;
+        printf("%s\n", message);
         printf("%f  %f\n", x1, x2);
+        return 0;
+        
       }
       break;
     case 'm':
       if (toggles_m(myatoi(argv[2]), myatoi(argv[3]))){
-        return "-b true\n";
+        printf("-b true\n");
+        return 0;
           }
       else {
-        return "-b false\n";
+        printf("-b false\n");
+        return 0;
       break;
       }
     case 't':
       if (toggles_t(atof(argv[2]), atof(argv[3]), atof(argv[4]))){
-        return "-b true\n";
+        printf("-b true\n");
+        return 0;
       } 
       else if (atof(argv[2]) > 0 && atof(argv[3]) > 0 && atof(argv[4]) > 0) {
-        return "-b false\n";
+        printf("-b false\n");
+        return 0;
       }
       break;
+  }
 }
-
-// принтф плохо
-// сравнение вещественных чисел переделывай
-// везде где тупо ==
-// надо сделать сравнение модуля разности чисел со значением эпсилон, которое было бы круто как параметр функции приделать
-// через == сравнивать нельзя
-// t2.c
-
-// return (sign > 0) ? 2147483647 : -2147483648;
-
-// есть удивительная либа limits.h
-
-// лучше пользоваться ей - Твой код не переносим между разными архитектурами
-
-// квадратные уравнения - где возврат результата не увидел
-
-// а то всё обмазано printf'ами, плохо
-
-// toggles_t - epsilon classic

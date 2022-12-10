@@ -1,3 +1,7 @@
+// Заполнить массив фиксированного размера случайными числами. 
+// Реализовать поиск максимального и минимального элементов, 
+// поменять местами максимальный и минимальный элементы массива.
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdarg.h>
@@ -11,7 +15,7 @@ bool СonvexTriangle(int count, ...) {
     bool sign = false;
 
     int n = count / 2;
-    int X[n], Y[n]; //не все скушают
+    int X[n], Y[n]; 
     int x = 0, y = 0;
 
     for (int i = 0; i < count; i++) {

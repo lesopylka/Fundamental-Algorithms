@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <math.h>
 
 int main(int argc, char* argv[]) {
     if(argc < 3) {
@@ -100,11 +103,11 @@ int main(int argc, char* argv[]) {
                     fputc(c, output_file);
                     kol_string++;
                 } else if (kol_string % 10 == 0) {
-                    fputc(to_floor(c), output_file);
+                    fputc(floor(c), output_file);
                 } else if (kol_string % 5 == 0) {
                     fputc(c, output_file);
                 } else if (kol_string % 2 == 0) {
-                    fputc(to_floor(c), output_file);
+                    fputc(floor(c), output_file);
                 } else {
                     fputc(c, output_file);
                 }
@@ -116,53 +119,3 @@ int main(int argc, char* argv[]) {
     free(file_path);
     return 0;
 }
-
-/* 
-строка 13
-char* extension_of_file = strrchr(input_file_path,'.'); // отделим расширение файла
-
-где гарантия того что у файла вообще есть расширение?
-
-его может не быть
-
-char file_path[strlen(input_file_path) + 4]; // на 4 символа больше ибо в out_ 4 символа
-
-в чистом си так делать нельзя
-
-инициализатор числа элементов в массиве всегда должен быть константой
-
-приделывай malloc
-
-и free соответственно
-
-FILE* output_file = fopen(output_file_path, "a");
-
-как насчёт проверить, открылся ли файл?
-
-for(int i = 0; i <(strlen(input_file_path)-strlen(extension_of_file)); i++) {
-        file_path[i] = input_file_path[i]; // найдём название файла без раширения
-    }
-
-strcpy? не, не слышал
-
-fprintf(output_file, "%c", c);
-
-если есть выбор между fputc и fprintf, лучше использовать fputc
-
-ибо не нужно тратить время на разбор форматной строки
-
-if (!isalpha(c) && !isdigit(c) && c != ' ')
-
-для букв/цифр одновременно, есть isalnum
-
-if (isdigit(c)) {
-                    fprintf(output_file, "%c", c);
-                } else {
-                    fprintf(output_file, "%d", c);
-                }
-
-удивительным образом превращается в
-
-fprintf(output_file, isdigit(c) ? "%c" : "%d", c);
- */ 
-

@@ -1,10 +1,8 @@
 #include <stdio.h>
-
 #include <time.h>
-
 #include <stdlib.h>
 
-void fill_array(int * array, int SIZE, int left_bound, int right_bound) {
+void fill_array(int * array, int SIZE, int left_bound, int right_bound) { //проверять 
   for (int i = 0; i < SIZE; ++i) {
     array[i] = rand() % (right_bound - left_bound + 1) + left_bound;
   }
@@ -35,6 +33,7 @@ void exchange_min_max(int * array, int SIZE) {
 
 int * unique_elems_array(int * array, int SIZE) {
   int * sub_array = (int * ) malloc(sizeof(int) * SIZE);
+    if (sub_array = NULL){return 0;}
   int k = 0;
   int flag;
   for (int i = 0; i < SIZE; ++i) {
@@ -51,11 +50,12 @@ int * unique_elems_array(int * array, int SIZE) {
     }
   }
   int * final_array = (int * ) malloc(sizeof(int) * (k));
+    if (final_array = NULL){return NULL;}
   for (int i = 0; i < k; ++i) {
     final_array[i] = sub_array[i];
   }
   for (int i = 0; i < k; ++i) {
-    printf("%d\n", final_array[i]);
+    printf("%d\n", final_array[i]); //убрать принтф
   }
   free(sub_array);
   return final_array;
@@ -67,7 +67,8 @@ int main() {
   int a, b;
   scanf("%d", & a);
   scanf("%d", & b);
-  int * array = (int * ) malloc(sizeof(int) * SIZE);
+  int * array = (int * ) malloc(sizeof(int) * SIZE); 
+    if (array = NULL){return 1;}
   fill_array(array, SIZE, a, b);
   printf("select an option\n1: change max and min\n 2: create an array of unique elements\n");
   int option;
@@ -80,7 +81,7 @@ int main() {
     exchange_min_max(array, SIZE);
     break;
   case 2:
-    unique_elems_array(array, SIZE);
+    unique_elems_array(array, SIZE); //утечка плохо
     break;
   default:
     printf("Incorrect option\n");

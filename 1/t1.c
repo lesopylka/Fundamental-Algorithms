@@ -87,11 +87,13 @@ unsigned numberDigitsCount(unsigned number, unsigned numberSystemBase) {
 }
 
 void toggles_h(unsigned n) {
-
+  if (n >= 100) {
+    printf("no such numbers\n");
+    return;
+  }
   for (unsigned acc = n; acc < 100; acc += n) {
     printf("%d ", acc);
   }
-
   printf("\n");
 }
 
@@ -105,7 +107,7 @@ unsigned toggles_f(unsigned number) {
   return result;
 }
 
-int toggles_p(unsigned number) {
+int toggles_p(unsigned number) { //тест должен быть детерменированным, факторилал зачем, надо через остаток. учитывать Число Кармайкла
   if (number == 4) {
     return 0;
   }

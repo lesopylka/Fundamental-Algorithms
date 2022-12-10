@@ -72,78 +72,85 @@ int main(int argc, char * argv[]) {
     if (!strcmp(Parameters[i], argv[2])) {
       good_flag = 1;
       switch (Parameters[i][0]) {
-      case 'a':
-        printf("numbers at odd indices: ");
-        for (int l = 1; l < SizeArray; l += 2) {
-          array2[SizeArray2] = array[l];
-          SizeArray2++;
-        }
-
-        break;
-      case 'b':
-        printf("even numbers: ");
-        for (int l = 0; l < SizeArray; ++l) {
-          if (array[l] & 1 == 0) {
+        case 'a': {
+          printf("numbers at odd indices: ");
+          for (int l = 1; l < SizeArray; l += 2) {
             array2[SizeArray2] = array[l];
             SizeArray2++;
           }
+
+          break;
         }
-        break;
-      case 'c':
-        printf("enter the index of the current element: ");
-        scanf("%d", & CurrentElement);
-        if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
-          printf("invalid pointer!\n");
-          return 0;
-        }
-        long long Minim = array[0], maxim = array[0];
-        for (int l = 0; l < SizeArray; ++l) {
-          if (array[l] > maxim) {
-            maxim = array[l];
+        case 'b': {
+          printf("even numbers: ");
+          for (int l = 0; l < SizeArray; ++l) {
+            int tmp = (array[l] & 1);
+            if (tmp == 0) {
+              array2[SizeArray2] = array[l];
+              SizeArray2++;
+            }
           }
-          if (array[l] < Minim) {
-            Minim = array[l];
+          break;
+        }
+        case 'c': {
+          printf("enter the index of the current element: ");
+          scanf("%d", & CurrentElement);
+          if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
+            printf("invalid pointer!\n");
+            return 0;
           }
+          long long Minim = array[0];
+          long long maxim = array[0];
+          for (int l = 0; l < SizeArray; ++l) {
+            if (array[l] > maxim) {
+              maxim = array[l];
+            }
+            if (array[l] < Minim) {
+              Minim = array[l];
+            }
+          }
+          printf("farthest (in value) from it: ");
+          if (maxim - array[CurrentElement] > array[CurrentElement] - Minim) {
+            printf("%lld", maxim);
+          } else {
+            printf("%lld", Minim);
+          }
+
+          break;
         }
-        printf("farthest (in value) from it: ");
-        if (maxim - array[CurrentElement] > array[CurrentElement] - Minim) {
-          printf("%lld", maxim);
-        } else {
-          printf("%lld", Minim);
-        }
+        case 'd': {
+          printf("enter the index of the current element: ");
+          scanf("%d", & CurrentElement);
 
-        break;
-      case 'd':
-        printf("enter the index of the current element: ");
-        scanf("%d", & CurrentElement);
+          if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
+            printf("invalid pointer!\n");
+            return 0;
+          }
 
-        if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
-          printf("invalid pointer!\n");
-          return 0;
-        }
-
-        for (int l = 0; l < CurrentElement; ++l)
-          s += array[l];
-
-        printf("sum: %lld", s);
-
-        break;
-      case 'e':
-        printf("enter the index of the current element: ");
-        scanf("%d", & CurrentElement);
-
-        if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
-          printf("invalid pointer!\n");
-          return 0;
-        }
-
-        for (int l = 0; l < SizeArray; ++l)
-          if (array[l] < array[CurrentElement])
+          for (int l = 0; l < CurrentElement; ++l)
             s += array[l];
 
-        printf("sum: %lld", s);
+          printf("sum: %lld", s);
 
-        break;
+          break;
+        }
+        case 'e': {
+          printf("enter the index of the current element: ");
+          scanf("%d", & CurrentElement);
+
+          if (CurrentElement > SizeArray - 1 || CurrentElement < 0) {
+            printf("invalid pointer!\n");
+            return 0;
+          }
+
+          for (int l = 0; l < SizeArray; ++l)
+            if (array[l] < array[CurrentElement])
+              s += array[l];
+
+          printf("sum: %lld", s);
+
+          break;
+      }
       }
     }
   }
@@ -159,8 +166,3 @@ int main(int argc, char * argv[]) {
 
   return 0;
 }
-
-
-
-// аналогично 1.5 и 1.6, с exit code в main при неуспешном завершении приложения +-
-// 86 строка: быстрее выполнить &1, чем %2 +

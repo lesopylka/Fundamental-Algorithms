@@ -12,9 +12,11 @@ double answer(double( * func)(double), double begin, double end, int accuracy) {
 
   do {
     result = (begin + end) / 2;
-    if (func(result) * func(begin) <= eps) end = result;
+    if (func(result) * func(begin) < -eps) end = result; 
     else begin = result;
-  } while (fabs(begin - end) >= eps);
+    if (func(result) * func(begin) < 0) end = result;
+    else begin = result;
+  } while (fabs(begin - end) >= eps); 
   return result;
 }
 

@@ -43,21 +43,21 @@ int main(void) {
     return 0;
   }
   char c[50];
-  char stop[4] = "Stop";
+  char stop[5] = "Stop";
   char MaxStr[50];
   int max_str_len = 0;
   printf("\nenter numbers no more than 50 characters long (Don`t forget, to stop typing, you must enter Stop with a capital letter!)\n");
   do {
-    scanf("%s", & c);
+    scanf("%s", c);
     if (strcmp(c, "stop") != 0) {
       int x = strlen(c);
       if (c[0] == '-') --x;
       if (x > max_str_len) {
-        Assimilation( & MaxStr, & c);
+        Assimilation(MaxStr, c);
         max_str_len = x;
       } else if (x == max_str_len) {
         if (strcmp(c, MaxStr) > 0) {
-          Assimilation( & MaxStr, & c);
+          Assimilation(MaxStr, c);
         }
       }
     } else {
@@ -80,7 +80,7 @@ int main(void) {
     p *= n;
   }
   MaxStr[max_str_len] = '\0';
-  printf("\nmax: %s  in decimal number system: %d\n", MaxStr, (minus) ? -result : result);
+  printf("\nmax: %s  in decimal number system: %lld\n", MaxStr, (minus) ? -result : result);
 
   int LenCC = 0, j = 0;
   char MassCC[50];

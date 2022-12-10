@@ -9,13 +9,13 @@
 
 enum VALIDATION_ENUM {
   ok = 0,
-    invalidCountOfOptions = 1,
-    invalidFileExtension = 2,
-    filDidntOpen = 3,
-    someOfTheArgumentFilesDidtOpen = 4,
-    someArgumentFileHasTheWrongExtension = 5,
-    invalidOptions = 6,
-    someFileDidntOpen = 7
+  invalidCountOfOptions = 1,
+  invalidFileExtension = 2,
+  filDidntOpen = 3,
+  someOfTheArgumentFilesDidtOpen = 4,
+  someArgumentFileHasTheWrongExtension = 5,
+  invalidOptions = 6,
+  someFileDidntOpen = 7
 };
 
 void printValidationError(enum VALIDATION_ENUM error) {
@@ -40,58 +40,62 @@ void printValidationError(enum VALIDATION_ENUM error) {
     break;
   case someFileDidntOpen:
     printf("Some file didn't open\n");
+    break;
+  case ok:
+    printf("No error\n");
+    break;
   }
 }
 
-int check_args(int argc, char
+enum VALIDATION_ENUM validationArg(int argc, char
   const * argv[]) {
   FILE * file = NULL;
 
   if (argc <= 1) {
-    return 1;
+    return invalidCountOfOptions;
   }
 
   if (strcmp(argv[1], "-fi") == 0) {
     if (argc != 3) {
-      return 1;
+      return invalidCountOfOptions;
     }
 
     if (strcmp(argv[2] + strlen(argv[2]) - 4, ".txt") == 0) {
-      return 2;
+      return invalidFileExtension;
     }
 
     if ((file = fopen(argv[2], "r")) != NULL) {
-      return 3;
+      return filDidntOpen;
     }
 
     fclose(file);
-    return 0;
+    return ok;
   }
 
   if (strcmp(argv[1], "-cin") == 0) {
-    return argc != 2;
+    return argc != 2 ? invalidCountOfOptions : ok;
   }
 
   if (strcmp(argv[1], "-arg") == 0) {
     if (argc <= 2) {
-      return 1;
+      return invalidCountOfOptions;
     }
 
     for (int i = 2; i < argc; i++) {
 
       if (strcmp(argv[i] + strlen(argv[i]) - 4, ".txt") != 0) {
-        return 5;
+        return someArgumentFileHasTheWrongExtension;
       }
 
       if ((file = fopen(argv[i], "r")) != NULL) {
         fclose(file);
       }
-      return 4;
+      return someOfTheArgumentFilesDidtOpen;
     }
 
-    return 0;
+    return ok;
   }
-  return 6;
+  return invalidOptions;
 }
 void get_names_from_file(const char * filename, char( * filenames)[SIZE_NAME], int * size) {
   FILE * file = NULL;
@@ -180,28 +184,29 @@ bool write_files(char( * files)[SIZE_NAME], int count_files) {
   return true;
 }
 
-int main(int argc, char
-    const * argv[]) {
-    int check = check_args(argc, argv);
+int main(int argc, char const * argv[]) {
     char filenames[COUNT_FILES][SIZE_NAME];
     int size = 0;
     enum VALIDATION_ENUM validationResult = validationArg(argc, argv);
 
-    if (check == 0) {
-      if (strcmp(argv[1], "-fi") == 0) {
-        get_names_from_file(argv[2], filenames, & size);
-      }
-      if (strcmp(argv[1], "-cin") == 0) {
-        get_names_from_stdin(filenames, & size);
-      }
-      if (strcmp(argv[1], "-arg") == 0) {
-        get_names_from_args(argc, argv, filenames, & size);
-      }
-
-      if (validationResult != ok) {
+    if (validationResult != ok) {
         printValidationError(validationResult);
-        return 1;
-      }
+    }
+  
+    if (strcmp(argv[1], "-fi") == 0) {
+      get_names_from_file(argv[2], filenames, & size);
+    }
+    if (strcmp(argv[1], "-cin") == 0) {
+      get_names_from_stdin(filenames, & size);
+    }
+    if (strcmp(argv[1], "-arg") == 0) {
+      get_names_from_args(argc, argv, filenames, & size);
+    }
+
+    if (validationResult != ok) {
+      printValidationError(validationResult);
+      return 1;
+    }
 
       //   if (!write_files(filenames, size)) {
       //     fprintf(stderr, "%s\n", "Some file didn't open");
@@ -226,6 +231,5 @@ int main(int argc, char
       //     fprintf(stderr, "%s\n", "Invalid options");
       //   }
       // }
-
-      return 0;
-    }
+    return 0;
+}

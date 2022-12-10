@@ -35,7 +35,7 @@ char ** generate_matrix(int row, int col) {
 
 char * file_name_generation(const char * str) {
   int j, ukazatel_na_slash = -1;
-  char * output = malloc(sizeof(char) * 300);
+  char * output = (char*)malloc(sizeof(char) * 300);
   for (j = 0; str[j] != '\0'; j++) {
     if (str[j] == '\\') {
       ukazatel_na_slash = j;
@@ -93,14 +93,14 @@ int main(int argc, char * argv[]) {
     if (!isspace(ch)) {
       if (j >= n) {
         n *= 2;
-        matrix[i] = realloc(matrix[i], n);
+        matrix[i] = (char*)realloc(matrix[i], n);
       }
       matrix[i][j] = ch;
       j++;
     } else if (isspace(ch) && !isspace(_c)) {
       if (j >= n) {
         n *= 2;
-        matrix[i] = realloc(matrix[i], n);
+        matrix[i] = (char*)realloc(matrix[i], n);
       }
       matrix[i][j] = '\0';
       i++;
