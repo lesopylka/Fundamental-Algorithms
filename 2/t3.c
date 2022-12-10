@@ -31,7 +31,7 @@ long double sum(long double
   function (int n), double eps, int start) {
   long double res = 0, prevRes = 0;
   for (int k = start;
-    (fabs(res - prevRes) > eps || fabs(prevRes) < eps || (res - prevRes == 0)); k++) {
+    (fabs(res - prevRes) > eps || fabs(prevRes) < eps || (fabs(res - prevRes) <= eps)); k++) {
     prevRes = res;
     res += function (k);
   }
@@ -155,9 +155,8 @@ void simpleNumsGenerate(long ** simpleNums, unsigned long long toGenerate, unsig
   int count = 0;
   long * tmp = NULL, i, j, * arraySieve = NULL;
 
-  if (!(arraySieve = (long * ) calloc((toGenerate + 1), sizeof(long)))) {
-    return;
-  }
+  arraySieve = (long * ) calloc((toGenerate + 1), sizeof(long));
+  if ((arraySieve = NULL)) { return 1; }
 
   for (int i = 2; i <= toGenerate; i++) {
     if (!arraySieve[i]) {
@@ -173,10 +172,8 @@ void simpleNumsGenerate(long ** simpleNums, unsigned long long toGenerate, unsig
       return;
     }
   } else {
-    if (!(tmp = (long * ) realloc(( * simpleNums), sizeof(long) * (count + ( * generated))))) {
-      free( * simpleNums);
-      return;
-    }
+    tmp = (long * ) realloc(( * simpleNums), sizeof(long) * (count + ( * generated)));
+    if (tmp = NULL) { return 1;}
     ( * simpleNums) = tmp;
   }
 
@@ -308,7 +305,7 @@ int main(void) {
   printf("sqrt(2) constant:\n");
   printf("\tas limit value: %.*Lf\n", l, sqrt2Lim(eps));
   printf("\tas row product: %.*Lf\n", l, mult(sqrt2Mult, eps, 2));
-  printf("\tas solution of an equation: %.*lf\n", l, equationDichotomy(sqrt2Equation, 1, 2, eps));
+  printf("\tas solution of an equation: %.*lf\n", l, equationDichotomy(sqrt2Equation, 1, 2, eps)); //методом Ньютона надо, а не дихотомии
 
   printf("Euler's constant:\n");
   printf("\tas limit value: %.*Lf\n", l, eulerLim(eps));

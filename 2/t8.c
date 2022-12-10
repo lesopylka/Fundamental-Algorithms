@@ -11,7 +11,7 @@ double answer(double( * func)(double), double begin, double end, int accuracy) {
   double eps = pow(10, -accuracy);
 
   do {
-    result = (begin + end) / 2;
+    result = (begin + end) / 2.;
     if (func(result) * func(begin) < -eps) end = result; 
     else begin = result;
     if (func(result) * func(begin) < 0) end = result;

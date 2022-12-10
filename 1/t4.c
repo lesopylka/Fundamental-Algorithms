@@ -12,44 +12,39 @@
 
 char ** generate_matrix(int row, int col) {
 
-  char ** matrix = (char ** ) malloc(sizeof(char * ) * row);
+  char ** matrix = calloc(row, sizeof(char * ));
 
   if (matrix == NULL)
     return NULL;
 
-  for (int i = 0; i < row; i++) {
-    matrix[i] = (char * ) malloc(sizeof(char) * col);
+  for (int i = 0; i < row; i++) 
+  {
+    matrix[i] = calloc(col, sizeof(char));
 
-    if (matrix[i] == NULL) {
+    if (matrix[i] == NULL) 
+    {
       for (int j = 0; j <= i; j++)
         free(matrix[j]);
       free(matrix);
       return NULL; 
     }
-
-    return matrix;
   }
 
   return matrix;
 }
 
-char * file_name_generation(const char * str) {
-  int j, ukazatel_na_slash = -1;
-  char * output = (char*)malloc(sizeof(char) * 300);
-  for (j = 0; str[j] != '\0'; j++) {
-    if (str[j] == '\\') {
-      ukazatel_na_slash = j;
+void swap_col(char **mat, int i, int j, int rw)
+{
+  char tmp;
+  for(int l=0; l<rw; l++)
+    {
+      tmp = mat[l][i];
+      mat[l][i] = mat[l][j];
+      mat[l][j] = tmp;
     }
-  }
-
-  for (j = 0; j <= ukazatel_na_slash; j++) {
-    output[j] = str[j];
-  }
-  strcpy(output, "out.txt");
-  return output;
 }
 
-void free_matrix(char ** matrix, int row) {
+void free_matrix(char **matrix, int row) {
   for (int i = 0; i < row; i++) {
     free(matrix[i]);
   }
@@ -73,65 +68,48 @@ int main(int argc, char * argv[]) {
     return 0;
   }
 
-  int i, n = 16, j;
+  int i = 0, n = 1, j = 0;
+  char ch;
 
-  char ** matrix = generate_matrix(3, n);
+  while ((ch = fgetc(input_file)) != EOF) 
+    if (ch == '\n') 
+      n++;
+  rewind(input_file);
 
-  char * output = file_name_generation(argv[0]);
+  char **matrix = generate_matrix(n, 3);
 
-  FILE * output_file = fopen(output, "w");
-  if (output_file == NULL) {
-    printf("\nError opening output file\n");
-    return 0;
-  }
-
-  i = 0, j = 0;
-  char ch, _c = 0;
-
-  while (!feof(input_file)) {
-    ch = fgetc(input_file);
-    if (!isspace(ch)) {
-      if (j >= n) {
-        n *= 2;
-        matrix[i] = (char*)realloc(matrix[i], n);
+  while ((ch = fgetc(input_file)) != EOF) 
+  {
+    if(ch != ' ')
+    {
+      if (ch == '\n') 
+      {
+        j++;
+        i=0;
       }
-      matrix[i][j] = ch;
-      j++;
-    } else if (isspace(ch) && !isspace(_c)) {
-      if (j >= n) {
-        n *= 2;
-        matrix[i] = (char*)realloc(matrix[i], n);
+      else
+      {
+        matrix[j][i] = ch;
+        i++;
       }
-      matrix[i][j] = '\0';
-      i++;
-      if (i == 3) {
-        for (int k = 0; k < 3; ++k) {
-          fprintf(output_file, "%s ", matrix[(k + 2) % 3]);
-        }
-        fprintf(output_file, "\n");
-        i = 0;
-      }
-      j = 0;
     }
-    _c = ch;
   }
 
-  free_matrix(matrix, 3);
+  swap_col(matrix, 1, 2, n);
+  swap_col(matrix, 0, 1, n);
 
   fclose(input_file);
-  fclose(output_file);
+  FILE * output_file = fopen(argv[1], "w");
 
-  input_file = fopen(output, "r");
-  output_file = fopen(argv[1], "w");
-
-  char c;
-  while ((c = getc(input_file)) != EOF) {
-    fprintf(output_file, "%c", c);
+  for (i=0; i<n; i++)
+  {
+    for (j=0; j<3; j++)
+    {
+      fprintf(output_file, "%c ", matrix[i][j]);
+    }
+    fprintf(output_file, "\n");
   }
   fclose(input_file);
-  fclose(output_file);
-
-  free(output);
-  remove(output);
+  free_matrix(matrix, n);
   return 0;
 }

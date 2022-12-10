@@ -77,10 +77,10 @@ void find(char* str, char* fileName, ...) {
 int main() {
     char str[100];
     char file1[100], file2[100], file3[100];
-    gets_s(str);
-    gets_s(file1);
-    gets_s(file2);
-    gets_s(file3);
+    gets(str);
+    gets(file1);
+    gets(file2);
+    gets(file3);
     find(str, file1, file2, file3);
     return 0;
 }
