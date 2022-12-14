@@ -119,7 +119,7 @@ int* toggles_q(double a, double b, double c) {
     d = dicriminant(a, b, c);
     if (d < -EPS) {
       printf("No roots.\n");
-    } else if (fabs(d - 0) <= EPS) {
+    } else if (fabs(d) <= EPS) {
       roots = (int*)malloc(sizeof(int));
       int x1 = (-b + sqrt(d)) / (2 * a);
       *roots = x1;
@@ -146,12 +146,14 @@ bool toggles_m(int i, int k) {
 }
 
 bool toggles_t(float a, float b, float c) {
+  float aabbcc = ((a * a + b * b) - (c * c));
+  float aaccbb = ((a * a + c * c) - (b * b));
+  float bbccaa = ((b * b + c * c) - (a * a));
   if (a > EPS && b > EPS && c > EPS)
-    return fabs((a * a + b * b) - (c * c)) <= EPS ||
-           fabs((a * a + c * c) - (b * b)) <= EPS ||
-           fabs((b * b + c * c) - (a * a)) <= EPS;
+    return fabs(aabbcc) <= EPS ||
+           fabs(aaccbb) <= EPS ||
+           fabs(bbccaa) <= EPS;
   else 
-    printf("Something went wrong\n");
     return 0;
 }
 

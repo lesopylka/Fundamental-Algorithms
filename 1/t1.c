@@ -39,7 +39,7 @@ void printValidationError(enum VALIDATION_ENUM error) {
   }
 }
 
-  enum VALIDATION_ENUM validationArg(int argc, char * argv[], unsigned * number) {
+enum VALIDATION_ENUM validationArg(int argc, char * argv[], unsigned * number) {
   if (argc == 1) {
     return noArguments;
   }
@@ -107,10 +107,13 @@ unsigned toggles_f(unsigned number) {
   return result;
 }
 
-int toggles_p(unsigned number) { //тест должен быть детерменированным, факторилал зачем, надо через остаток. учитывать Число Кармайкла
-  if (number == 4) {
-    return 0;
+int toggles_p(unsigned number) {
+  for (int i = 2; i < floor(sqrt(number)); i++) {
+    if (number % i == 0) {
+      return 0;
+    }
   }
+  return 0;
 
   int result = toggles_f(number - 1) % number;
 
@@ -171,10 +174,10 @@ int main(int argc, char * argv[]) {
     break;
   case 'p':
     if (toggles_p(number)) {
-      printf("%d is prime\n", number);
+      printf("%d is composite\n", number);
       return 0;
     }
-    printf("%d is composite\n", number);
+    printf("%d is prime\n", number);
     break;
   case 's':
     toggles_s(number, numberDigitsCount(number, 10));

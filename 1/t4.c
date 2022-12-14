@@ -48,6 +48,7 @@ void free_matrix(char **matrix, int row) {
   for (int i = 0; i < row; i++) {
     free(matrix[i]);
   }
+  
   free(matrix);
 }
 

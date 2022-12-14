@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdarg.h>
+ #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <limits.h>
@@ -35,9 +37,9 @@ char *Stacking(char *str1, char *str2, int n) {
     int len2 = strlen(str2);
     int len_result = ((len1 > len2) ? len1: len2) + 2;
     char *result = (char *) malloc(sizeof(char) * len_result);
-    if (*result = NULL) 
+    if (result == NULL) 
     {
-        return 1;
+        return "";
     }
     for (int i = 0; i < len_result - 1; ++i) result[i] = '0';
     result[len_result - 1] = '\0';
@@ -59,19 +61,16 @@ char *Stacking(char *str1, char *str2, int n) {
     return result;
 }
 
-char* summ(int system_num, unsigned num, char* first, ...) 
+char* summ(int system_num, unsigned num, ...) 
 {
-    num = num-2;
-    char **p = &first;
-    char* sum = Stacking(*p,*(++p), system_num);
-    p++;
-    while (num--)
+    va_list factor;
+    va_start(factor, num);
+    char* sum = "";
+    for (int i=0;i<num; i++)
     {
-        char* tmp = Stacking(sum,*p, system_num);
-        memcpy(sum, tmp, strlen(tmp));
-        free(tmp);
-        p++;
+        sum = Stacking(va_arg(factor, char*),sum, system_num); 
     }
+    va_end(factor); 
     return sum;
 }
 
@@ -82,7 +81,8 @@ int main() {
     char str2[] = "0000000010";
     char str3[] = "0000010000";
     char str4[] = "0010000000";
-    char *res = summ(2,4,&str1,&str2,&str3,&str4);//Stacking(&str1,&str2,2);
+    char str5[] = "1000000000";
+    char *res = summ(2,5,str1,str2,str3,str4,str5);
 
     printf("%s\n", res);
     free(res);
