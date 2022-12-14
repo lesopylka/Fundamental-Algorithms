@@ -108,19 +108,39 @@ unsigned toggles_f(unsigned number) {
 }
 
 int toggles_p(unsigned number) {
+  // testiruesh chislo 65537 na prostotu naprimer
+  // determinirovannym algoritmom
+
+    // i = [2, 3, ..., sqrt(65537) primerno ravno 256]
+  // delim na 2, potom na 3, tipa vse ok
+  // no zachem delitj na 4 esli na 2 ne delitsja ._.
+  // zachem delitj na 9 esli ne delitsja na 3
+  // nu i tak dalee
+  // to est' po-horoshemu, nuZhno delitj tol'ko na prostie chisla iZ doapoZona
+  // a ne na vse
+  // uberi hotya by kratnie 2, 3, 5
+  // eta ochenj legko
+  // delaj prjam seichas ._. чт....
+// zachem vsjo stiratj-to o_O
+//так все говно же
+// хотя бля говно но хотя бы не жидкое =)
+// верни как было и просто отбрось числа кратные 2 3 и 5
+// надо к счетчику не 1 прибавлять а логику инкремента его значения продумать чуть и норм будет
+// меньше итераций потратишь чем втупую все подряд перебирать
+// делай кароч а я пошел пить пиво =)
+// 
   for (int i = 2; i < floor(sqrt(number)); i++) {
     if (number % i == 0) {
       return 0;
     }
   }
   return 0;
-
-  int result = toggles_f(number - 1) % number;
-
-  if (result == number - 1) {
-    return 1;
-  }
-  return 0;
+  // и return-коды разные сделай а то только 0 маловато будет
+  // я пошел
+  // как будет готово кидай
+  // я обязательно это не посмотрю
+  // =)
+  //спасибо!
 }
 
 void toggles_s(unsigned number, unsigned digits_kol) {
@@ -201,3 +221,18 @@ int main(int argc, char * argv[]) {
 
   return 0;
 }
+
+
+
+//  toggles_q:
+//   убери printf в main
+//   где проверки на malloc
+//   fabs(d - 0) - зочем, если можно просто fabs(d)
+//   не увидел где возвращается статускод метода чтобы можно было его обработать выше
+//  toggles_t:
+//   зачем трижды считать произведения если можно сохранить и пользоваться вычисленными значениями
+//   аналогично, printf здесь не должно быть
+//  main
+//   196 и 198 строки: Ты передаёшь в функцию неинициализированные указатели, а в функции под них чтото пишешь, так делать нельзя
+//   вызов toggles_q из main: вроде как функция возвращает значение типа int*, а Ты его в int кладёшь. Ну и как же без утечки памяти (=
+// IntToString: слишком долго работает, сделай без reverse
