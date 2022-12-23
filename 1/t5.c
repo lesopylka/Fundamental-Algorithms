@@ -67,6 +67,7 @@ enum VALIDATION_ENUM validationArg(int argc, char
     if ((file = fopen(argv[2], "r")) != NULL) {
       return filDidntOpen;
     }
+    
 
     fclose(file);
     return ok;
@@ -127,8 +128,9 @@ void get_names_from_args(int argc,
   const char * argv[], char( * filenames)[SIZE_NAME], int * size) {
   * size = argc - 2;
   for (int i = 2; i < argc; i++) {
-    for (int j = 0; j <= strlen(argv[i]); j++) {
-      if (j == strlen(argv[i])) {
+    int length = strlen(argv[i]);
+    for (int j = 0; j <= length; j++) {
+      if (j == length) {
         filenames[i - 2][j] = '\0';
       } else {
         filenames[i - 2][j] = argv[i][j];
@@ -152,6 +154,7 @@ bool is_all_file_closed(bool * closed, int size) {
 bool write_files(char( * files)[SIZE_NAME], int count_files) {
   FILE * opened_files[count_files];
   FILE * result_file = fopen("out_file.txt", "w");
+  if (result_file == NULL) { return false; }
   bool closed[count_files];
   char symb = 0;
 
@@ -163,9 +166,7 @@ bool write_files(char( * files)[SIZE_NAME], int count_files) {
   while (!is_all_file_closed(closed, count_files)) {
     for (int i = 0; i < count_files; i++) {
       if (opened_files[i] == NULL) {
-        if ((opened_files[i] = fopen(files[i], "r")) != NULL) {
-          ;
-        } else {
+        if ((opened_files[i] = fopen(files[i], "r")) == NULL) {
           return false;
         }
       }
@@ -191,6 +192,7 @@ int main(int argc, char const * argv[]) {
 
     if (validationResult != ok) {
         printValidationError(validationResult);
+        return 1;
     }
   
     if (strcmp(argv[1], "-fi") == 0) {
@@ -203,39 +205,9 @@ int main(int argc, char const * argv[]) {
       get_names_from_args(argc, argv, filenames, & size);
     }
 
-    if (validationResult != ok) {
-      printValidationError(validationResult);
-      return 1;
-    }
+    if (!write_files(filenames, size)) {
+			fprintf(stderr, "%s\n", "Some file didn't open");
+		}
 
-      //   if (!write_files(filenames, size)) {
-      //     fprintf(stderr, "%s\n", "Some file didn't open");
-      //   }
-      // } else {
-      //   if (check == 1) {
-      //     fprintf(stderr, "%s\n", "Invalid count of options");
-      //   }
-      //   if (check == 2) {
-      //     fprintf(stderr, "%s\n", "Invalid file extension");
-      //   }
-      //   if (check == 3) {
-      //     fprintf(stderr, "%s\n", "File didn't open");
-      //   }
-      //   if (check == 4) {
-      //     fprintf(stderr, "%s\n", "Some of the argument files did't open");
-      //   }
-      //   if (check == 5) {
-      //     fprintf(stderr, "%s\n", "Some argument file has the wrong extension");
-      //   }
-      //   if (check == 6) {
-      //     fprintf(stderr, "%s\n", "Invalid options");
-      //   }
-      // }
     return 0;
 }
-
-
-// строки 130 и 131: зачем по 100500 раз дёргать функцию которая детерминирована и работает за линейное время? если можно сохранить результат во временную переменную и использовать его
-// 154 строка: как насчёт проверить открылся ли файл
-// 167 строка: прикрути обработчик вместо пустого оператора
-// не увидел вызова функции write_files
