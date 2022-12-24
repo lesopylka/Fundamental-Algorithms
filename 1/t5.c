@@ -64,7 +64,7 @@ enum VALIDATION_ENUM validationArg(int argc, char
       return invalidFileExtension;
     }
 
-    if ((file = fopen(argv[2], "r")) != NULL) {
+    if ((file = fopen(argv[2], "r")) == NULL) {
       return filDidntOpen;
     }
     
@@ -88,10 +88,11 @@ enum VALIDATION_ENUM validationArg(int argc, char
         return someArgumentFileHasTheWrongExtension;
       }
 
-      if ((file = fopen(argv[i], "r")) != NULL) {
+      if ((file = fopen(argv[i], "r")) == NULL) {
         fclose(file);
+        return someOfTheArgumentFilesDidtOpen;
       }
-      return someOfTheArgumentFilesDidtOpen;
+      
     }
 
     return ok;

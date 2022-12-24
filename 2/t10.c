@@ -27,7 +27,7 @@ void inCommonFraction(int * numenator, int * denumenator, char * number) {
 
   int mult2Count = numLen - 1, mult5Count = numLen - 1;
 
-  while ((!(( * numenator) % 2) && mult2Count > 0) || (!(( * numenator) % 5)) && mult5Count > 0) {
+  while ((!(( * numenator) % 2) && mult2Count > 0) || (!(( * numenator) % 5)) || mult5Count > 0) {
     if (!(( * numenator) % 2)) {
       ( * numenator) /= 2;
       mult2Count--;
@@ -53,9 +53,7 @@ char * fToBase(char * number, int base) {
   int numLen = strlen(number), size = 16;
 
   char * res = (char * ) malloc(sizeof(char) * (size)), * tmp = NULL;
-  if (res = NULL) {
-    return NULL;
-  }
+  if (res == 0) { return 0; }
 
   int actualSize = 0, iterations = 0;
 
@@ -84,7 +82,6 @@ char * fToBase(char * number, int base) {
     numLong %= partial;
   }
   tmp = (char * ) realloc(res, sizeof(char) * (actualSize + 1));
-
   if (tmp == NULL) { return NULL; }
 
   res = tmp;
@@ -93,21 +90,19 @@ char * fToBase(char * number, int base) {
 }
 
 int isFinalRepresentation(char ** * result, int base, int count, ...) {
+  int numenator = 0, denumenator = 0, isEndless = 0, resultInd = 0;
+  char * number = 0;
+
   if (base <= 1 || base > 36) {
     return 2;
   }
-  if (( * result)) {
-    return 2;
-  } else {
+  if (( * result)) { return 2; } else {
     * result = (char ** ) calloc(count, sizeof(char * ));
-    if (result == NULL) { return NULL;}
+    if (result == 0) { return 0;}
   }
 
   va_list ptr;
   va_start(ptr, count);
-
-  int numenator = 0, denumenator = 0, isEndless = 0, resultInd = 0;
-  char * number = 0;
 
   for (int i = 0; i < count; i++) {
     number = va_arg(ptr, char * );
@@ -120,7 +115,7 @@ int isFinalRepresentation(char ** * result, int base, int count, ...) {
 
     if (isEndless) {
       ( * result)[resultInd] = (char * ) calloc(2, sizeof(char));
-      if (( * result)[resultInd] = NULL) { return NULL; }
+      if (( * result)[resultInd] == 0) { return 0; }
       strcpy(( * result)[resultInd++], "0");
     } else {
       if (!(( * result)[resultInd++] = fToBase(number, base))) {

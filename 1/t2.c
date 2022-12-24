@@ -78,16 +78,26 @@ int myatoi(char * s) {
 
 int IntToString(int x, char str[], int d){ // возвращает индекс символа конца строки
   int i = 0;
-  while (x) {
-      str[i++] = (x % 10) + '0';
-      x = x / 10;
+  int len = 0;
+  int tmpX = x;
+  while (tmpX) {
+    len++;
+    tmpX /= 10;
   }
-  while (i < d)
-      str[i++] = '0';
-  reverse(str, i);
-  str[i] = '\0';
+  str[len] = '\0';
+  len--;
+  while (len >= 0) {
+      str[len] = (x % 10) + '0';
+      len--;
+  }
+  // while (i < d)
+  //     str[i++] = '0';
+  // reverse(str, i);
+  // str[i] = '\0';
   return i;
 }
+
+
 
 int myftoa(double n, char* res, int after_point){ // возвращает индекс символа конца строки
   int i_part = (int)n;
@@ -121,11 +131,13 @@ int* toggles_q(double a, double b, double c) {
       printf("No roots.\n");
     } else if (fabs(d) <= EPS) {
       roots = (int*)malloc(sizeof(int));
+      if (roots == NULL) { return NULL; }
       int x1 = (-b + sqrt(d)) / (2 * a);
       *roots = x1;
       printf("x = %d\n", x1);
     } else {
       roots = (int*)malloc(sizeof(int) * 2);
+      if (roots == NULL) { return NULL; }
       int x1 = (-b + sqrt(d)) / (2 * a);
       int x2 = (-b - sqrt(d)) / (2 * a);
       *roots = x1;
@@ -199,7 +211,7 @@ int main(int argc, char ** argv) {
         char* ans2;
         myftoa(x2, ans2, 2);
         strcat(message, ans1);
-        strcat(message, ans2);
+        strcat(message, ans2); 
         printf("%s\n", message);
         printf("%f  %f\n", x1, x2);
         return 0;
@@ -231,8 +243,8 @@ int main(int argc, char ** argv) {
 
 //  toggles_q:
 //   убери printf в main
-//   где проверки на malloc
-//   fabs(d - 0) - зочем, если можно просто fabs(d)
+//   где проверки на malloc +
+//   fabs(d - 0) - зочем, если можно просто fabs(d) +
 //   не увидел где возвращается статускод метода чтобы можно было его обработать выше
 //  toggles_t:
 //   зачем трижды считать произведения если можно сохранить и пользоваться вычисленными значениями

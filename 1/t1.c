@@ -49,9 +49,6 @@ enum VALIDATION_ENUM validationArg(int argc, char * argv[], unsigned * number) {
   if (strlen(argv[2]) != 2) {
     return unexpectedToggles;
   }
-  if ((argv[1][0] == '0') && (argv[1][1] == 0)) {
-    return unexpectedNumber;
-  }
   char * symbol = argv[1];
   char difference = * symbol - '0';
   while ( * symbol) {
@@ -107,40 +104,34 @@ unsigned toggles_f(unsigned number) {
   return result;
 }
 
-int toggles_p(unsigned number) {
-  // testiruesh chislo 65537 na prostotu naprimer
-  // determinirovannym algoritmom
-
-    // i = [2, 3, ..., sqrt(65537) primerno ravno 256]
-  // delim na 2, potom na 3, tipa vse ok
-  // no zachem delitj na 4 esli na 2 ne delitsja ._.
-  // zachem delitj na 9 esli ne delitsja na 3
-  // nu i tak dalee
-  // to est' po-horoshemu, nuZhno delitj tol'ko na prostie chisla iZ doapoZona
-  // a ne na vse
-  // uberi hotya by kratnie 2, 3, 5
-  // eta ochenj legko
-  // delaj prjam seichas ._. чт....
-// zachem vsjo stiratj-to o_O
-//так все говно же
-// хотя бля говно но хотя бы не жидкое =)
-// верни как было и просто отбрось числа кратные 2 3 и 5
-// надо к счетчику не 1 прибавлять а логику инкремента его значения продумать чуть и норм будет
-// меньше итераций потратишь чем втупую все подряд перебирать
-// делай кароч а я пошел пить пиво =)
-// 
-  for (int i = 2; i < floor(sqrt(number)); i++) {
+int toggles_p(unsigned number, unsigned* error) {
+if (number == 1 || number == 0) {
+  (*error)++;
+  return 1;
+}
+if (number == 4 || number == 6  ) {
+  return 0;
+} else if (number <= 7) {
+  return 1;
+}
+if (number % 2 == 0 || number % 5 == 0 || number % 3 == 0) {
+  return 0;
+}
+int counter = 1;
+  for (int i = 7; i < floor(sqrt(number)); i += 2) {
+    if (counter == 5) {
+      counter = 1;
+      continue;
+      
+    } else {
+      counter++;
+    }
     if (number % i == 0) {
+      // printf("%d\n", i);
       return 0;
     }
   }
-  return 0;
-  // и return-коды разные сделай а то только 0 маловато будет
-  // я пошел
-  // как будет готово кидай
-  // я обязательно это не посмотрю
-  // =)
-  //спасибо!
+  return 1;
 }
 
 void toggles_s(unsigned number, unsigned digits_kol) {
@@ -177,7 +168,7 @@ unsigned toggles_a(unsigned number) {
 
 int main(int argc, char * argv[]) {
   unsigned number = 0;
-
+  unsigned error = 0;
   enum VALIDATION_ENUM validation_result = validationArg(argc, argv, & number);
 
   if (validation_result != ok) {
@@ -187,21 +178,25 @@ int main(int argc, char * argv[]) {
 
   char toggle = argv[2][0];
   char command = argv[2][1];
+  char p;
 
   switch (command) {
   case 'h':
     toggles_h(number);
     break;
   case 'p':
-    if (toggles_p(number)) {
-      printf("%d is composite\n", number);
+    if (toggles_p(number, &error)) {
+      if(error) {
+         printf("%d not prime, not composite\n", number);
+         return 0;
+      }
+      printf("%d is prime\n", number);
       return 0;
     }
-    printf("%d is prime\n", number);
+    printf("%d is composite\n", number);
     break;
   case 's':
     toggles_s(number, numberDigitsCount(number, 10));
-
     break;
   case 'e':
     if (toggles_e(number)) {

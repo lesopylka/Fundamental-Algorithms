@@ -56,6 +56,7 @@ void find(char* str, char* fileName, ...) {
         // Запись файла в массив
         // нет смысла записывать файл в массив, тк считывание идет напрямую через fgetc, без необходимости копирования в массив-буффер
         char* arrayFile = (char*)malloc(sizeof(char) * fileSize);
+        
         int i = 0;
         while ((header = fgetc(input_file)) != EOF) {
             if (header != '\n' && header != '\t') {

@@ -37,10 +37,7 @@ char *Stacking(char *str1, char *str2, int n) {
     int len2 = strlen(str2);
     int len_result = ((len1 > len2) ? len1: len2) + 2;
     char *result = (char *) malloc(sizeof(char) * len_result);
-    if (result == NULL) 
-    {
-        return "";
-    }
+    if (result == NULL)  { return ""; }
     for (int i = 0; i < len_result - 1; ++i) result[i] = '0';
     result[len_result - 1] = '\0';
     int p[] = {
@@ -65,7 +62,8 @@ char* summ(int system_num, unsigned num, ...)
 {
     va_list factor;
     va_start(factor, num);
-    char* sum = "";
+    char* sum = 0;
+    if (num == 0) {return 0;}
     for (int i=0;i<num; i++)
     {
         sum = Stacking(va_arg(factor, char*),sum, system_num); 
@@ -77,13 +75,7 @@ char* summ(int system_num, unsigned num, ...)
 
 int main() {
     int n = 2;
-    char str1[] = "00001";
-    char str2[] = "0000000010";
-    char str3[] = "0000010000";
-    char str4[] = "0010000000";
-    char str5[] = "1000000000";
-    char *res = summ(2,5,str1,str2,str3,str4,str5);
-
+    char *res = summ(2,0);
     printf("%s\n", res);
     free(res);
     return 0;
