@@ -3,8 +3,30 @@
 #include <string.h>
 #include <math.h>
 #include <locale.h>
+#include <limits.h>
 
-double EPS = 0.0000001;
+double EPS = 1.0f;
+
+enum VALIDATION_ENUM {
+  ok = 0,
+    invalidinput = 5,
+    noRealSolutions = 6,
+
+};
+
+void printValidationError(enum VALIDATION_ENUM error) {
+  switch (error) {
+  case invalidinput:
+    printf("Error: Invalid input!\n");
+    break;
+  case noRealSolutions:
+    printf("There are no real solutions\n");
+    break;
+  default:
+    printf("Unexpected error\n");
+  }
+}
+
 
 int char_to_int(char * string) {
   int result = 0;
@@ -42,31 +64,25 @@ double char_to_double(char * string) {
   return sign * backp;
 }
 
-void square_equation(double a, double b, double c, double * x1, double * x2) {
-
-  if (fabs(a - 0) < EPS) {
-    printf("Error: Invalid input!\n");
-    return;
-  }
+int square_equation(double a, double b, double c, double * x1, double * x2) {
   double D;
+
+  if (fabs(a) < EPS) {
+    return 5;
+  }
+  
   D = pow(b, 2) - (4 * a * c);
-  printf(" a = %lf, b = %lf, c = %lf:\n", a, b, c);
-  if (fabs(D) < -EPS) {
-    printf("There are no real solutions\n");
-  } else {
+
+  if (fabs(D) < -EPS) { return noRealSolutions; } else {
     * x1 = (-b + sqrt(D)) / ((2 * a));
     * x2 = (-b - sqrt(D)) / ((2 * a));
-    printf("Roots - %lf %lf\n", * x1, * x2);
+    
   }
-
+  return 0;
 }
 
 void solveEqation(double a, double b, double c, double * x1, double * x2) {
-  double arr[3] = {
-    a,
-    b,
-    c
-  };
+  double arr[3] = { a, b, c };
   int counter = 1;
 
   for (int i = 0; i <= 2; i++) {
@@ -83,6 +99,7 @@ void solveEqation(double a, double b, double c, double * x1, double * x2) {
 }
 
 int main(int argc, char * argv[]) {
+
   if (strlen(argv[1]) != 2) {
     printf("Error: Wrong flag length!\n");
   }
@@ -92,6 +109,7 @@ int main(int argc, char * argv[]) {
   if (argv[1][0] == '-' || argv[1][0] == '/') {
     switch (argv[1][1]) {
     case 'q':
+    
       if (argc != 5) {
         printf("Error: Invalid number of parameters!\n");
         break;
@@ -100,6 +118,9 @@ int main(int argc, char * argv[]) {
       b = char_to_double(argv[3]);
       c = char_to_double(argv[4]);
       solveEqation(a, b, c, & x1, & x2);
+      printf(" a = %lf, b = %lf, c = %lf:\n", a, b, c);
+      printf("Roots - %lf %lf\n", x1, x2);
+
       break;
 
     case 'm':
@@ -127,9 +148,9 @@ int main(int argc, char * argv[]) {
         printf("Error: Invalid number of parameters!\n");
         break;
       }
-      num1 = char_to_double(argv[2]);
-      num2 = char_to_double(argv[3]);
-      num3 = char_to_double(argv[4]);
+      num1 = char_to_int(argv[2]);
+      num2 = char_to_int(argv[3]);
+      num3 = char_to_int(argv[4]);
 
       if (num1 > 0 && num2 > 0 && num3 > 0) {
         num1 *= num1;

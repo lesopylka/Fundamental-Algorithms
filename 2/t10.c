@@ -53,17 +53,19 @@ char * fToBase(char * number, int base) {
   int numLen = strlen(number), size = 16;
 
   char * res = (char * ) malloc(sizeof(char) * (size)), * tmp = NULL;
-  if (res == 0) { return 0; }
+  if ( res == NULL ) { return NULL; }
 
-  int actualSize, iterations = 0;
-  long numLong, partial = 0;
+  int actualSize = 0, iterations = 0;
+
   res[actualSize++] = '.';
 
+  long numLong = 0;
   for (int i = 1; i < numLen; i++) {
     numLong *= 10;
     numLong += toDecimal(number[i]);
   }
 
+  long partial = 0;
   while (numLong && iterations < 36) {
     iterations++;
     numLong *= base;
@@ -71,8 +73,8 @@ char * fToBase(char * number, int base) {
 
     if (actualSize >= size - 1) {
       size *= 2;
-      tmp = (char * ) realloc(res, sizeof(char) * size);
-      if (tmp == NULL) {
+      if (!(tmp = (char * ) realloc(res, sizeof(char) * size))) {
+        free(res);
         return NULL;
       }
       res = tmp;
@@ -81,23 +83,34 @@ char * fToBase(char * number, int base) {
     res[actualSize++] = toAscii(numLong / partial);
     numLong %= partial;
   }
-  tmp = (char * ) realloc(res, sizeof(char) * (actualSize + 1));
-  if (tmp == NULL) { return NULL; }
+
+  if (!(tmp = (char * ) realloc(res, sizeof(char) * (actualSize + 1)))) {
+    free(res);
+    return NULL;
+  }
+
+  res = tmp;
+  res[actualSize] = '\0';
+  return res;
 }
 
 int isFinalRepresentation(char ** * result, int base, int count, ...) {
-  va_list ptr;
-  int numenator, denumenator, isEndless, resultInd = 0;
-  char * number = 0;
-  va_start(ptr, count);
-
   if (base <= 1 || base > 36) {
     return 2;
   }
-  if (( * result)) { return 2; } else {
-    * result = (char ** ) calloc(count, sizeof(char * ));
-    if (result == 0) { return 0; }
+  if (( * result)) {
+    return 2;
+  } else {
+    if (!(( * result) = (char ** ) calloc(count, sizeof(char * )))) {
+      return 1;
+    }
   }
+
+  va_list ptr;
+  va_start(ptr, count);
+
+  int numenator = 0, denumenator = 0, isEndless = 0, resultInd = 0;
+  char * number = 0;
 
   for (int i = 0; i < count; i++) {
     number = va_arg(ptr, char * );
@@ -109,8 +122,11 @@ int isFinalRepresentation(char ** * result, int base, int count, ...) {
       isEndless++;
 
     if (isEndless) {
-      ( * result)[resultInd] = (char * ) calloc(2, sizeof(char));
-      if (( * result)[resultInd] == 0) { return 0; }
+      if (!(( * result)[resultInd] = (char * ) calloc(2, sizeof(char)))) {
+        clear(result, resultInd);
+        va_end(ptr);
+        return 1;
+      }
       strcpy(( * result)[resultInd++], "0");
     } else {
       if (!(( * result)[resultInd++] = fToBase(number, base))) {
@@ -139,10 +155,12 @@ int main() {
   printf("Enter base: ");
   scanf("%d", & base);
 
-  if (base < 1)  return 2;
+  if (base < 1)
+    return 2;
 
   int statusCode = isFinalRepresentation( & res, base, count, num1, num2, num3, num4);
-  if (statusCode != 0) return statusCode;
+  if (statusCode != 0)
+    return statusCode;
 
   printf("\"0\" - number cant be displayed\n");
   printMatrix(res, count);
