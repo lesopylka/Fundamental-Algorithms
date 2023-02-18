@@ -33,6 +33,7 @@
         "unordered_map": "c",
         "vector": "c",
         "hashtable": "c",
-        "__locale": "c"
+        "__locale": "c",
+        "errno.h": "c"
     }
 }
